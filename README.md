@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="assets/brand/DAS-1_Banner_1024.png" alt="DAS-1(TM)" width="640">
+</p>
+
+<p align="center"><strong>Authority, Tempered.</strong></p>
 # Delegated Authority Standard(TM) (DAS-1(TM))
 
 Maintained by Forged Culture. Brand hub: forgedculture.com
