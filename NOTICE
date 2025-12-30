@@ -1,0 +1,12 @@
+NOTICE
+
+DAS-1(TM) (Delegated Authority Standard(TM))
+Copyright (c) 2025 Heron Group LLC
+
+This repository contains:
+- Documentation/spec text intended to be licensed under CC BY 4.0 (see LICENSES/CC-BY-4.0.txt)
+- Code and tooling intended to be licensed under Apache 2.0 (see LICENSES/Apache-2.0.txt)
+
+Trademarks:
+- "Delegated Authority Standard(TM)", "DAS-1(TM)", and "DAS-1 Conformant(TM)" are trademarks of the project owner.
+See TRADEMARKS.md.

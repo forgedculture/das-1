@@ -1,0 +1,11 @@
+DAS-1 licensing
+
+This repository contains multiple license scopes:
+
+- Spec and documentation text: Creative Commons Attribution 4.0 International (CC BY 4.0)
+  - See LICENSES/CC-BY-4.0.txt
+
+- Code, scripts, and tooling (if/when present): Apache License 2.0
+  - See LICENSES/Apache-2.0.txt
+
+Trademarks are governed by TRADEMARKS.md and are not licensed under CC BY 4.0 or Apache 2.0.
