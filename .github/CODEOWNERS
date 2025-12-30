@@ -1,0 +1,25 @@
+# CODEOWNERS for DAS-1
+
+* @chraithe
+
+# Core spec and conformance are high-signal, keep review tight
+/spec/ @chraithe
+/spec/core/ @chraithe
+/spec/conformance/ @chraithe
+
+# Trademark and licensing are load-bearing
+/TRADEMARKS.md @chraithe
+/NOTICE @chraithe
+/LICENSE @chraithe
+/LICENSE-DOCS @chraithe
+/LICENSE-CODE @chraithe
+
+# Brand assets should never be casually changed
+/assets/brand/ @chraithe
+
+# Catalog, profiles, overlays can be more open once you add teams
+/catalog/ @chraithe
+/profiles/ @chraithe
+/overlays/ @chraithe
+/mappings/ @chraithe
+/examples/ @chraithe

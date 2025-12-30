@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use DAS-1 in research or documentation, please cite it."
+title: "Delegated Authority Standard (DAS-1)"
+type: standard
+version: "v0.001"
+date-released: "2025-12-30"
+url: "https://github.com/forgedculture/das-1"
+authors:
+  - family-names: "LaPosta"
+    given-names: "Paul"
+preferred-citation:
+  type: standard
+  title: "Delegated Authority Standard (DAS-1)"
+  authors:
+    - family-names: "LaPosta"
+      given-names: "Paul"
+  version: "v0.001"
+  date-released: "2025-12-30"
+  url: "https://github.com/forgedculture/das-1"

@@ -21,7 +21,12 @@ DAS-1(TM) defines minimum controls for delegated authority where systems can inv
 - Examples: examples/
 
 Licensing
-- See LICENSE (summary), LICENSE-DOCS, LICENSE-CODE
+Licensing
+
+- Spec and documentation: CC BY 4.0 (see LICENSE-DOCS)
+- Code and tooling: Apache 2.0 (see LICENSE and LICENSE-CODE)
+- Brand assets (logos, marks, badges): all rights reserved, trademark governed (see assets/brand/LICENSE-ASSETS.txt and TRADEMARKS.md)
+
 
 Status
 - Version: v0.001 (draft)
