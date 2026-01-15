@@ -1,0 +1,8 @@
+{
+  "kind": "das1-exceptions",
+  "generated_at": "2026-01-15T19:33:42.023800+00:00",
+  "path": "das1/examples/exceptions",
+  "total_files": 1,
+  "failures": [],
+  "pass": true
+}

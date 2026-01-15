@@ -1,0 +1,23 @@
+{
+  "kind": "das1-conformance-seed",
+  "generated_at": "2026-01-15T19:33:51.360289+00:00",
+  "receipts_path": "das1/examples/receipt_packs",
+  "exceptions_path": "das1/examples/exceptions",
+  "receipts": {
+    "kind": "das1-receipts",
+    "generated_at": "2026-01-15T19:33:51.359441+00:00",
+    "path": "das1/examples/receipt_packs",
+    "total_files": 3,
+    "failures": [],
+    "pass": true
+  },
+  "exceptions": {
+    "kind": "das1-exceptions",
+    "generated_at": "2026-01-15T19:33:51.360273+00:00",
+    "path": "das1/examples/exceptions",
+    "total_files": 1,
+    "failures": [],
+    "pass": true
+  },
+  "pass": true
+}
