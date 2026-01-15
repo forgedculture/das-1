@@ -1,0 +1,23 @@
+{
+  "receipt_version": "v0.0.1",
+  "event_id": "evt_0001_r1",
+  "timestamp": "2026-01-15T15:00:00Z",
+  "actor_id": "svc.agent.readonly",
+  "owner_id": "team.platform",
+  "workflow_id": "wf.reporting.readonly",
+  "tool": "reports_api",
+  "action": "generate_report",
+  "target": "report:weekly-availability",
+  "risk_class": "R1",
+  "decision": "allow",
+  "policy_version": "pol_2026-01-15_001",
+  "correlation_id": "corr_r1_0001",
+  "inputs_present": true,
+  "outputs_present": true,
+  "inputs_hash": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+  "outputs_hash": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+  "data_classes": ["public"],
+  "cost_center": "cc_platform",
+  "cost_estimate": 0.02,
+  "notes": "Example R1 allow receipt"
+}

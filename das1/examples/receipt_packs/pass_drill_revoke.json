@@ -1,0 +1,23 @@
+{
+  "receipt_version": "v0.0.1",
+  "event_id": "evt_0003_revoke",
+  "timestamp": "2026-01-15T15:06:30Z",
+  "actor_id": "user.oncall",
+  "owner_id": "team.platform",
+  "workflow_id": "wf.deploy.gated",
+  "tool": "authz_gateway",
+  "action": "revoke_authority",
+  "target": "wf.deploy.gated",
+  "risk_class": "R3",
+  "decision": "allow",
+  "policy_version": "pol_2026-01-15_002",
+  "correlation_id": "corr_drill_0001",
+  "inputs_present": true,
+  "outputs_present": true,
+  "approver_id": "user.oncall",
+  "approval_id": "app_drill_0001",
+  "preflight_id": "pre_drill_0001",
+  "revoked": true,
+  "revoke_of_event_id": "evt_0002_r3",
+  "notes": "Example D2 revoke receipt"
+}
