@@ -35,6 +35,8 @@ This directory provides the smallest executable core needed to make DAS-1 claims
   - preflight_id (AEC-06)
 - Allow receipts SHOULD have:
   - inputs_present=true and outputs_present=true (AEC-07)
+- Cost-incurring receipts require owner/cost-center attribution tags (AEC-10)
+- Exceptions with `status` in `proposed|approved|active` must be unexpired; `expired` entries remain valid historical evidence (AEC-11)
 
 ## What this does not cover
 

@@ -111,8 +111,18 @@ def _das1_receipt_checks(receipt: Dict[str, Any], file: str) -> List[Failure]:
                 )
             )
 
-    # AEC-10: cost attribution tags for cost-incurring tools (if cost_incurred=true).
-    if receipt.get("cost_incurred") is True:
+    # AEC-10: cost attribution tags for cost-incurring tools.
+    # `cost_incurred` is optional and not part of the canonical schema; treat
+    # non-zero cost estimate/actual as cost-incurring for machine checks.
+    cost_estimate = receipt.get("cost_estimate")
+    cost_actual = receipt.get("cost_actual")
+    cost_incurred = (
+        receipt.get("cost_incurred") is True
+        or (isinstance(cost_estimate, (int, float)) and cost_estimate > 0)
+        or (isinstance(cost_actual, (int, float)) and cost_actual > 0)
+    )
+
+    if cost_incurred:
         if not receipt.get("owner_id"):
             failures.append(
                 Failure(
@@ -139,7 +149,9 @@ def _das1_exception_checks(exc: Dict[str, Any], file: str) -> List[Failure]:
     failures: List[Failure] = []
 
     # AEC-11: exceptions expire by default and must not silently renew.
-    # We can at least ensure expires_at is in the future at time of validation.
+    # Expired entries remain valid historical evidence, but are not applicable
+    # to the current conformance window.
+    status = exc.get("status")
     expires_at = exc.get("expires_at")
     if isinstance(expires_at, str):
         try:
@@ -154,13 +166,30 @@ def _das1_exception_checks(exc: Dict[str, Any], file: str) -> List[Failure]:
                     )
                 )
             else:
-                if dt <= datetime.now(dt.tzinfo):
+                now = datetime.now(dt.tzinfo)
+                if status in ("proposed", "approved", "active") and dt <= now:
                     failures.append(
                         Failure(
                             kind="das1",
                             file=file,
-                            message="Exception is expired (AEC-11).",
+                            message=(
+                                "Exception is expired and not applicable to the "
+                                "current period (AEC-11). Mark as expired/revoked "
+                                "or renew with review."
+                            ),
                             pointer="/expires_at",
+                        )
+                    )
+                if status == "expired" and dt > now:
+                    failures.append(
+                        Failure(
+                            kind="das1",
+                            file=file,
+                            message=(
+                                "status=expired is inconsistent with a future "
+                                "expires_at timestamp (AEC-11)."
+                            ),
+                            pointer="/status",
                         )
                     )
         except ValueError:

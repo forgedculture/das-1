@@ -1,0 +1,23 @@
+name: das-1-openclaw-overlay
+version: v0.001
+requires:
+  das_core: v0.001
+applies_to:
+  runtime: openclaw
+  deployment: internet-reachable-or-multi-user
+tightens:
+  - AEC-03
+  - AEC-05
+  - AEC-06
+  - AEC-07
+  - AEC-08
+  - AEC-09
+  - AEC-11
+adds:
+  - AECX-014
+  - AECX-030
+  - AECX-041
+drills:
+  - D-OC-01
+  - D-OC-02
+  - D-OC-03
