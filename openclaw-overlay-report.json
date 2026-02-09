@@ -1,6 +1,6 @@
 {
   "kind": "das1-conformance-seed",
-  "generated_at": "2026-02-09T12:42:18.213093+00:00",
+  "generated_at": "2026-02-09T12:55:12.723459+00:00",
   "receipts_path": "das1/examples/openclaw/receipt_packs",
   "exceptions_path": "das1/examples/exceptions",
   "drills_path": "das1/examples/openclaw/drills",
@@ -9,7 +9,7 @@
   "ir_annexes_path": "das1/examples/ir_annexes",
   "receipts": {
     "kind": "das1-receipts",
-    "generated_at": "2026-02-09T12:42:18.209881+00:00",
+    "generated_at": "2026-02-09T12:55:12.719469+00:00",
     "path": "das1/examples/openclaw/receipt_packs",
     "total_files": 1,
     "metrics": {
@@ -54,7 +54,7 @@
   },
   "exceptions": {
     "kind": "das1-exceptions",
-    "generated_at": "2026-02-09T12:42:18.210350+00:00",
+    "generated_at": "2026-02-09T12:55:12.719797+00:00",
     "path": "das1/examples/exceptions",
     "total_files": 1,
     "failures": [],
@@ -62,7 +62,7 @@
   },
   "drills": {
     "kind": "das1-drills",
-    "generated_at": "2026-02-09T12:42:18.211447+00:00",
+    "generated_at": "2026-02-09T12:55:12.721672+00:00",
     "path": "das1/examples/openclaw/drills",
     "total_files": 5,
     "required_drills": [
@@ -79,7 +79,7 @@
   },
   "tool_catalogs": {
     "kind": "das1-tool-catalogs",
-    "generated_at": "2026-02-09T12:42:18.211715+00:00",
+    "generated_at": "2026-02-09T12:55:12.721974+00:00",
     "path": "das1/examples/tool_catalogs",
     "total_files": 1,
     "failures": [],
@@ -87,7 +87,7 @@
   },
   "policy_snapshots": {
     "kind": "das1-policy-snapshots",
-    "generated_at": "2026-02-09T12:42:18.211926+00:00",
+    "generated_at": "2026-02-09T12:55:12.722214+00:00",
     "path": "das1/examples/policy_snapshots",
     "total_files": 1,
     "failures": [],
@@ -95,7 +95,7 @@
   },
   "ir_annexes": {
     "kind": "das1-ir-annexes",
-    "generated_at": "2026-02-09T12:42:18.212164+00:00",
+    "generated_at": "2026-02-09T12:55:12.722462+00:00",
     "path": "das1/examples/ir_annexes",
     "total_files": 1,
     "max_age_days": 365,
