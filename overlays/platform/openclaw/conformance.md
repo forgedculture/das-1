@@ -17,7 +17,7 @@ This overlay claim is additive to core conformance and does not modify DAS-1 cor
 
 ## 3. Required overlay evidence
 
-- OpenClaw overlay drills D-OC-01, D-OC-02, and D-OC-03 MUST each have a passing report within the current conformance window.
+- OpenClaw overlay drills D-OC-01 through D-OC-07 MUST each have a passing report within the current conformance window.
 - Each D-OC drill report MUST include at least two evidence references.
 - For each D-OC drill report, `overlay_context.openclaw.assertions` MUST include the required assertions and each MUST be `true`.
 
@@ -35,6 +35,22 @@ Required assertions:
   - `non_main_session_sandboxed`
   - `host_filesystem_traversal_blocked`
   - `unauthorized_network_egress_blocked`
+- D-OC-04
+  - `session_scope_isolation_enforced`
+  - `cross_peer_context_bleed_blocked`
+  - `session_scope_key_bound_in_receipts`
+- D-OC-05
+  - `connector_scopes_least_privilege`
+  - `connector_tokens_rotatable_independently`
+  - `high_risk_connector_split_enforced`
+- D-OC-06
+  - `r3_r4_execution_without_approval_blocked`
+  - `expired_exceptions_not_honored`
+  - `exception_override_disclosure_recorded`
+- D-OC-07
+  - `revocation_kill_switch_reachable_by_oncall`
+  - `revocation_within_slo`
+  - `post_revoke_actions_blocked`
 
 ## 4. Required receipt provenance bindings
 
@@ -43,6 +59,9 @@ For R3/R4 allow receipts in OpenClaw-covered scope:
 - `overlay_context.openclaw.channel_id` MUST be present.
 - `overlay_context.openclaw.sender_id` MUST be present.
 - `overlay_context.openclaw.session_scope_key` MUST be present.
+- `overlay_context.openclaw.gateway_instance_id` MUST be present.
+- `overlay_context.openclaw.policy_snapshot_ref` MUST be present.
+- `overlay_context.openclaw.tool_catalog_ref` MUST be present.
 
 ## 5. Claim validation
 

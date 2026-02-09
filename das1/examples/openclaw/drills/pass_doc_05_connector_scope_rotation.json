@@ -1,0 +1,30 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-OC-05",
+  "run_id": "run_openclaw_doc05_2026_02_01",
+  "executed_at": "2026-02-01T20:15:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.ops",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.openclaw.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/openclaw/drills/doc05/scorecard.md",
+  "evidence_refs": [
+    "artifacts/openclaw/drills/doc05/connector-scope-manifest.json",
+    "artifacts/openclaw/drills/doc05/rotation-run-log.json"
+  ],
+  "overlay_context": {
+    "openclaw": {
+      "assertions": {
+        "connector_scopes_least_privilege": true,
+        "connector_tokens_rotatable_independently": true,
+        "high_risk_connector_split_enforced": true
+      }
+    }
+  },
+  "notes": "Connector scopes and token rotation controls passed with independent revocation."
+}

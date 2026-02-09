@@ -43,6 +43,22 @@ Overlay drills
 - D-OC-03 Sandbox containment test
   - Pass: non-main-session tool calls execute inside sandbox constraints and cannot traverse host filesystem/network beyond policy.
   - Output: execution receipts plus containment verification logs.
+- D-OC-04 Session isolation enforcement test
+  - Pass: per-peer/per-channel session boundaries are enforced; malicious or noisy peers cannot bleed state into another principal's session.
+  - Output: multi-peer transcript proving isolation and receipt provenance links.
+- D-OC-05 Connector privilege and rotation test
+  - Pass: secret-bearing connectors are least-privilege scoped, independently rotatable, and split across risk tiers.
+  - Output: connector inventory, scope manifest, and rotation evidence.
+- D-OC-06 Approval/exception bypass prevention test
+  - Pass: R3/R4 execution without approval is blocked, expired exceptions are rejected, and emergency overrides are disclosure-recorded.
+  - Output: attempted bypass receipts plus exception register evaluation logs.
+- D-OC-07 Revocation readiness and latency test
+  - Pass: on-call can trigger kill switch, revocation completes within SLO, and post-revoke high-risk actions are blocked.
+  - Output: revocation timeline receipts and post-revoke gate logs.
+
+Operational risk closure requirements
+- To reduce runtime-policy drift, R3/R4 allow receipts MUST bind policy provenance in `overlay_context.openclaw` with `gateway_instance_id`, `policy_snapshot_ref`, and `tool_catalog_ref`.
+- To reduce shared-state risk, R3/R4 allow receipts MUST include `channel_id`, `sender_id`, and `session_scope_key`.
 
 Verifier mapping (informative)
 - Overlay checks are implemented as a plugin (`tools/overlays/openclaw.py`) and run via `verify-overlay --overlay openclaw`.

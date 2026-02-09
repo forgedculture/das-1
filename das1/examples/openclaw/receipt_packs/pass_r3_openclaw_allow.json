@@ -27,7 +27,10 @@
     "openclaw": {
       "channel_id": "slack:C018ABCDEF",
       "sender_id": "U018ABCDEF",
-      "session_scope_key": "slack:C018ABCDEF:U018ABCDEF"
+      "session_scope_key": "slack:C018ABCDEF:U018ABCDEF",
+      "gateway_instance_id": "gw-openclaw-prod-01",
+      "policy_snapshot_ref": "artifacts/openclaw/policy/policy-snapshot-2026-02-01.json",
+      "tool_catalog_ref": "artifacts/openclaw/policy/tool-catalog-2026-02-01.json"
     }
   },
   "notes": "Example OpenClaw R3 allow with provenance binding."

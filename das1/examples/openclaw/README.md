@@ -2,6 +2,15 @@
 
 This folder contains sample evidence to exercise the `openclaw` overlay plugin.
 
+The example drill pack includes D-OC-01 through D-OC-07 for:
+- prompt injection crossing control
+- proxy trust boundary integrity
+- sandbox containment
+- session isolation
+- connector scope and rotation hygiene
+- approval/exception bypass prevention
+- revocation readiness and latency
+
 Run:
 
 ```bash

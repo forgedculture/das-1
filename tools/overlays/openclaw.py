@@ -33,13 +33,33 @@ REQUIRED_DRILL_ASSERTIONS = {
         "non_main_session_sandboxed",
         "host_filesystem_traversal_blocked",
         "unauthorized_network_egress_blocked"
+    ],
+    "D-OC-04": [
+        "session_scope_isolation_enforced",
+        "cross_peer_context_bleed_blocked",
+        "session_scope_key_bound_in_receipts"
+    ],
+    "D-OC-05": [
+        "connector_scopes_least_privilege",
+        "connector_tokens_rotatable_independently",
+        "high_risk_connector_split_enforced"
+    ],
+    "D-OC-06": [
+        "r3_r4_execution_without_approval_blocked",
+        "expired_exceptions_not_honored",
+        "exception_override_disclosure_recorded"
+    ],
+    "D-OC-07": [
+        "revocation_kill_switch_reachable_by_oncall",
+        "revocation_within_slo",
+        "post_revoke_actions_blocked"
     ]
 }
 
 
 def run_overlay_checks(context, load_json_records, parse_iso8601_aware):
     failures: List[Dict[str, str]] = []
-    required_overlay_drills = ("D-OC-01", "D-OC-02", "D-OC-03")
+    required_overlay_drills = tuple(REQUIRED_DRILL_ASSERTIONS.keys())
     cutoff = context.now_utc - timedelta(days=context.max_age_days)
 
     drill_records = load_json_records(context.drills_path)
@@ -160,7 +180,14 @@ def run_overlay_checks(context, load_json_records, parse_iso8601_aware):
             continue
 
         tagged += 1
-        for key in ("channel_id", "sender_id", "session_scope_key"):
+        for key in (
+            "channel_id",
+            "sender_id",
+            "session_scope_key",
+            "gateway_instance_id",
+            "policy_snapshot_ref",
+            "tool_catalog_ref",
+        ):
             if not openclaw_ctx.get(key):
                 failures.append(
                     _failure(

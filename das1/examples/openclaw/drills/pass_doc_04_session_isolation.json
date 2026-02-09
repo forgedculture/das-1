@@ -1,0 +1,30 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-OC-04",
+  "run_id": "run_openclaw_doc04_2026_02_01",
+  "executed_at": "2026-02-01T20:05:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.ops",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.openclaw.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/openclaw/drills/doc04/scorecard.md",
+  "evidence_refs": [
+    "artifacts/openclaw/drills/doc04/multi-peer-session-log.json",
+    "artifacts/openclaw/drills/doc04/session-scope-receipt-map.json"
+  ],
+  "overlay_context": {
+    "openclaw": {
+      "assertions": {
+        "session_scope_isolation_enforced": true,
+        "cross_peer_context_bleed_blocked": true,
+        "session_scope_key_bound_in_receipts": true
+      }
+    }
+  },
+  "notes": "Per-peer session scopes prevented cross-user state bleed."
+}

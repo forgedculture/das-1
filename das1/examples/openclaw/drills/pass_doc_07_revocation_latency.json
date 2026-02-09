@@ -1,0 +1,30 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-OC-07",
+  "run_id": "run_openclaw_doc07_2026_02_01",
+  "executed_at": "2026-02-01T20:35:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.ops",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.openclaw.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/openclaw/drills/doc07/scorecard.md",
+  "evidence_refs": [
+    "artifacts/openclaw/drills/doc07/revocation-timeline.json",
+    "artifacts/openclaw/drills/doc07/post-revoke-block-log.json"
+  ],
+  "overlay_context": {
+    "openclaw": {
+      "assertions": {
+        "revocation_kill_switch_reachable_by_oncall": true,
+        "revocation_within_slo": true,
+        "post_revoke_actions_blocked": true
+      }
+    }
+  },
+  "notes": "On-call kill switch met revocation SLO and blocked post-revoke high-risk actions."
+}
