@@ -1,9 +1,0 @@
-{
-  "kind": "das1-claims",
-  "generated_at": "2026-02-09T12:55:14.922466+00:00",
-  "path": "das1/examples/claims",
-  "total_files": 2,
-  "max_age_days": 90,
-  "failures": [],
-  "pass": true
-}

@@ -1,8 +1,0 @@
-{
-  "kind": "das1-receipts",
-  "generated_at": "2026-01-15T19:33:11.444250+00:00",
-  "path": "das1/examples/receipt_packs",
-  "total_files": 3,
-  "failures": [],
-  "pass": true
-}
