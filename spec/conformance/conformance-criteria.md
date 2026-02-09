@@ -19,10 +19,11 @@ Utility and proportionality note
 
 Recommended evidence package
 - Tool catalog export
-- Approval logs + latency metrics
+- Policy snapshot + approval latency budget evidence
 - Drill reports for D1 and D2 with timestamps and evidence references
 - Audit completeness sample pack
 - Cost attribution coverage report
 - Utility guardrail report (M5-M7 trends, blocked/queued rates by risk class, and declared target ranges)
 - Exceptions register with expiries
 - Tool-call IR annex + tabletop record
+- Conformance claim packet including required disclosures and report references

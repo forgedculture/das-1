@@ -1,0 +1,30 @@
+{
+  "snapshot_version": "v0.0.1",
+  "snapshot_id": "policy_2026_02_09",
+  "generated_at": "2026-02-08T13:05:00Z",
+  "owner_id": "team.platform",
+  "workflow_id": "wf.deploy.gated",
+  "approval_latency_budget_ms": 60000,
+  "approval_budget_fallback": "Fail-safe for R3/R4; continue bounded autonomous R1/R2 under policy.",
+  "credential_ttl_policy": {
+    "max_ttl_seconds": 3600,
+    "rotation_required": true,
+    "no_shared_credentials": true
+  },
+  "credentials": [
+    {
+      "credential_id": "cred_cd_pipeline_01",
+      "scope": "deploy:write",
+      "ttl_seconds": 1800,
+      "shared": false,
+      "rotation_ref": "rotation://deploy/cred_cd_pipeline_01"
+    },
+    {
+      "credential_id": "cred_reports_api_01",
+      "scope": "reports:read",
+      "ttl_seconds": 900,
+      "shared": false,
+      "rotation_ref": "rotation://reports/cred_reports_api_01"
+    }
+  ]
+}

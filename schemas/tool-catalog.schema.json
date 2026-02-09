@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forgedculture.org/das-1/schemas/tool-catalog.schema.json",
+  "title": "DAS-1 Tool Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "catalog_version",
+    "catalog_id",
+    "generated_at",
+    "owner_id",
+    "workflow_id",
+    "tools"
+  ],
+  "properties": {
+    "catalog_version": {
+      "type": "string",
+      "pattern": "^v\\d+\\.\\d+\\.\\d+$"
+    },
+    "catalog_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "owner_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflow_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "review_ref": {
+      "type": "string"
+    },
+    "tools": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "tool",
+          "actions",
+          "permissions",
+          "data_classes",
+          "owner_id",
+          "revocation_path",
+          "logging_location"
+        ],
+        "properties": {
+          "tool": {
+            "type": "string",
+            "minLength": 1
+          },
+          "actions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "permissions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "data_classes": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "owner_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revocation_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "logging_location": {
+            "type": "string",
+            "minLength": 1
+          },
+          "risk_notes": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

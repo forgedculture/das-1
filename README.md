@@ -72,6 +72,9 @@ python tools/das1_verify.py verify \
   --receipts das1/examples/receipt_packs \
   --exceptions das1/examples/exceptions \
   --drills das1/examples/drills \
+  --tool-catalogs das1/examples/tool_catalogs \
+  --policy-snapshots das1/examples/policy_snapshots \
+  --ir-annexes das1/examples/ir_annexes \
   --report conformance-report.json
 ```
 
@@ -82,8 +85,18 @@ python tools/das1_verify.py verify-overlay \
   --receipts das1/examples/openclaw/receipt_packs \
   --exceptions das1/examples/exceptions \
   --drills das1/examples/openclaw/drills \
+  --tool-catalogs das1/examples/tool_catalogs \
+  --policy-snapshots das1/examples/policy_snapshots \
+  --ir-annexes das1/examples/ir_annexes \
   --overlay openclaw \
   --report openclaw-overlay-report.json
+```
+
+Verify publishable claim packets:
+
+```bash
+python tools/das1_verify.py verify-claims das1/examples/claims
+# optional: add --report claims-report.json for publishable evidence bundle output
 ```
 
 See `/spec/conformance/README.md` for full command options and current machine checks.

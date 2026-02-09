@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forgedculture.org/das-1/schemas/conformance-claim.schema.json",
+  "title": "DAS-1 Conformance Claim Packet",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "claim_version",
+    "claim_id",
+    "generated_at",
+    "claimant",
+    "das_version",
+    "scope",
+    "disclosures",
+    "evidence",
+    "attestation"
+  ],
+  "properties": {
+    "claim_version": {
+      "type": "string",
+      "pattern": "^v\\d+\\.\\d+\\.\\d+$"
+    },
+    "claim_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "claimant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization",
+        "owner_id"
+      ],
+      "properties": {
+        "organization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "das_version": {
+      "type": "string",
+      "pattern": "^v\\d+\\.\\d+(?:\\.\\d+)?(?:-[A-Za-z0-9_.-]+)?$"
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "core_conformant",
+        "overlay_claims"
+      ],
+      "properties": {
+        "core_conformant": {
+          "type": "boolean"
+        },
+        "overlay_claims": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "disclosures": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "last_required_drill_pass_at",
+        "known_exceptions",
+        "non_certification_statement"
+      ],
+      "properties": {
+        "last_required_drill_pass_at": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "D1",
+            "D2"
+          ],
+          "properties": {
+            "D1": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "D2": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "known_exceptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "exception_id",
+              "status",
+              "expires_at"
+            ],
+            "properties": {
+              "exception_id": {
+                "type": "string",
+                "minLength": 8
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "proposed",
+                  "approved",
+                  "active",
+                  "expired",
+                  "revoked",
+                  "denied"
+                ]
+              },
+              "expires_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "notes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "non_certification_statement": {
+          "type": "string",
+          "minLength": 10
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conformance_report_ref"
+      ],
+      "properties": {
+        "conformance_report_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "exceptions_ref": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    },
+    "attestation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "attester_id",
+        "attested_at"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 10
+        },
+        "attester_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attested_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  }
+}

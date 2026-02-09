@@ -1,0 +1,37 @@
+{
+  "annex_version": "v0.0.1",
+  "annex_id": "ir_annex_2026_02_09",
+  "generated_at": "2026-02-08T13:10:00Z",
+  "owner_id": "team.security",
+  "detection": {
+    "signals": [
+      "unexpected_r3_tool_call",
+      "anomalous_sender_origin",
+      "approval_policy_mismatch"
+    ],
+    "pager_route": "oncall-security"
+  },
+  "containment": {
+    "revocation_procedure": "runbook://revocation/kill-switch-single-action",
+    "isolation_procedure": "runbook://isolation/workflow-segment"
+  },
+  "evidence_capture": {
+    "receipt_sources": [
+      "logs://authority/*",
+      "receipts://workflow/*"
+    ],
+    "forensics_storage": "vault://forensics/authority-incidents"
+  },
+  "decision_trace_reconstruction": {
+    "procedure": "runbook://trace/reconstruct-plan-approval-exec",
+    "owner_id": "team.security"
+  },
+  "tabletop": {
+    "last_executed_at": "2026-01-20T10:00:00Z",
+    "exercise_ref": "artifacts/ir/tabletop-2026-01-20.md",
+    "remediation_refs": [
+      "JIRA-2451",
+      "JIRA-2463"
+    ]
+  }
+}

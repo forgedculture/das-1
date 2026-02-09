@@ -47,3 +47,4 @@ Overlay drills
 Verifier mapping (informative)
 - Overlay checks are implemented as a plugin (`tools/overlays/openclaw.py`) and run via `verify-overlay --overlay openclaw`.
 - For R3/R4 allow receipts, provenance evidence is expected in `overlay_context.openclaw` with `channel_id`, `sender_id`, and `session_scope_key`.
+- Normative claim requirements are defined in `overlays/platform/openclaw/conformance.md`.

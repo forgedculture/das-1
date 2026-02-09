@@ -1,0 +1,61 @@
+name: Conformance Gate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: python -m pip install -r tools/requirements.txt
+
+      - name: Verify core conformance evidence
+        run: |
+          python tools/das1_verify.py verify \
+            --receipts das1/examples/receipt_packs \
+            --exceptions das1/examples/exceptions \
+            --drills das1/examples/drills \
+            --tool-catalogs das1/examples/tool_catalogs \
+            --policy-snapshots das1/examples/policy_snapshots \
+            --ir-annexes das1/examples/ir_annexes \
+            --report conformance-report.json
+
+      - name: Verify OpenClaw overlay evidence
+        run: |
+          python tools/das1_verify.py verify-overlay \
+            --receipts das1/examples/openclaw/receipt_packs \
+            --exceptions das1/examples/exceptions \
+            --drills das1/examples/openclaw/drills \
+            --tool-catalogs das1/examples/tool_catalogs \
+            --policy-snapshots das1/examples/policy_snapshots \
+            --ir-annexes das1/examples/ir_annexes \
+            --overlay openclaw \
+            --report openclaw-overlay-report.json
+
+      - name: Verify conformance claim packets
+        run: |
+          python tools/das1_verify.py verify-claims das1/examples/claims \
+            --report claims-report.json
+
+      - name: Upload reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: conformance-reports
+          path: |
+            conformance-report.json
+            openclaw-overlay-report.json
+            claims-report.json

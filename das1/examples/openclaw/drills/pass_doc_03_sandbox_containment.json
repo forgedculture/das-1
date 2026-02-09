@@ -14,7 +14,17 @@
   "result": "pass",
   "scorecard_ref": "artifacts/openclaw/drills/doc03/scorecard.md",
   "evidence_refs": [
-    "artifacts/openclaw/drills/doc03/sandbox-exec-log.json"
+    "artifacts/openclaw/drills/doc03/sandbox-exec-log.json",
+    "artifacts/openclaw/drills/doc03/containment-verification.json"
   ],
+  "overlay_context": {
+    "openclaw": {
+      "assertions": {
+        "non_main_session_sandboxed": true,
+        "host_filesystem_traversal_blocked": true,
+        "unauthorized_network_egress_blocked": true
+      }
+    }
+  },
   "notes": "Non-main-session tool calls executed under sandbox constraints."
 }

@@ -21,3 +21,4 @@ drills:
   - D-OC-01
   - D-OC-02
   - D-OC-03
+conformance_doc: overlays/platform/openclaw/conformance.md

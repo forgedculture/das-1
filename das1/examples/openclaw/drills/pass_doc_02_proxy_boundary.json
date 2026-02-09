@@ -14,7 +14,17 @@
   "result": "pass",
   "scorecard_ref": "artifacts/openclaw/drills/doc02/scorecard.md",
   "evidence_refs": [
-    "artifacts/openclaw/drills/doc02/proxy-trust-test.log"
+    "artifacts/openclaw/drills/doc02/proxy-trust-test.log",
+    "artifacts/openclaw/drills/doc02/client-provenance-sample.json"
   ],
+  "overlay_context": {
+    "openclaw": {
+      "assertions": {
+        "remote_localhost_inheritance_blocked": true,
+        "unauth_high_risk_execution_blocked": true,
+        "trusted_proxy_evaluation_logged": true
+      }
+    }
+  },
   "notes": "Remote clients did not inherit localhost trust."
 }

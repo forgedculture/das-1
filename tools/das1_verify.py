@@ -532,6 +532,407 @@ def verify_exceptions(path: Path, schema_path: Path) -> Tuple[List[Failure], Dic
     return failures, report
 
 
+def verify_tool_catalogs(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[str, Any]]:
+    schema = _load_json(schema_path)
+    failures: List[Failure] = []
+    total = 0
+
+    for jf in _iter_json_files(path):
+        total += 1
+        obj = _load_json(jf)
+        failures.extend(_validate_against_schema(obj, schema, str(jf), kind="schema"))
+        if not isinstance(obj, dict):
+            failures.append(
+                Failure(kind="schema", file=str(jf), message="Tool catalog must be a JSON object.")
+            )
+            continue
+
+        generated_at = _parse_iso8601_aware(str(obj.get("generated_at", "")))
+        if generated_at is None:
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message="generated_at must be a valid timezone-aware ISO-8601 datetime (AEC-01).",
+                    pointer="/generated_at",
+                )
+            )
+        elif generated_at > datetime.now(timezone.utc):
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message="generated_at cannot be in the future (AEC-01).",
+                    pointer="/generated_at",
+                )
+            )
+
+        seen_tools = set()
+        for idx, tool in enumerate(obj.get("tools", [])):
+            if not isinstance(tool, dict):
+                continue
+            tool_name = tool.get("tool")
+            if isinstance(tool_name, str):
+                if tool_name in seen_tools:
+                    failures.append(
+                        Failure(
+                            kind="das1",
+                            file=str(jf),
+                            message=f"Duplicate tool entry '{tool_name}' in catalog (AEC-01).",
+                            pointer=f"/tools/{idx}/tool",
+                        )
+                    )
+                seen_tools.add(tool_name)
+
+    report = {
+        "kind": "das1-tool-catalogs",
+        "generated_at": _utcnow_iso(),
+        "path": str(path),
+        "total_files": total,
+        "failures": [f.__dict__ for f in failures],
+        "pass": len(failures) == 0,
+    }
+    return failures, report
+
+
+def verify_policy_snapshots(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[str, Any]]:
+    schema = _load_json(schema_path)
+    failures: List[Failure] = []
+    total = 0
+
+    for jf in _iter_json_files(path):
+        total += 1
+        obj = _load_json(jf)
+        failures.extend(_validate_against_schema(obj, schema, str(jf), kind="schema"))
+        if not isinstance(obj, dict):
+            failures.append(
+                Failure(kind="schema", file=str(jf), message="Policy snapshot must be a JSON object.")
+            )
+            continue
+
+        generated_at = _parse_iso8601_aware(str(obj.get("generated_at", "")))
+        if generated_at is None:
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message="generated_at must be a valid timezone-aware ISO-8601 datetime (AEC-02/AEC-04).",
+                    pointer="/generated_at",
+                )
+            )
+
+        ttl_policy = obj.get("credential_ttl_policy", {})
+        max_ttl = ttl_policy.get("max_ttl_seconds") if isinstance(ttl_policy, dict) else None
+        no_shared = ttl_policy.get("no_shared_credentials") if isinstance(ttl_policy, dict) else None
+
+        for idx, cred in enumerate(obj.get("credentials", [])):
+            if not isinstance(cred, dict):
+                continue
+            ttl = cred.get("ttl_seconds")
+            shared = cred.get("shared")
+
+            if isinstance(max_ttl, (int, float)) and isinstance(ttl, (int, float)) and ttl > max_ttl:
+                failures.append(
+                    Failure(
+                        kind="das1",
+                        file=str(jf),
+                        message=(
+                            f"Credential ttl_seconds ({ttl}) exceeds credential_ttl_policy.max_ttl_seconds "
+                            f"({max_ttl}) (AEC-02)."
+                        ),
+                        pointer=f"/credentials/{idx}/ttl_seconds",
+                    )
+                )
+            if no_shared is True and shared is True:
+                failures.append(
+                    Failure(
+                        kind="das1",
+                        file=str(jf),
+                        message="Shared credentials are disallowed by policy (AEC-02).",
+                        pointer=f"/credentials/{idx}/shared",
+                    )
+                )
+
+    report = {
+        "kind": "das1-policy-snapshots",
+        "generated_at": _utcnow_iso(),
+        "path": str(path),
+        "total_files": total,
+        "failures": [f.__dict__ for f in failures],
+        "pass": len(failures) == 0,
+    }
+    return failures, report
+
+
+def verify_ir_annexes(path: Path, schema_path: Path, max_age_days: int = 365) -> Tuple[List[Failure], Dict[str, Any]]:
+    schema = _load_json(schema_path)
+    failures: List[Failure] = []
+    total = 0
+    now_utc = datetime.now(timezone.utc)
+
+    for jf in _iter_json_files(path):
+        total += 1
+        obj = _load_json(jf)
+        failures.extend(_validate_against_schema(obj, schema, str(jf), kind="schema"))
+        if not isinstance(obj, dict):
+            failures.append(
+                Failure(kind="schema", file=str(jf), message="IR annex must be a JSON object.")
+            )
+            continue
+
+        annex_generated = _parse_iso8601_aware(str(obj.get("generated_at", "")))
+        if annex_generated is None:
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message="generated_at must be a valid timezone-aware ISO-8601 datetime (AEC-12).",
+                    pointer="/generated_at",
+                )
+            )
+
+        tabletop = obj.get("tabletop", {})
+        if isinstance(tabletop, dict):
+            dt = _parse_iso8601_aware(str(tabletop.get("last_executed_at", "")))
+            if dt is None:
+                failures.append(
+                    Failure(
+                        kind="das1",
+                        file=str(jf),
+                        message="tabletop.last_executed_at must be a valid timezone-aware ISO-8601 datetime (AEC-12).",
+                        pointer="/tabletop/last_executed_at",
+                    )
+                )
+            else:
+                if (now_utc - dt).total_seconds() > (max_age_days * 24 * 60 * 60):
+                    failures.append(
+                        Failure(
+                            kind="das1",
+                            file=str(jf),
+                            message=f"IR tabletop execution is older than {max_age_days} days (AEC-12).",
+                            pointer="/tabletop/last_executed_at",
+                        )
+                    )
+
+    report = {
+        "kind": "das1-ir-annexes",
+        "generated_at": _utcnow_iso(),
+        "path": str(path),
+        "total_files": total,
+        "max_age_days": max_age_days,
+        "failures": [f.__dict__ for f in failures],
+        "pass": len(failures) == 0,
+    }
+    return failures, report
+
+
+def _resolve_ref(base_file: Path, ref: str) -> Path:
+    ref_path = Path(ref)
+    if ref_path.is_absolute():
+        return ref_path
+    return (base_file.parent / ref_path).resolve()
+
+
+def verify_claims(path: Path, schema_path: Path, max_age_days: int = 90) -> Tuple[List[Failure], Dict[str, Any]]:
+    schema = _load_json(schema_path)
+    failures: List[Failure] = []
+    total = 0
+
+    for jf in _iter_json_files(path):
+        total += 1
+        obj = _load_json(jf)
+        failures.extend(_validate_against_schema(obj, schema, str(jf), kind="schema"))
+        if not isinstance(obj, dict):
+            failures.append(
+                Failure(kind="schema", file=str(jf), message="Claim packet must be a JSON object.")
+            )
+            continue
+
+        generated_at = _parse_iso8601_aware(str(obj.get("generated_at", "")))
+        if generated_at is None:
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message="generated_at must be a valid timezone-aware ISO-8601 datetime.",
+                    pointer="/generated_at",
+                )
+            )
+            continue
+
+        non_cert_stmt = (
+            obj.get("disclosures", {}).get("non_certification_statement", "")
+            if isinstance(obj.get("disclosures"), dict)
+            else ""
+        )
+        if "not a certification" not in str(non_cert_stmt).lower():
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message='Disclosure must include a non-certification statement containing "not a certification".',
+                    pointer="/disclosures/non_certification_statement",
+                )
+            )
+
+        report_ref = (
+            obj.get("evidence", {}).get("conformance_report_ref", "")
+            if isinstance(obj.get("evidence"), dict)
+            else ""
+        )
+        if not isinstance(report_ref, str) or not report_ref.strip():
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message="Claim packet requires evidence.conformance_report_ref.",
+                    pointer="/evidence/conformance_report_ref",
+                )
+            )
+            continue
+
+        report_path = _resolve_ref(jf, report_ref)
+        if not report_path.exists():
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message=f"Referenced conformance report not found: {report_path}",
+                    pointer="/evidence/conformance_report_ref",
+                )
+            )
+            continue
+
+        try:
+            conformance_report = _load_json(report_path)
+        except Exception as exc:
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message=f"Unable to read referenced conformance report: {exc}",
+                    pointer="/evidence/conformance_report_ref",
+                )
+            )
+            continue
+
+        if not isinstance(conformance_report, dict):
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message="Referenced conformance report must be a JSON object.",
+                    pointer="/evidence/conformance_report_ref",
+                )
+            )
+            continue
+
+        if conformance_report.get("pass") is not True:
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=str(jf),
+                    message="Referenced conformance report is not passing.",
+                    pointer="/evidence/conformance_report_ref",
+                )
+            )
+
+        scope = obj.get("scope", {}) if isinstance(obj.get("scope"), dict) else {}
+        core_conformant = scope.get("core_conformant")
+        if core_conformant is True:
+            for section in ("receipts", "exceptions", "drills"):
+                sec = conformance_report.get(section)
+                if not isinstance(sec, dict) or sec.get("pass") is not True:
+                    failures.append(
+                        Failure(
+                            kind="das1",
+                            file=str(jf),
+                            message=f"Core claim requires passing {section} section in referenced conformance report.",
+                            pointer=f"/scope/core_conformant",
+                        )
+                    )
+
+        # Required disclosure: last required drill pass dates
+        drill_disclosure = (
+            obj.get("disclosures", {}).get("last_required_drill_pass_at", {})
+            if isinstance(obj.get("disclosures"), dict)
+            else {}
+        )
+        if not isinstance(drill_disclosure, dict):
+            drill_disclosure = {}
+
+        for drill_id in ("D1", "D2"):
+            dt = _parse_iso8601_aware(str(drill_disclosure.get(drill_id, "")))
+            if dt is None:
+                failures.append(
+                    Failure(
+                        kind="das1",
+                        file=str(jf),
+                        message=f"Disclosure for {drill_id} must be a valid timezone-aware ISO-8601 datetime.",
+                        pointer=f"/disclosures/last_required_drill_pass_at/{drill_id}",
+                    )
+                )
+                continue
+            if (generated_at - dt).total_seconds() > (max_age_days * 24 * 60 * 60):
+                failures.append(
+                    Failure(
+                        kind="das1",
+                        file=str(jf),
+                        message=f"Disclosure for {drill_id} is older than {max_age_days} days.",
+                        pointer=f"/disclosures/last_required_drill_pass_at/{drill_id}",
+                    )
+                )
+
+        report_drills = conformance_report.get("drills", {})
+        latest_pass = report_drills.get("latest_pass", {}) if isinstance(report_drills, dict) else {}
+        if isinstance(latest_pass, dict):
+            for drill_id in ("D1", "D2"):
+                claimed = _parse_iso8601_aware(str(drill_disclosure.get(drill_id, "")))
+                observed = _parse_iso8601_aware(str(latest_pass.get(drill_id, "")))
+                if claimed is not None and observed is not None and claimed != observed:
+                    failures.append(
+                        Failure(
+                            kind="das1",
+                            file=str(jf),
+                            message=(
+                                f"Disclosure for {drill_id} does not match referenced report "
+                                f"latest pass ({observed.isoformat()})."
+                            ),
+                            pointer=f"/disclosures/last_required_drill_pass_at/{drill_id}",
+                        )
+                    )
+
+        overlay_claims = scope.get("overlay_claims", [])
+        if not isinstance(overlay_claims, list):
+            overlay_claims = []
+        report_overlays = conformance_report.get("overlays", {})
+        if not isinstance(report_overlays, dict):
+            report_overlays = {}
+
+        for overlay_id in overlay_claims:
+            overlay_report = report_overlays.get(overlay_id)
+            if not isinstance(overlay_report, dict) or overlay_report.get("pass") is not True:
+                failures.append(
+                    Failure(
+                        kind="das1",
+                        file=str(jf),
+                        message=f"Overlay claim '{overlay_id}' requires passing overlay evidence in referenced report.",
+                        pointer="/scope/overlay_claims",
+                    )
+                )
+
+    report = {
+        "kind": "das1-claims",
+        "generated_at": _utcnow_iso(),
+        "path": str(path),
+        "total_files": total,
+        "max_age_days": max_age_days,
+        "failures": [f.__dict__ for f in failures],
+        "pass": len(failures) == 0,
+    }
+    return failures, report
+
+
 def _load_overlay_plugin(overlay_id: str, overlay_dir: Path):
     module_name = overlay_id.replace("-", "_")
     plugin_path = overlay_dir / f"{module_name}.py"
@@ -668,8 +1069,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     p_verify.add_argument("--receipts", type=str, required=True, help="path to receipts directory")
     p_verify.add_argument("--exceptions", type=str, required=True, help="path to exceptions directory")
     p_verify.add_argument("--drills", type=str, required=True, help="path to drills directory")
+    p_verify.add_argument("--tool-catalogs", type=str, required=True, help="path to tool catalogs directory")
+    p_verify.add_argument("--policy-snapshots", type=str, required=True, help="path to policy snapshots directory")
+    p_verify.add_argument("--ir-annexes", type=str, required=True, help="path to incident response annexes directory")
     p_verify.add_argument("--schemas", type=str, default="schemas", help="schemas directory")
     p_verify.add_argument("--drill-max-age-days", type=int, default=90, help="max age for required D1/D2 passes")
+    p_verify.add_argument("--ir-max-age-days", type=int, default=365, help="max age for IR tabletop evidence")
     p_verify.add_argument("--overlay", action="append", default=[], help="overlay plugin id (repeatable)")
     p_verify.add_argument("--overlay-dir", type=str, default="tools/overlays", help="overlay plugin directory")
     p_verify.add_argument("--report", type=str, default="conformance-report.json", help="output report path")
@@ -690,12 +1095,38 @@ def main(argv: Optional[List[str]] = None) -> int:
     p_d.add_argument("--max-age-days", type=int, default=90)
     p_d.add_argument("--report", type=str, default="drills-report.json")
 
+    p_c = sub.add_parser("verify-claims", help="verify conformance claim packets")
+    p_c.add_argument("path", type=str)
+    p_c.add_argument("--schema", type=str, default="schemas/conformance-claim.schema.json")
+    p_c.add_argument("--max-age-days", type=int, default=90)
+    p_c.add_argument("--report", type=str, default="claims-report.json")
+
+    p_tc = sub.add_parser("verify-tool-catalogs", help="verify tool catalog artifacts")
+    p_tc.add_argument("path", type=str)
+    p_tc.add_argument("--schema", type=str, default="schemas/tool-catalog.schema.json")
+    p_tc.add_argument("--report", type=str, default="tool-catalogs-report.json")
+
+    p_ps = sub.add_parser("verify-policy-snapshots", help="verify policy snapshot artifacts")
+    p_ps.add_argument("path", type=str)
+    p_ps.add_argument("--schema", type=str, default="schemas/policy-snapshot.schema.json")
+    p_ps.add_argument("--report", type=str, default="policy-snapshots-report.json")
+
+    p_ir = sub.add_parser("verify-ir-annexes", help="verify incident response annex artifacts")
+    p_ir.add_argument("path", type=str)
+    p_ir.add_argument("--schema", type=str, default="schemas/ir-annex.schema.json")
+    p_ir.add_argument("--max-age-days", type=int, default=365)
+    p_ir.add_argument("--report", type=str, default="ir-annexes-report.json")
+
     p_o = sub.add_parser("verify-overlay", help="verify core plus overlay plugin checks")
     p_o.add_argument("--receipts", type=str, required=True, help="path to receipts directory")
     p_o.add_argument("--exceptions", type=str, required=True, help="path to exceptions directory")
     p_o.add_argument("--drills", type=str, required=True, help="path to drills directory")
+    p_o.add_argument("--tool-catalogs", type=str, required=True, help="path to tool catalogs directory")
+    p_o.add_argument("--policy-snapshots", type=str, required=True, help="path to policy snapshots directory")
+    p_o.add_argument("--ir-annexes", type=str, required=True, help="path to incident response annexes directory")
     p_o.add_argument("--schemas", type=str, default="schemas", help="schemas directory")
     p_o.add_argument("--drill-max-age-days", type=int, default=90, help="max age for required D1/D2 passes")
+    p_o.add_argument("--ir-max-age-days", type=int, default=365, help="max age for IR tabletop evidence")
     p_o.add_argument("--overlay", action="append", required=True, help="overlay plugin id (repeatable)")
     p_o.add_argument("--overlay-dir", type=str, default="tools/overlays", help="overlay plugin directory")
     p_o.add_argument("--report", type=str, default="overlay-report.json", help="output report path")
@@ -720,10 +1151,37 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(json.dumps({"pass": report["pass"], "failures": len(failures)}))
         return 1 if failures else 0
 
+    if args.cmd == "verify-claims":
+        failures, report = verify_claims(Path(args.path), Path(args.schema), max_age_days=args.max_age_days)
+        Path(args.report).write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(json.dumps({"pass": report["pass"], "failures": len(failures)}))
+        return 1 if failures else 0
+
+    if args.cmd == "verify-tool-catalogs":
+        failures, report = verify_tool_catalogs(Path(args.path), Path(args.schema))
+        Path(args.report).write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(json.dumps({"pass": report["pass"], "failures": len(failures)}))
+        return 1 if failures else 0
+
+    if args.cmd == "verify-policy-snapshots":
+        failures, report = verify_policy_snapshots(Path(args.path), Path(args.schema))
+        Path(args.report).write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(json.dumps({"pass": report["pass"], "failures": len(failures)}))
+        return 1 if failures else 0
+
+    if args.cmd == "verify-ir-annexes":
+        failures, report = verify_ir_annexes(Path(args.path), Path(args.schema), max_age_days=args.max_age_days)
+        Path(args.report).write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(json.dumps({"pass": report["pass"], "failures": len(failures)}))
+        return 1 if failures else 0
+
     if args.cmd in ("verify", "verify-overlay"):
         receipts_dir = Path(args.receipts)
         exceptions_dir = Path(args.exceptions)
         drills_dir = Path(args.drills)
+        tool_catalogs_dir = Path(args.tool_catalogs)
+        policy_snapshots_dir = Path(args.policy_snapshots)
+        ir_annexes_dir = Path(args.ir_annexes)
         schemas_dir = Path(args.schemas)
         overlay_dir = Path(args.overlay_dir)
         overlays = args.overlay or []
@@ -732,6 +1190,15 @@ def main(argv: Optional[List[str]] = None) -> int:
         exc_failures, exc_report = verify_exceptions(exceptions_dir, schemas_dir / "exception.schema.json")
         drill_failures, drill_report = verify_drills(
             drills_dir, schemas_dir / "drill-report.schema.json", max_age_days=args.drill_max_age_days
+        )
+        tool_catalog_failures, tool_catalog_report = verify_tool_catalogs(
+            tool_catalogs_dir, schemas_dir / "tool-catalog.schema.json"
+        )
+        policy_snapshot_failures, policy_snapshot_report = verify_policy_snapshots(
+            policy_snapshots_dir, schemas_dir / "policy-snapshot.schema.json"
+        )
+        ir_annex_failures, ir_annex_report = verify_ir_annexes(
+            ir_annexes_dir, schemas_dir / "ir-annex.schema.json", max_age_days=args.ir_max_age_days
         )
         overlay_failures: List[Failure] = []
         overlay_reports: Dict[str, Any] = {}
@@ -752,14 +1219,23 @@ def main(argv: Optional[List[str]] = None) -> int:
             "receipts_path": str(receipts_dir),
             "exceptions_path": str(exceptions_dir),
             "drills_path": str(drills_dir),
+            "tool_catalogs_path": str(tool_catalogs_dir),
+            "policy_snapshots_path": str(policy_snapshots_dir),
+            "ir_annexes_path": str(ir_annexes_dir),
             "receipts": receipt_report,
             "exceptions": exc_report,
             "drills": drill_report,
+            "tool_catalogs": tool_catalog_report,
+            "policy_snapshots": policy_snapshot_report,
+            "ir_annexes": ir_annex_report,
             "overlays": overlay_reports,
             "pass": (
                 len(receipt_failures) == 0
                 and len(exc_failures) == 0
                 and len(drill_failures) == 0
+                and len(tool_catalog_failures) == 0
+                and len(policy_snapshot_failures) == 0
+                and len(ir_annex_failures) == 0
                 and len(overlay_failures) == 0
             ),
         }
@@ -772,6 +1248,9 @@ def main(argv: Optional[List[str]] = None) -> int:
                     "receipt_failures": len(receipt_failures),
                     "exception_failures": len(exc_failures),
                     "drill_failures": len(drill_failures),
+                    "tool_catalog_failures": len(tool_catalog_failures),
+                    "policy_snapshot_failures": len(policy_snapshot_failures),
+                    "ir_annex_failures": len(ir_annex_failures),
                     "overlay_failures": len(overlay_failures),
                 }
             )

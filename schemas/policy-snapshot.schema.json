@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forgedculture.org/das-1/schemas/policy-snapshot.schema.json",
+  "title": "DAS-1 Policy Snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "snapshot_version",
+    "snapshot_id",
+    "generated_at",
+    "owner_id",
+    "workflow_id",
+    "approval_latency_budget_ms",
+    "approval_budget_fallback",
+    "credentials"
+  ],
+  "properties": {
+    "snapshot_version": {
+      "type": "string",
+      "pattern": "^v\\d+\\.\\d+\\.\\d+$"
+    },
+    "snapshot_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "owner_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "workflow_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approval_latency_budget_ms": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "approval_budget_fallback": {
+      "type": "string",
+      "minLength": 1
+    },
+    "credential_ttl_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_ttl_seconds",
+        "rotation_required"
+      ],
+      "properties": {
+        "max_ttl_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "rotation_required": {
+          "type": "boolean"
+        },
+        "no_shared_credentials": {
+          "type": "boolean"
+        }
+      }
+    },
+    "credentials": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "credential_id",
+          "scope",
+          "ttl_seconds",
+          "shared"
+        ],
+        "properties": {
+          "credential_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ttl_seconds": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "shared": {
+            "type": "boolean"
+          },
+          "rotation_ref": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

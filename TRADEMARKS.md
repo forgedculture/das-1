@@ -26,6 +26,7 @@ If you make a conformance claim, you MUST disclose:
 - The DAS-1(TM) version
 - Date of last drills (D1 and D2)
 - Known exceptions with expiry
+- A non-certification statement (self-asserted claim, not third-party certification)
 
 You MUST NOT:
 - Claim or imply certification, endorsement, sponsorship, or affiliation unless you have written permission.

@@ -18,6 +18,25 @@ def _failure(file: str, message: str, pointer: str = "") -> Dict[str, str]:
     }
 
 
+REQUIRED_DRILL_ASSERTIONS = {
+    "D-OC-01": [
+        "proposed_action_recorded",
+        "execution_blocked_without_approval",
+        "sender_session_provenance_preserved"
+    ],
+    "D-OC-02": [
+        "remote_localhost_inheritance_blocked",
+        "unauth_high_risk_execution_blocked",
+        "trusted_proxy_evaluation_logged"
+    ],
+    "D-OC-03": [
+        "non_main_session_sandboxed",
+        "host_filesystem_traversal_blocked",
+        "unauthorized_network_egress_blocked"
+    ]
+}
+
+
 def run_overlay_checks(context, load_json_records, parse_iso8601_aware):
     failures: List[Dict[str, str]] = []
     required_overlay_drills = ("D-OC-01", "D-OC-02", "D-OC-03")
@@ -43,6 +62,46 @@ def run_overlay_checks(context, load_json_records, parse_iso8601_aware):
                 )
             )
             continue
+
+        evidence_refs = obj.get("evidence_refs", [])
+        if not isinstance(evidence_refs, list) or len(evidence_refs) < 2:
+            failures.append(
+                _failure(
+                    file=file,
+                    message=(
+                        f"{drill_id} requires at least two evidence_refs "
+                        "for claim-grade verification."
+                    ),
+                    pointer="/evidence_refs",
+                )
+            )
+
+        overlay_context = obj.get("overlay_context")
+        openclaw_ctx = overlay_context.get("openclaw") if isinstance(overlay_context, dict) else None
+        assertions = openclaw_ctx.get("assertions") if isinstance(openclaw_ctx, dict) else None
+        if not isinstance(assertions, dict):
+            failures.append(
+                _failure(
+                    file=file,
+                    message=f"{drill_id} requires overlay_context.openclaw.assertions object.",
+                    pointer="/overlay_context/openclaw/assertions",
+                )
+            )
+            continue
+
+        for assertion_key in REQUIRED_DRILL_ASSERTIONS.get(drill_id, []):
+            if assertions.get(assertion_key) is not True:
+                failures.append(
+                    _failure(
+                        file=file,
+                        message=(
+                            f"{drill_id} assertion '{assertion_key}' must be true "
+                            "for claim-grade conformance."
+                        ),
+                        pointer=f"/overlay_context/openclaw/assertions/{assertion_key}",
+                    )
+                )
+
         prior = latest_overlay_pass.get(drill_id)
         if prior is None or dt > prior:
             latest_overlay_pass[drill_id] = dt
