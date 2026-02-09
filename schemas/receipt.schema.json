@@ -54,6 +54,15 @@
     "cap_id": {"type": "string"},
     "revoked": {"type": "boolean"},
     "revoke_of_event_id": {"type": "string"},
+    "overlay_context": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$"
+      },
+      "additionalProperties": {
+        "type": "object"
+      }
+    },
     "notes": {"type": "string"}
   }
 }

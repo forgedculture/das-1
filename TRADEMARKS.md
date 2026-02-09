@@ -20,7 +20,7 @@ You may use the phrase:
 - "DAS-1(TM) v0.001 Conformant"
 
 Only if you meet the conformance criteria in:
-- spec/conformance/conformance-criteria-v0.001.md
+- spec/conformance/conformance-criteria.md
 
 If you make a conformance claim, you MUST disclose:
 - The DAS-1(TM) version

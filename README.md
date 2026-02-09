@@ -13,7 +13,7 @@ That gap becomes your next incident.
 
 DAS-1(TM) is a minimal, operator-grade standard for delegated authority in AI and agentic systems. It defines 12 Authority Engineering Controls (AEC-01 through AEC-12), required drills, and a conformance claim that is backed by receipts.
 
-- Core Spec: spec/core/das-1-core-v0.001.md
+- Core Spec: spec/core/das-1-core.md
 - Conformance: spec/conformance/
 - Controls Catalog: catalog/
 - Profiles: profiles/
@@ -42,7 +42,7 @@ You may claim "DAS-1(TM) v0.001 Conformant(TM)" only if:
 - Both required drills executed within the last 90 days
 - Minimum metrics are measurable from stored receipts
 
-See: spec/conformance/conformance-criteria-v0.001.md
+See: spec/conformance/conformance-criteria.md
 
 ## Collaboration
 

@@ -1,0 +1,24 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D1",
+  "run_id": "run_d1_2026_01_15",
+  "executed_at": "2026-01-15T16:00:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.deploy.gated"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/drills/d1/scorecard-2026-01-15.md",
+  "evidence_refs": [
+    "artifacts/drills/d1/receipt-pack.json",
+    "artifacts/drills/d1/timeline.csv"
+  ],
+  "chain_reconstruction_ok": true,
+  "revocation_within_budget": true,
+  "m2_approval_latency_ms_p95": 42000,
+  "notes": "D1 passed with full chain reconstruction and correct approve/deny path."
+}

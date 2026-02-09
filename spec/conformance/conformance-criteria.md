@@ -9,10 +9,14 @@ Exception handling note
 - Expired exceptions SHOULD be retained for historical evidence and audit reconstruction.
 - Expired exceptions are not applicable for the current conformance period.
 
+Overlay conformance note
+- Overlay claims are additive. Implementations MAY claim core conformance without an overlay claim.
+- If an overlay claim is made, overlay-specific drills and evidence requirements also apply.
+
 Recommended evidence package
 - Tool catalog export
 - Approval logs + latency metrics
-- Revocation drill record with timestamps
+- Drill reports for D1 and D2 with timestamps and evidence references
 - Audit completeness sample pack
 - Cost attribution coverage report
 - Exceptions register with expiries

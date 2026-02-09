@@ -1,0 +1,21 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D1",
+  "run_id": "run_openclaw_d1_2026_02_01",
+  "executed_at": "2026-02-01T19:00:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.ops",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.openclaw.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/openclaw/drills/d1/scorecard.md",
+  "evidence_refs": [
+    "artifacts/openclaw/drills/d1/receipt-pack.json"
+  ],
+  "chain_reconstruction_ok": true,
+  "revocation_within_budget": true
+}

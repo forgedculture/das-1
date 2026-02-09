@@ -1,0 +1,20 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-OC-03",
+  "run_id": "run_openclaw_doc03_2026_02_01",
+  "executed_at": "2026-02-01T19:55:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.ops",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.openclaw.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/openclaw/drills/doc03/scorecard.md",
+  "evidence_refs": [
+    "artifacts/openclaw/drills/doc03/sandbox-exec-log.json"
+  ],
+  "notes": "Non-main-session tool calls executed under sandbox constraints."
+}

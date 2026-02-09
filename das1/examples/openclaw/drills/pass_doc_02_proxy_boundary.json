@@ -1,0 +1,20 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-OC-02",
+  "run_id": "run_openclaw_doc02_2026_02_01",
+  "executed_at": "2026-02-01T19:45:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.ops",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.openclaw.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/openclaw/drills/doc02/scorecard.md",
+  "evidence_refs": [
+    "artifacts/openclaw/drills/doc02/proxy-trust-test.log"
+  ],
+  "notes": "Remote clients did not inherit localhost trust."
+}

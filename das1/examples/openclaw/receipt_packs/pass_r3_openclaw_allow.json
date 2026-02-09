@@ -1,0 +1,30 @@
+{
+  "receipt_version": "v0.0.1",
+  "event_id": "evt_openclaw_r3_0001",
+  "timestamp": "2026-02-01T18:05:00Z",
+  "actor_id": "svc.agent.openclaw",
+  "owner_id": "team.ops",
+  "workflow_id": "wf.openclaw.assistant",
+  "tool": "connector.gmail",
+  "action": "send_message",
+  "target": "thread:12345",
+  "risk_class": "R3",
+  "decision": "allow",
+  "policy_version": "pol_2026-02-01_003",
+  "correlation_id": "corr_openclaw_0001",
+  "inputs_present": true,
+  "outputs_present": true,
+  "preflight_id": "pre_openclaw_0001",
+  "approval_id": "app_openclaw_0001",
+  "approver_id": "user.oncall",
+  "cost_center": "cc_ops",
+  "cost_estimate": 0.03,
+  "overlay_context": {
+    "openclaw": {
+      "channel_id": "slack:C018ABCDEF",
+      "sender_id": "U018ABCDEF",
+      "session_scope_key": "slack:C018ABCDEF:U018ABCDEF"
+    }
+  },
+  "notes": "Example OpenClaw R3 allow with provenance binding."
+}

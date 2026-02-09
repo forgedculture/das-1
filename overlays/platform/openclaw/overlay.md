@@ -42,3 +42,7 @@ Overlay drills
 - D-OC-03 Sandbox containment test
   - Pass: non-main-session tool calls execute inside sandbox constraints and cannot traverse host filesystem/network beyond policy.
   - Output: execution receipts plus containment verification logs.
+
+Verifier mapping (informative)
+- Overlay checks are implemented as a plugin (`tools/overlays/openclaw.py`) and run via `verify-overlay --overlay openclaw`.
+- For R3/R4 allow receipts, provenance evidence is expected in `overlay_context.openclaw` with `channel_id`, `sender_id`, and `session_scope_key`.
