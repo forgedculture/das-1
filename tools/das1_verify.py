@@ -232,6 +232,21 @@ def _parse_iso8601_aware(value: str) -> Optional[datetime]:
         return None
 
 
+def _percentile(values: List[float], p: float) -> Optional[float]:
+    if not values:
+        return None
+    ordered = sorted(values)
+    if len(ordered) == 1:
+        return float(ordered[0])
+    rank = (len(ordered) - 1) * p
+    low = int(rank)
+    high = min(low + 1, len(ordered) - 1)
+    if high == low:
+        return float(ordered[low])
+    weight = rank - low
+    return float(ordered[low] * (1 - weight) + ordered[high] * weight)
+
+
 def _das1_drill_checks(drill: Dict[str, Any], file: str, now_utc: datetime) -> List[Failure]:
     failures: List[Failure] = []
 
@@ -343,6 +358,16 @@ def verify_receipts(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[
 
     failures: List[Failure] = []
     total = 0
+    risk_totals: Dict[str, int] = {"R1": 0, "R2": 0, "R3": 0, "R4": 0}
+    risk_denies: Dict[str, int] = {"R1": 0, "R2": 0, "R3": 0, "R4": 0}
+    risk_blocked_or_queued: Dict[str, int] = {"R1": 0, "R2": 0, "R3": 0, "R4": 0}
+    risk_execution_status_observed: Dict[str, int] = {"R1": 0, "R2": 0, "R3": 0, "R4": 0}
+    r1_r2_allow_total = 0
+    r1_r2_allow_gated = 0
+    r1_r2_allow_auto = 0
+    r1_r2_execution_latency_values: List[float] = []
+    r1_r2_execution_latency_observed = 0
+    approval_wait_values: List[float] = []
 
     for jf in _iter_json_files(path):
         total += 1
@@ -350,16 +375,129 @@ def verify_receipts(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[
         failures.extend(_validate_against_schema(obj, schema, str(jf), kind="schema"))
         if isinstance(obj, dict):
             failures.extend(_das1_receipt_checks(obj, str(jf)))
+
+            risk = obj.get("risk_class")
+            decision = obj.get("decision")
+            if risk in risk_totals:
+                risk_totals[risk] += 1
+                if decision == "deny":
+                    risk_denies[risk] += 1
+
+                execution_status = obj.get("execution_status")
+                if execution_status in ("executed", "blocked", "queued", "failed", "noop"):
+                    risk_execution_status_observed[risk] += 1
+                    if execution_status in ("blocked", "queued"):
+                        risk_blocked_or_queued[risk] += 1
+
+            approval_wait_ms = obj.get("approval_wait_ms")
+            if isinstance(approval_wait_ms, (int, float)) and approval_wait_ms >= 0:
+                approval_wait_values.append(float(approval_wait_ms))
+
+            if risk in ("R1", "R2") and decision == "allow":
+                r1_r2_allow_total += 1
+                approval_required = obj.get("approval_required")
+                gated = (
+                    approval_required is True
+                    or bool(obj.get("approval_id"))
+                    or bool(obj.get("approver_id"))
+                )
+                if gated:
+                    r1_r2_allow_gated += 1
+                else:
+                    r1_r2_allow_auto += 1
+
+                execution_latency_ms = obj.get("execution_latency_ms")
+                if isinstance(execution_latency_ms, (int, float)) and execution_latency_ms >= 0:
+                    r1_r2_execution_latency_values.append(float(execution_latency_ms))
+                    r1_r2_execution_latency_observed += 1
         else:
             failures.append(
                 Failure(kind="schema", file=str(jf), message="Receipt must be a JSON object.")
             )
+
+    blocked_or_queued_rate_by_risk: Dict[str, Optional[float]] = {}
+    denied_rate_by_risk: Dict[str, Optional[float]] = {}
+    for risk in ("R1", "R2", "R3", "R4"):
+        total_risk = risk_totals[risk]
+        if total_risk == 0:
+            blocked_or_queued_rate_by_risk[risk] = None
+            denied_rate_by_risk[risk] = None
+        else:
+            if risk_execution_status_observed[risk] == 0:
+                blocked_or_queued_rate_by_risk[risk] = None
+            else:
+                blocked_or_queued_rate_by_risk[risk] = risk_blocked_or_queued[risk] / risk_execution_status_observed[risk]
+            denied_rate_by_risk[risk] = risk_denies[risk] / total_risk
+
+            if risk_execution_status_observed[risk] < total_risk:
+                failures.append(
+                    Failure(
+                        kind="das1",
+                        file=str(path),
+                        message=(
+                            f"M7 measurability gap: risk class {risk} has {total_risk} receipts "
+                            f"but only {risk_execution_status_observed[risk]} with execution_status."
+                        ),
+                        pointer=f"/metrics/m7/{risk}",
+                    )
+                )
+
+    if r1_r2_allow_total > 0 and r1_r2_execution_latency_observed < r1_r2_allow_total:
+        failures.append(
+            Failure(
+                kind="das1",
+                file=str(path),
+                message=(
+                    "M6 measurability gap: not all R1/R2 allow receipts include execution_latency_ms."
+                ),
+                pointer="/metrics/m6",
+            )
+        )
+
+    r1_r2_autonomous_execution_coverage = (
+        (r1_r2_allow_auto / r1_r2_allow_total) if r1_r2_allow_total else None
+    )
+
+    utility_metrics = {
+        "m5_r1_r2_autonomous_execution_coverage": r1_r2_autonomous_execution_coverage,
+        "m6_r1_r2_execution_latency_ms": {
+            "p50": _percentile(r1_r2_execution_latency_values, 0.50),
+            "p95": _percentile(r1_r2_execution_latency_values, 0.95),
+            "sample_size": len(r1_r2_execution_latency_values),
+            "coverage": (
+                (r1_r2_execution_latency_observed / r1_r2_allow_total)
+                if r1_r2_allow_total
+                else None
+            ),
+        },
+        "m7_blocked_or_queued_rate_by_risk_class": blocked_or_queued_rate_by_risk,
+        "supporting": {
+            "r1_r2_allow_total": r1_r2_allow_total,
+            "r1_r2_allow_auto": r1_r2_allow_auto,
+            "r1_r2_allow_gated": r1_r2_allow_gated,
+            "denied_rate_by_risk_class": denied_rate_by_risk,
+            "execution_status_coverage_by_risk_class": {
+                risk: (
+                    (risk_execution_status_observed[risk] / risk_totals[risk])
+                    if risk_totals[risk]
+                    else None
+                )
+                for risk in ("R1", "R2", "R3", "R4")
+            },
+            "approval_wait_ms": {
+                "p50": _percentile(approval_wait_values, 0.50),
+                "p95": _percentile(approval_wait_values, 0.95),
+                "sample_size": len(approval_wait_values),
+            },
+        },
+    }
 
     report = {
         "kind": "das1-receipts",
         "generated_at": _utcnow_iso(),
         "path": str(path),
         "total_files": total,
+        "metrics": utility_metrics,
         "failures": [f.__dict__ for f in failures],
         "pass": len(failures) == 0,
     }

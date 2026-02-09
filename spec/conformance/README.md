@@ -54,6 +54,8 @@ This directory provides the smallest executable core needed to make DAS-1 claims
 - Cost-incurring receipts require owner/cost-center attribution tags (AEC-10)
 - Exceptions with `status` in `proposed|approved|active` must be unexpired; `expired` entries remain valid historical evidence (AEC-11)
 - Required drills D1 and D2 must have a passing execution within the last 90 days
+- Receipt reports include utility-oriented summaries for R1/R2 autonomy, execution latency, and blocked rates when optional fields are present (M5-M7 support)
+- Measurability gaps for M6/M7 are surfaced as failures when relevant receipt fields are missing
 
 ## Overlay extensions
 

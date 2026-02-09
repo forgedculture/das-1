@@ -27,6 +27,7 @@ Risk classes (default; replaceable with explicit mapping)
 - R2: sensitive reads or small writes with trivial blast radius.
 - R3: privileged access or meaningful write blast radius.
 - R4: high impact, irreversible, secrets/identity, production change.
+- Design intent: controls MUST be risk-proportional so low-risk work remains useful while high-risk work remains bounded.
 
 ## 3. Authority Engineering Controls (AEC) (Normative)
 
@@ -42,10 +43,12 @@ AEC-02 Least privilege and time bounding
 AEC-03 Human gating for high risk actions
 - R3 and R4 tool calls MUST require explicit human approval prior to execution.
 - Approval MUST be attributable and linked to execution.
+- R1 and R2 actions SHOULD execute without per-action human approval when policy conditions are satisfied.
 - Receipt: approval policy plus correlated approval logs.
 
 AEC-04 Approval latency budget
 - The organization MUST define an approval latency budget and a fallback when budget is exceeded.
+- Fallback behavior MUST preserve bounded utility for R1/R2 while failing safely for R3/R4.
 - Receipt: SLO doc plus measured p95 approval latency.
 
 AEC-05 Revocation kill switch and drill
@@ -95,6 +98,9 @@ AEC-12 Tool-call incident annex and exercises
 - M2 Approval latency (p50, p95)
 - M3 Audit completeness rate
 - M4 Cost attribution coverage
+- M5 R1/R2 autonomous execution coverage rate
+- M6 R1/R2 execution latency (p50, p95)
+- M7 Blocked or queued action rate by risk class
 
 ## 5. Required drills (Normative)
 
@@ -105,3 +111,9 @@ D1 Tool-Call Pager Test
 D2 Revocation Fire Drill
 - Pass: revoke mid-execution; confirm no further tool calls; audit completeness preserved.
 - Outputs: drill log plus remediations.
+
+## 6. Utility guardrails (Normative)
+
+- Organizations MUST define target ranges for M5-M7 and review them at least monthly.
+- If emergency hardening materially reduces R1/R2 utility, the reduction MUST be tracked as an AEC-11 exception with owner and expiry.
+- Conformance evidence MUST show both protection outcomes and usefulness outcomes; "safe because inert" is not a sufficient operating posture.

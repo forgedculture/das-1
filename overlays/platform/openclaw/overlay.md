@@ -31,6 +31,7 @@ OpenClaw runtime baseline
 - Non-main sessions and untrusted channels must run tools in sandboxed execution.
 - Elevated host execution is prohibited unless explicitly approved as R4 with time-bounded revocation.
 - Public/group channels default to deny for high-risk tools (exec, host file write, outbound connector send/delete).
+- In trusted low-risk contexts, policy-conformant R1/R2 actions should execute autonomously to preserve operational usefulness.
 
 Overlay drills
 - D-OC-01 Prompt-injection authority crossing test

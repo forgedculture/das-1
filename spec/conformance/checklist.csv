@@ -11,3 +11,7 @@ AEC-09,,,,,
 AEC-10,,,,,
 AEC-11,,,,,
 AEC-12,,,,,
+MET-M5,,,,,R1/R2 autonomous execution coverage reported and compared to target range
+MET-M6,,,,,R1/R2 execution latency p50/p95 reported and compared to target range
+MET-M7,,,,,Blocked or queued action rate by risk class reported and compared to target range
+UTL-01,,,,,Utility-impacting hardening captured via AEC-11 exception with expiry when needed

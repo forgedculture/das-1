@@ -47,7 +47,14 @@
     },
     "approver_id": {"type": "string"},
     "approval_id": {"type": "string"},
+    "approval_required": {"type": "boolean"},
+    "approval_wait_ms": {"type": "number", "minimum": 0},
     "preflight_id": {"type": "string"},
+    "execution_status": {
+      "type": "string",
+      "enum": ["executed", "blocked", "queued", "failed", "noop"]
+    },
+    "execution_latency_ms": {"type": "number", "minimum": 0},
     "cost_center": {"type": "string"},
     "cost_estimate": {"type": "number", "minimum": 0},
     "cost_actual": {"type": "number", "minimum": 0},
