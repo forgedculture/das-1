@@ -1,0 +1,30 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-CC-05",
+  "run_id": "run_claude_code_dcc05_2026_02_01",
+  "executed_at": "2026-02-01T20:15:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.claude_code.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/claude-code/drills/dcc05/scorecard.md",
+  "evidence_refs": [
+    "artifacts/claude-code/drills/dcc05/mcp-tool-policy-eval.json",
+    "artifacts/claude-code/drills/dcc05/mcp-invocation-receipts.json"
+  ],
+  "overlay_context": {
+    "claude_code": {
+      "assertions": {
+        "untrusted_mcp_tools_default_deny": true,
+        "mcp_permissions_scoped_per_server": true,
+        "mcp_tool_invocation_provenance_preserved": true
+      }
+    }
+  },
+  "notes": "Untrusted MCP tools were denied and scoped permissions were enforced."
+}

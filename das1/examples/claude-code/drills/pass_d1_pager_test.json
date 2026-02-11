@@ -1,0 +1,21 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D1",
+  "run_id": "run_claude_code_d1_2026_02_01",
+  "executed_at": "2026-02-01T19:00:00Z",
+  "environment": "staging",
+  "owner_id": "team.ops",
+  "witness_ids": [
+    "user.sre"
+  ],
+  "workflow_ids": [
+    "wf.claude_code.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/drills/d1/scorecard.md",
+  "evidence_refs": [
+    "artifacts/drills/d1/pager-events.log",
+    "artifacts/drills/d1/receipt-chain.json"
+  ],
+  "notes": "Pager escalation and incident coordination drill passed."
+}

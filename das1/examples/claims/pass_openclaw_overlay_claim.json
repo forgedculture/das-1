@@ -22,7 +22,7 @@
       {
         "exception_id": "exc_0001",
         "status": "approved",
-        "expires_at": "2026-02-10T12:00:00Z"
+        "expires_at": "2026-12-31T12:00:00Z"
       }
     ],
     "non_certification_statement": "This claim is a self-asserted conformance statement and not a certification."

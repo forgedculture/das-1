@@ -1,0 +1,30 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-CC-09",
+  "run_id": "run_claude_code_dcc09_2026_02_01",
+  "executed_at": "2026-02-01T20:55:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.claude_code.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/claude-code/drills/dcc09/scorecard.md",
+  "evidence_refs": [
+    "artifacts/claude-code/drills/dcc09/approval-sample-audit.json",
+    "artifacts/claude-code/drills/dcc09/receipt-crosscheck.log"
+  ],
+  "overlay_context": {
+    "claude_code": {
+      "assertions": {
+        "approval_artifact_scope_match_verified": true,
+        "approval_artifact_time_bound_verified": true,
+        "approval_sample_crosscheck_passed": true
+      }
+    }
+  },
+  "notes": "Approval artifacts were sampled against receipt outcomes with no scope/time mismatches."
+}

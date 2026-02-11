@@ -92,6 +92,20 @@ python tools/das1_verify.py verify-overlay \
   --report openclaw-overlay-report.json
 ```
 
+Verify core plus Claude Code overlay:
+
+```bash
+python tools/das1_verify.py verify-overlay \
+  --receipts das1/examples/claude-code/receipt_packs \
+  --exceptions das1/examples/exceptions \
+  --drills das1/examples/claude-code/drills \
+  --tool-catalogs das1/examples/tool_catalogs \
+  --policy-snapshots das1/examples/policy_snapshots \
+  --ir-annexes das1/examples/ir_annexes \
+  --overlay claude-code \
+  --report claude-code-overlay-report.json
+```
+
 Verify publishable claim packets:
 
 ```bash

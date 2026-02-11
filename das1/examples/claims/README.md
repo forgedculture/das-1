@@ -13,4 +13,5 @@ python tools/das1_verify.py verify-claims das1/examples/claims
 
 - `pass_core_claim.json` expects a passing core report at `conformance-report.json`.
 - `pass_openclaw_overlay_claim.json` expects a passing overlay report at `openclaw-overlay-report.json`.
+- `pass_claude_code_overlay_claim.json` expects a passing overlay report at `claude-code-overlay-report.json`.
 - Claims are self-asserted and must include a non-certification statement.

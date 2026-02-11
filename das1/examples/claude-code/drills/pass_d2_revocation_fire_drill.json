@@ -1,0 +1,21 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D2",
+  "run_id": "run_claude_code_d2_2026_02_01",
+  "executed_at": "2026-02-01T19:20:00Z",
+  "environment": "staging",
+  "owner_id": "team.ops",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.claude_code.assistant"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/drills/d2/scorecard.md",
+  "evidence_refs": [
+    "artifacts/drills/d2/revocation-events.log",
+    "artifacts/drills/d2/post-revoke-receipts.json"
+  ],
+  "notes": "Revocation and recovery drill passed within target budget."
+}

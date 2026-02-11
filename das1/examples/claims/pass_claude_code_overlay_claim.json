@@ -1,7 +1,7 @@
 {
   "claim_version": "v0.0.1",
-  "claim_id": "claim_core_2026_02_09",
-  "generated_at": "2026-02-08T14:00:00Z",
+  "claim_id": "claim_claude_code_2026_02_09",
+  "generated_at": "2026-02-09T14:10:00Z",
   "claimant": {
     "organization": "Forge Signals",
     "owner_id": "team.platform"
@@ -9,31 +9,31 @@
   "das_version": "v0.001",
   "scope": {
     "core_conformant": true,
-    "overlay_claims": []
+    "overlay_claims": [
+      "claude-code"
+    ]
   },
   "disclosures": {
     "last_required_drill_pass_at": {
-      "D1": "2026-01-15T16:00:00Z",
-      "D2": "2026-01-15T16:30:00Z"
+      "D1": "2026-02-01T19:00:00Z",
+      "D2": "2026-02-01T19:20:00Z"
     },
     "known_exceptions": [
       {
         "exception_id": "exc_0001",
         "status": "approved",
-        "expires_at": "2026-12-31T12:00:00Z",
-        "notes": "Approval latency SLO pipeline pending."
+        "expires_at": "2026-12-31T12:00:00Z"
       }
     ],
     "non_certification_statement": "This claim is a self-asserted conformance statement and not a certification."
   },
   "evidence": {
-    "conformance_report_ref": "../../../conformance-report.json",
-    "exceptions_ref": "das1/examples/exceptions",
-    "notes": "Core claim based on seed verifier outputs and evidence pack."
+    "conformance_report_ref": "../../../claude-code-overlay-report.json",
+    "exceptions_ref": "das1/examples/exceptions"
   },
   "attestation": {
     "statement": "I attest this claim is accurate to the best of my knowledge and supported by the referenced evidence.",
     "attester_id": "user.security",
-    "attested_at": "2026-02-08T14:05:00Z"
+    "attested_at": "2026-02-09T14:15:00Z"
   }
 }

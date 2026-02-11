@@ -1,0 +1,31 @@
+name: das-1-claude-code-overlay
+version: v0.001
+requires:
+  das_core: v0.001
+applies_to:
+  runtime: claude-code
+  model_provider: amazon-bedrock
+  deployment: local-or-ci-agentic-coding
+tightens:
+  - AEC-03
+  - AEC-05
+  - AEC-06
+  - AEC-07
+  - AEC-08
+  - AEC-09
+  - AEC-11
+adds:
+  - AECX-050
+  - AECX-051
+  - AECX-052
+drills:
+  - D-CC-01
+  - D-CC-02
+  - D-CC-03
+  - D-CC-04
+  - D-CC-05
+  - D-CC-06
+  - D-CC-07
+  - D-CC-08
+  - D-CC-09
+conformance_doc: overlays/platform/claude-code/conformance.md
