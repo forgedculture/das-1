@@ -19,6 +19,10 @@ DAS-1(TM) is a minimal, operator-grade standard for delegated authority in AI an
 - Profiles: profiles/
 - Overlays: overlays/
 
+Current overlay bundles:
+- `openclaw`: gateway exposure, prompt-injection boundary, sandbox/session isolation, revocation readiness.
+- `claude-code`: supervised coding-agent controls (propose/execute boundary, workspace containment, shell/git gating, MCP boundaries, CI execute boundary, approval integrity, revocation readiness).
+
 ## What this is for
 
 Use DAS-1 when an AI agent, automation, or workflow can:
@@ -138,3 +142,4 @@ Bring receipts.
 Status
 - Version: v0.001 (draft)
 - Date: 2025-12-30
+- Last Updated: 2026-02-12
