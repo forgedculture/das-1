@@ -141,5 +141,4 @@ Bring receipts.
 
 Status
 - Version: v0.001 (draft)
-- Date: 2025-12-30
-- Last Updated: 2026-02-12
+- Date: 2026-02-12
