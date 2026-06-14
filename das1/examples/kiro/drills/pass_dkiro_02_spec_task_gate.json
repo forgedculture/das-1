@@ -1,0 +1,30 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-KIRO-02",
+  "run_id": "run_kiro_dkiro02_2026_06_10",
+  "executed_at": "2026-06-10T20:10:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.kiro.agent"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/kiro/drills/dkiro02/scorecard.md",
+  "evidence_refs": [
+    "artifacts/kiro/drills/dkiro02/spec-artifacts.json",
+    "artifacts/kiro/drills/dkiro02/blocked-task-execution.log"
+  ],
+  "overlay_context": {
+    "kiro": {
+      "assertions": {
+        "spec_artifacts_reviewable_before_execution": true,
+        "r3_r4_spec_task_requires_approval": true,
+        "unapproved_spec_task_execution_blocked": true
+      }
+    }
+  },
+  "notes": "Spec requirements/design/tasks remained reviewable; R3/R4 spec task stayed proposed-only until approval."
+}

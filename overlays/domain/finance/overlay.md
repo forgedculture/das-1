@@ -1,5 +1,7 @@
 # DAS-1(TM) Finance overlay v0.001 (Informative)
 
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace financial regulation, securities/banking/insurance supervision, AML/sanctions obligations, or suitability and disclosure review.
+
 Prerequisite
 - DAS-1(TM) v0.001 Conformant.
 
@@ -51,3 +53,6 @@ Operational risk closure requirements
 - R3/R4 receipts MUST include `financial_owner_id`, `account_or_entity_ref`, `amount_or_exposure`, `control_check_refs`, `approval_artifact_ref`, `system_of_record_ref`, and `reversal_or_reconciliation_pointer`.
 - Market-impacting receipts MUST include market/customer impact assessment and review artifact.
 - Advice or disclosure receipts MUST include accountable reviewer, source data, suitability/disclosure review where applicable, and final-send authority.
+
+Caveat
+- Not legal, regulatory, or financial advice. Using this overlay does not establish financial-regulatory compliance and MUST NOT be claimed as DAS-1(TM) conformance.

@@ -1,5 +1,7 @@
 # DAS-1(TM) Military and defense overlay v0.001 (Informative)
 
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace applicable defense policy, rules of engagement, classification and export-control authorities, law of armed conflict, or command legal review.
+
 Prerequisite
 - DAS-1(TM) v0.001 Conformant.
 
@@ -53,3 +55,6 @@ Operational risk closure requirements
 - R3/R4 receipts MUST include `command_or_mission_owner_id`, `classification_boundary_ref`, `authority_ref`, `operational_impact_assessment`, `approval_artifact_ref`, `containment_or_rollback_pointer`, and `post_action_review_ref`.
 - Classified-data receipts MUST include allowed-path evidence, destination control, retention location, and spill-response pointer.
 - Cyber-effect receipts MUST include scope, containment plan, authorization path, and post-action review.
+
+Caveat
+- Not legal, regulatory, or policy advice. Using this overlay does not establish defense-policy or legal compliance and MUST NOT be claimed as DAS-1(TM) conformance.

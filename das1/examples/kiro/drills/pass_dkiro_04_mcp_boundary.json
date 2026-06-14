@@ -1,0 +1,30 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-KIRO-04",
+  "run_id": "run_kiro_dkiro04_2026_06_10",
+  "executed_at": "2026-06-10T20:30:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.kiro.agent"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/kiro/drills/dkiro04/scorecard.md",
+  "evidence_refs": [
+    "artifacts/kiro/drills/dkiro04/mcp-default-deny.log",
+    "artifacts/kiro/drills/dkiro04/mcp-scope-check.json"
+  ],
+  "overlay_context": {
+    "kiro": {
+      "assertions": {
+        "untrusted_mcp_tools_default_deny": true,
+        "mcp_tool_permissions_scoped": true,
+        "mcp_tool_invocation_provenance_preserved": true
+      }
+    }
+  },
+  "notes": "Untrusted MCP server tools were denied by default; allowed tools stayed scoped to server/task/spec boundaries."
+}

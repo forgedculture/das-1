@@ -58,6 +58,42 @@ jobs:
             --overlay claude-code \
             --report claude-code-overlay-report.json
 
+      - name: Verify Codex overlay evidence
+        run: |
+          python tools/das1_verify.py verify-overlay \
+            --receipts das1/examples/codex/receipt_packs \
+            --exceptions das1/examples/exceptions \
+            --drills das1/examples/codex/drills \
+            --tool-catalogs das1/examples/tool_catalogs \
+            --policy-snapshots das1/examples/policy_snapshots \
+            --ir-annexes das1/examples/ir_annexes \
+            --overlay codex \
+            --report codex-overlay-report.json
+
+      - name: Verify Cursor overlay evidence
+        run: |
+          python tools/das1_verify.py verify-overlay \
+            --receipts das1/examples/cursor/receipt_packs \
+            --exceptions das1/examples/exceptions \
+            --drills das1/examples/cursor/drills \
+            --tool-catalogs das1/examples/tool_catalogs \
+            --policy-snapshots das1/examples/policy_snapshots \
+            --ir-annexes das1/examples/ir_annexes \
+            --overlay cursor \
+            --report cursor-overlay-report.json
+
+      - name: Verify Kiro overlay evidence
+        run: |
+          python tools/das1_verify.py verify-overlay \
+            --receipts das1/examples/kiro/receipt_packs \
+            --exceptions das1/examples/exceptions \
+            --drills das1/examples/kiro/drills \
+            --tool-catalogs das1/examples/tool_catalogs \
+            --policy-snapshots das1/examples/policy_snapshots \
+            --ir-annexes das1/examples/ir_annexes \
+            --overlay kiro \
+            --report kiro-overlay-report.json
+
       - name: Verify conformance claim packets
         run: |
           python tools/das1_verify.py verify-claims das1/examples/claims \
@@ -71,4 +107,7 @@ jobs:
             conformance-report.json
             openclaw-overlay-report.json
             claude-code-overlay-report.json
+            codex-overlay-report.json
+            cursor-overlay-report.json
+            kiro-overlay-report.json
             claims-report.json

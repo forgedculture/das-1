@@ -1,0 +1,63 @@
+{
+  "receipt_version": "v0.0.1",
+  "event_id": "evt_cursor_r3_0001",
+  "timestamp": "2026-05-01T18:10:00Z",
+  "actor_id": "svc.agent.cursor",
+  "owner_id": "team.platform",
+  "workflow_id": "wf.cursor.composer",
+  "tool": "terminal",
+  "action": "exec",
+  "target": "repo:forgedculture/das-1",
+  "risk_class": "R3",
+  "decision": "allow",
+  "policy_version": "pol_2026-05-01_001",
+  "correlation_id": "corr_cursor_0001",
+  "inputs_present": true,
+  "outputs_present": true,
+  "approval_required": true,
+  "approval_wait_ms": 11000,
+  "execution_status": "executed",
+  "execution_latency_ms": 17000,
+  "preflight_id": "pre_cursor_0001",
+  "approval_id": "app_cursor_0001",
+  "approver_id": "user.oncall",
+  "cost_center": "cc_platform",
+  "cost_estimate": 0.02,
+  "overlay_context": {
+    "cursor": {
+      "session_id": "sess_cur_0001",
+      "task_id": "task_cur_overlay_0001",
+      "workspace_root": "/workspace/das-1",
+      "cwd": "/workspace/das-1",
+      "invocation_id": "inv_cur_20260501_1810",
+      "git_repo": "forgedculture/das-1",
+      "git_ref": "refs/heads/main",
+      "policy_snapshot_ref": "artifacts/cursor/policy/policy-snapshot-2026-05-01.json",
+      "tool_catalog_ref": "artifacts/cursor/policy/tool-catalog-2026-05-01.json",
+      "rule_refs": [
+        "repo:.cursor/rules/security.mdc@sha256:example-reviewed-project-rule",
+        "repo:AGENTS.md@sha256:example-reviewed-root"
+      ],
+      "operator_id": "dev.paul",
+      "intent_summary": "Run reviewed test suite in terminal for Cursor overlay change",
+      "files_changed_ref": "artifacts/cursor/prs/pr-414/files.txt",
+      "commands_run_ref": "artifacts/cursor/prs/pr-414/commands.log",
+      "tools_invoked_ref": "artifacts/cursor/prs/pr-414/tools.log",
+      "assumptions_ref": "artifacts/cursor/prs/pr-414/assumptions.md",
+      "validation_ref": "artifacts/cursor/prs/pr-414/validation.md",
+      "used_authority_surface": true,
+      "authority_surface_refs": [
+        "mcp:filesystem-readonly@reviewed-v1",
+        "extension:test-runner@reviewed-v1"
+      ],
+      "r3_r4_approver_id": "user.security",
+      "change_control_ref": "https://github.com/forgedculture/das-1/pull/414",
+      "supervision_mode": "user-confirmed",
+      "production_impact": true,
+      "two_person_review": true,
+      "secondary_approver_id": "user.release-manager",
+      "rollback_pointer": "artifacts/cursor/prs/pr-414/rollback.md"
+    }
+  },
+  "notes": "Example Cursor R3 allow with provenance binding."
+}

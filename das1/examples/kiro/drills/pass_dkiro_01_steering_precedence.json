@@ -1,0 +1,31 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-KIRO-01",
+  "run_id": "run_kiro_dkiro01_2026_06_10",
+  "executed_at": "2026-06-10T20:01:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": [
+    "user.security"
+  ],
+  "workflow_ids": [
+    "wf.kiro.agent"
+  ],
+  "result": "pass",
+  "scorecard_ref": "artifacts/kiro/drills/dkiro01/scorecard.md",
+  "evidence_refs": [
+    "artifacts/kiro/drills/dkiro01/steering-inventory.json",
+    "artifacts/kiro/drills/dkiro01/blocked-override.log"
+  ],
+  "overlay_context": {
+    "kiro": {
+      "assertions": {
+        "steering_inventory_present": true,
+        "steering_load_order_verified": true,
+        "lower_authority_steering_override_blocked": true,
+        "steering_conflict_logged": true
+      }
+    }
+  },
+  "notes": "Reviewed workspace steering and AGENTS.md loaded by declared precedence; lower-authority global steering could not override high-impact policy."
+}

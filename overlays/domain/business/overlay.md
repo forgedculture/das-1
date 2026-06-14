@@ -1,5 +1,7 @@
 # DAS-1(TM) Business operations overlay v0.001 (Informative)
 
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace corporate legal, contractual, employment, financial, privacy, or sector-specific regulatory review.
+
 Prerequisite
 - DAS-1(TM) v0.001 Conformant.
 
@@ -49,3 +51,6 @@ Operational risk closure requirements
 - R3/R4 receipts MUST include `business_owner_id`, `system_of_record_ref`, `affected_party_type`, `financial_exposure`, `approval_artifact_ref`, and `rollback_pointer`.
 - Spend or revenue-impacting receipts MUST include `cost_center`, `threshold_ref`, and `cap_evaluation_ref`.
 - Bulk action receipts MUST include batch size, sampling/approval evidence, and rollback or remediation plan.
+
+Caveat
+- Not legal, regulatory, or policy advice. Using this overlay does not establish business legal, contractual, employment, or regulatory compliance and MUST NOT be claimed as DAS-1(TM) conformance.

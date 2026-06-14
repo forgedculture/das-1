@@ -1,5 +1,7 @@
 # DAS-1(TM) Healthcare overlay v0.001 (Informative)
 
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace HIPAA, clinical governance, patient-safety, medical-device, or other applicable healthcare legal and regulatory review.
+
 Prerequisite
 - DAS-1(TM) v0.001 Conformant.
 
@@ -52,3 +54,6 @@ Operational risk closure requirements
 - R3/R4 receipts MUST include `healthcare_owner_id`, `patient_record_ref` or documented de-identification, `phi_boundary_ref`, `accountable_human_reviewer`, and `correction_or_rollback_pointer`.
 - Patient communication receipts MUST include recipient class, message class, review artifact, and final send authority.
 - Claims or revenue-cycle receipts MUST include payer/workflow owner, threshold evaluation, and appeal/correction path where applicable.
+
+Caveat
+- Not legal, regulatory, or clinical advice. Using this overlay does not establish HIPAA or clinical-governance compliance and MUST NOT be claimed as DAS-1(TM) conformance.

@@ -1,5 +1,7 @@
 # DAS-1(TM) Voting and elections overlay v0.001 (Informative)
 
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace election law, certification and audit requirements, or jurisdiction-specific election-administration policy review.
+
 Prerequisite
 - DAS-1(TM) v0.001 Conformant.
 
@@ -51,3 +53,6 @@ Operational risk closure requirements
 - R3/R4 receipts MUST include `election_authority_owner_id`, `jurisdiction_ref`, `election_phase`, `official_source_ref`, `approval_artifact_ref`, `public_or_record_impact`, and `correction_pointer`.
 - Public communication receipts MUST include two-person approval, official-source verification, publication destination, and correction path.
 - Artifact receipts MUST include chain-of-custody references and audit retention location.
+
+Caveat
+- Not legal, regulatory, or policy advice. Using this overlay does not establish election-law compliance and MUST NOT be claimed as DAS-1(TM) conformance.

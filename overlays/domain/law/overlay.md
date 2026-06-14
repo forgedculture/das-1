@@ -1,5 +1,7 @@
 # DAS-1(TM) Legal services overlay v0.001 (Informative)
 
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace legal professional responsibility, bar/ethics rules, privilege and confidentiality obligations, or jurisdiction-specific practice-of-law review.
+
 Prerequisite
 - DAS-1(TM) v0.001 Conformant.
 
@@ -48,3 +50,6 @@ Operational risk closure requirements
 - R3/R4 receipts MUST include `matter_ref`, `client_or_confidentiality_boundary_ref`, `accountable_lawyer_id`, `source_material_refs`, `approval_artifact_ref`, and `correction_or_withdrawal_pointer`.
 - Filing receipts MUST include forum/destination, deadline impact, final approved artifact reference, and submission confirmation.
 - Privilege-affecting receipts MUST include privilege review artifact and waiver/non-waiver decision.
+
+Caveat
+- Not legal advice and not a substitute for a licensed lawyer's judgment. Using this overlay does not establish professional-responsibility or ethics compliance and MUST NOT be claimed as DAS-1(TM) conformance.

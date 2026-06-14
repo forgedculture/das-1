@@ -10,6 +10,8 @@ Allowed claim (exact)
     - "DAS-1(TM) v0.001 Conformant + codex"
     - "DAS-1(TM) v0.001 Conformant + claude-code"
     - "DAS-1(TM) v0.001 Conformant + openclaw"
+    - "DAS-1(TM) v0.001 Conformant + cursor"
+    - "DAS-1(TM) v0.001 Conformant + kiro"
 
 Overlay claim rules
 - Overlay claims are additive and MUST NOT imply that the overlay modifies or weakens DAS-1 core controls.

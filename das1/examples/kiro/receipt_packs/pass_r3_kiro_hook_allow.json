@@ -1,0 +1,63 @@
+{
+  "receipt_version": "v0.0.1",
+  "event_id": "evt_kiro_r3_0002",
+  "timestamp": "2026-05-01T18:20:00Z",
+  "actor_id": "svc.agent.kiro",
+  "owner_id": "team.platform",
+  "workflow_id": "wf.kiro.agent",
+  "tool": "shell",
+  "action": "exec",
+  "target": "repo:forgedculture/das-1",
+  "risk_class": "R3",
+  "decision": "allow",
+  "policy_version": "pol_2026-05-01_001",
+  "correlation_id": "corr_kiro_0002",
+  "inputs_present": true,
+  "outputs_present": true,
+  "approval_required": true,
+  "approval_wait_ms": 9000,
+  "execution_status": "executed",
+  "execution_latency_ms": 12000,
+  "preflight_id": "pre_kiro_0002",
+  "approval_id": "app_kiro_0002",
+  "approver_id": "user.oncall",
+  "cost_center": "cc_platform",
+  "cost_estimate": 0.01,
+  "overlay_context": {
+    "kiro": {
+      "session_id": "sess_ki_0001",
+      "task_id": "task_ki_overlay_0002",
+      "workspace_root": "/workspace/das-1",
+      "cwd": "/workspace/das-1",
+      "invocation_id": "inv_ki_20260501_1820",
+      "git_repo": "forgedculture/das-1",
+      "git_ref": "refs/heads/main",
+      "policy_snapshot_ref": "artifacts/kiro/policy/policy-snapshot-2026-05-01.json",
+      "tool_catalog_ref": "artifacts/kiro/policy/tool-catalog-2026-05-01.json",
+      "steering_refs": [
+        "workspace:.kiro/steering/structure.md@sha256:example-reviewed-structure",
+        "repo:AGENTS.md@sha256:example-reviewed-root"
+      ],
+      "operator_id": "dev.paul",
+      "intent_summary": "Reviewed on-save hook ran a gated test-and-build shell command",
+      "files_changed_ref": "artifacts/kiro/prs/pr-401/files.txt",
+      "commands_run_ref": "artifacts/kiro/hooks/hk-on-save-build/commands.log",
+      "tools_invoked_ref": "artifacts/kiro/hooks/hk-on-save-build/tools.log",
+      "assumptions_ref": "artifacts/kiro/hooks/hk-on-save-build/assumptions.md",
+      "validation_ref": "artifacts/kiro/hooks/hk-on-save-build/validation.md",
+      "is_hook": true,
+      "hook_id": "hk-on-save-build",
+      "trigger_type": "on-file-save",
+      "action_type": "shell-command",
+      "hook_review_ref": "artifacts/kiro/hooks/hk-on-save-build/review.json",
+      "used_authority_surface": true,
+      "authority_surface_refs": [
+        "hook:hk-on-save-build@reviewed-v1"
+      ],
+      "r3_r4_approver_id": "user.security",
+      "change_control_ref": "https://github.com/forgedculture/das-1/pull/401",
+      "supervision_mode": "user-confirmed"
+    }
+  },
+  "notes": "Example Kiro R3 hook allow with provenance binding and hook review metadata."
+}

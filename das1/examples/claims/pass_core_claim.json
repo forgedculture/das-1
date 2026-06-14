@@ -1,7 +1,7 @@
 {
   "claim_version": "v0.0.1",
   "claim_id": "claim_core_2026_05_01",
-  "generated_at": "2026-05-01T22:00:00Z",
+  "generated_at": "2026-06-10T22:00:00Z",
   "claimant": {
     "organization": "Forge Signals",
     "owner_id": "team.platform"
@@ -13,8 +13,8 @@
   },
   "disclosures": {
     "last_required_drill_pass_at": {
-      "D1": "2026-05-01T16:00:00Z",
-      "D2": "2026-05-01T16:30:00Z"
+      "D1": "2026-06-10T16:00:00Z",
+      "D2": "2026-06-10T16:30:00Z"
     },
     "known_exceptions": [
       {
@@ -34,6 +34,6 @@
   "attestation": {
     "statement": "I attest this claim is accurate to the best of my knowledge and supported by the referenced evidence.",
     "attester_id": "user.security",
-    "attested_at": "2026-05-01T22:05:00Z"
+    "attested_at": "2026-06-10T22:05:00Z"
   }
 }

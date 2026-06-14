@@ -1,5 +1,7 @@
 # DAS-1(TM) Government services overlay v0.001 (Informative)
 
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace applicable public-sector law, due-process and administrative-procedure requirements, records, privacy, accessibility, or procurement policy review.
+
 Prerequisite
 - DAS-1(TM) v0.001 Conformant.
 
@@ -47,3 +49,6 @@ Overlay drills
 Operational risk closure requirements
 - R3/R4 receipts MUST include `agency_owner_id`, `authority_or_policy_ref`, `affected_person_or_entity_ref`, `human_accountable_official`, `appeal_or_review_path_ref`, `records_retention_ref`, and `correction_or_rollback_pointer`.
 - Public communication receipts MUST include source verification, approval artifact, publication destination, accessibility review where applicable, and correction path.
+
+Caveat
+- Not legal, regulatory, or policy advice. Using this overlay does not establish public-sector legal or policy compliance and MUST NOT be claimed as DAS-1(TM) conformance.

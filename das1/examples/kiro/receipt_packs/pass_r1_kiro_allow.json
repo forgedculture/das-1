@@ -1,0 +1,30 @@
+{
+  "receipt_version": "v0.0.1",
+  "event_id": "evt_kiro_r1_0001",
+  "timestamp": "2026-05-01T18:00:00Z",
+  "actor_id": "svc.agent.kiro",
+  "owner_id": "team.platform",
+  "workflow_id": "wf.kiro.agent",
+  "tool": "formatter",
+  "action": "format_diff",
+  "target": "repo:forgedculture/das-1",
+  "risk_class": "R1",
+  "decision": "allow",
+  "policy_version": "pol_2026-05-01_001",
+  "correlation_id": "corr_kiro_0000",
+  "inputs_present": true,
+  "outputs_present": true,
+  "approval_required": false,
+  "execution_status": "executed",
+  "execution_latency_ms": 1800,
+  "overlay_context": {
+    "kiro": {
+      "session_id": "sess_ki_0001",
+      "task_id": "task_ki_overlay_0001",
+      "workspace_root": "/workspace/das-1",
+      "cwd": "/workspace/das-1",
+      "invocation_id": "inv_ki_20260501_1800"
+    }
+  },
+  "notes": "Low-risk formatting action to demonstrate non-inert throughput."
+}

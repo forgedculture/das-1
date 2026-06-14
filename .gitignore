@@ -3,3 +3,6 @@
 
 # Local publication drafts and working materials
 examples/openclaw-article/
+__pycache__/
+*.pyc
+.obsidian/

@@ -109,7 +109,7 @@ This directory provides the smallest executable core needed to make DAS-1 claims
 - Core verifier is runtime-agnostic by default.
 - Overlay-specific checks are loaded from `tools/overlays/<overlay_id>.py`.
 - Overlay evidence can use namespaced `overlay_context` in receipt/drill artifacts without changing core control semantics.
-- Platform overlays currently include `openclaw`, `claude-code`, and `codex`.
+- Platform overlays currently include `openclaw`, `claude-code`, `codex`, `cursor`, and `kiro`.
 - Domain overlays under `overlays/domain/` are high-impact operating-context examples; they do not replace legal, regulatory, policy, or mission-specific compliance review.
 
 ## What this does not cover

@@ -2,7 +2,7 @@
   "report_version": "v0.0.1",
   "drill_id": "D2",
   "run_id": "run_openclaw_d2_2026_02_01",
-  "executed_at": "2026-02-01T19:20:00Z",
+  "executed_at": "2026-06-10T19:20:00Z",
   "environment": "staging-with-prod-like-policy",
   "owner_id": "team.ops",
   "witness_ids": [

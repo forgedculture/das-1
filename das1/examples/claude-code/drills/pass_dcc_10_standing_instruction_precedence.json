@@ -2,7 +2,7 @@
   "report_version": "v0.0.1",
   "drill_id": "D-CC-10",
   "run_id": "run_claude_code_dcc10_2026_05_01",
-  "executed_at": "2026-05-01T20:56:00Z",
+  "executed_at": "2026-06-10T20:56:00Z",
   "environment": "staging-with-prod-like-policy",
   "owner_id": "team.platform",
   "witness_ids": [
