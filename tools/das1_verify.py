@@ -6,7 +6,7 @@ Goal: make DAS-1 claims less subjective and more testable.
 This tool:
 - Validates receipt events against the canonical DAS-1 receipt schema.
 - Validates exception register entries against the canonical exceptions schema.
-- Applies a small set of DAS-1 v0.001 checks that are machine-verifiable.
+- Applies a small set of DAS-1 v0.002 checks that are machine-verifiable.
 
 This tool does NOT fully prove conformance with all 12 controls. Some controls
 require human-reviewed artifacts (catalog exports, policy docs, drill scorecards).

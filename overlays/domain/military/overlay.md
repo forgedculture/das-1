@@ -1,9 +1,9 @@
-# DAS-1(TM) Military and defense overlay v0.001 (Informative)
+# DAS-1(TM) Military and defense overlay v0.002 (Informative)
 
-Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace applicable defense policy, rules of engagement, classification and export-control authorities, law of armed conflict, or command legal review.
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.002 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace applicable defense policy, rules of engagement, classification and export-control authorities, law of armed conflict, or command legal review.
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Objective
 - Govern delegated authority in defense administration, logistics, readiness, cyber defense support, intelligence-support workflows, mission planning support, and command-support systems.

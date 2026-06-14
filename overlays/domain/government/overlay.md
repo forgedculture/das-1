@@ -1,9 +1,9 @@
-# DAS-1(TM) Government services overlay v0.001 (Informative)
+# DAS-1(TM) Government services overlay v0.002 (Informative)
 
-Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace applicable public-sector law, due-process and administrative-procedure requirements, records, privacy, accessibility, or procurement policy review.
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.002 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace applicable public-sector law, due-process and administrative-procedure requirements, records, privacy, accessibility, or procurement policy review.
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Objective
 - Govern delegated authority in civilian government workflows involving benefits, permits, procurement, records, casework, public communications, inspections, enforcement support, public safety support, and administrative decision systems.

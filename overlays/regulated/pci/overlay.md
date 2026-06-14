@@ -1,7 +1,7 @@
-# DAS-1(TM) PCI overlay v0.001 (Informative)
+# DAS-1(TM) PCI overlay v0.002 (Informative)
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Tightens
 - AEC-03: human gating mandatory for any action affecting payment flow integrity.

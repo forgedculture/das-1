@@ -1,4 +1,4 @@
-# Delegated Authority Standard(TM) (DAS-1(TM)) v0.001
+# Delegated Authority Standard(TM) (DAS-1(TM)) v0.002
 
 Subtitle: Tool calls are production changes.
 

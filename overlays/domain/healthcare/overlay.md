@@ -1,9 +1,9 @@
-# DAS-1(TM) Healthcare overlay v0.001 (Informative)
+# DAS-1(TM) Healthcare overlay v0.002 (Informative)
 
-Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace HIPAA, clinical governance, patient-safety, medical-device, or other applicable healthcare legal and regulatory review.
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.002 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace HIPAA, clinical governance, patient-safety, medical-device, or other applicable healthcare legal and regulatory review.
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Objective
 - Govern delegated authority in healthcare workflows involving protected health information, patient communications, chart operations, care-team administration, revenue cycle, claims, scheduling, and insurance workflows.

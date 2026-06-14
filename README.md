@@ -54,7 +54,7 @@ Use DAS-1 when an AI agent, automation, or workflow can:
 
 ## Conformance
 
-You may claim "DAS-1(TM) v0.001 Conformant(TM)" only if:
+You may claim "DAS-1(TM) v0.002 Conformant(TM)" only if:
 - All 12 AEC controls are implemented, or explicitly excepted with expiry dates
 - Both required drills executed within the last 90 days
 - Minimum metrics M1-M7 are measurable from stored receipts
@@ -62,8 +62,8 @@ You may claim "DAS-1(TM) v0.001 Conformant(TM)" only if:
 See: spec/conformance/conformance-criteria.md
 
 Overlay claims are additive:
-- Core claim: DAS-1(TM) v0.001 Conformant(TM)
-- Overlay claim: DAS-1(TM) v0.001 Conformant(TM) + `<overlay>`
+- Core claim: DAS-1(TM) v0.002 Conformant(TM)
+- Overlay claim: DAS-1(TM) v0.002 Conformant(TM) + `<overlay>`
 
 ## Safety With Utility
 
@@ -166,5 +166,5 @@ Bring receipts.
 - Brand assets (logos, marks, badges): all rights reserved, trademark governed (see assets/brand/LICENSE-ASSETS.txt and TRADEMARKS.md)
 
 Status
-- Version: v0.001 (draft)
-- Date: 2026-02-12
+- Version: v0.002 (draft)
+- Date: 2026-06-14

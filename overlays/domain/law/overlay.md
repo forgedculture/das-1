@@ -1,9 +1,9 @@
-# DAS-1(TM) Legal services overlay v0.001 (Informative)
+# DAS-1(TM) Legal services overlay v0.002 (Informative)
 
-Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.001 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace legal professional responsibility, bar/ethics rules, privilege and confidentiality obligations, or jurisdiction-specific practice-of-law review.
+Status: Informative (documentation-only). This domain overlay is NOT machine-verified and is NOT part of the DAS-1(TM) v0.002 conformance claim set. It SHOULD be read as guidance only; normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from this document. It does not replace legal professional responsibility, bar/ethics rules, privilege and confidentiality obligations, or jurisdiction-specific practice-of-law review.
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Objective
 - Govern delegated authority in legal workflows involving research, drafting, matter management, e-discovery, privilege review, client communications, contract workflows, and filings.

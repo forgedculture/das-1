@@ -1,7 +1,7 @@
-# DAS-1(TM) Cursor overlay v0.001 (Informative)
+# DAS-1(TM) Cursor overlay v0.002 (Informative)
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Objective
 - Prevent authority crossing in Cursor-style coding-agent workflows where reusable rules, repository instructions, editor context, terminal actions, MCP/tool calls, extension state, git operations, and background edits can become real execution authority.

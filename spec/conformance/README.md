@@ -88,7 +88,7 @@ This directory provides the smallest executable core needed to make DAS-1 claims
   python tools/das1_verify.py verify-policy-snapshots das1/examples/policy_snapshots
   python tools/das1_verify.py verify-ir-annexes das1/examples/ir_annexes
 
-## Checks implemented (v0.001)
+## Checks implemented (v0.002)
 
 - Schema validation (receipt + exception + drill)
 - R3/R4 allow receipts MUST include:

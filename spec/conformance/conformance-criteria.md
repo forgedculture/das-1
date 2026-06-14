@@ -1,6 +1,6 @@
-# Conformance criteria (DAS-1(TM) v0.001)
+# Conformance criteria (DAS-1(TM) v0.002)
 
-An implementation MAY claim "DAS-1(TM) v0.001 Conformant" only if:
+An implementation MAY claim "DAS-1(TM) v0.002 Conformant" only if:
 - All AEC controls are implemented OR explicitly excepted with expiry (AEC-11).
 - D1 and D2 have been executed within the last 90 days.
 - Metrics M1-M7 are measurable from stored receipts.

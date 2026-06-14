@@ -1,4 +1,4 @@
-# MCP profile (DAS-1(TM)) v0.001 (Informative)
+# MCP profile (DAS-1(TM)) v0.002 (Informative)
 
 Goal
 - Describe how MCP connectors SHOULD satisfy DAS-1(TM) core controls.

@@ -1,7 +1,7 @@
-# DAS-1(TM) OpenClaw overlay v0.001 (Informative)
+# DAS-1(TM) OpenClaw overlay v0.002 (Informative)
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Objective
 - Prevent the common OpenClaw breach class where untrusted input or deployment misconfiguration crosses directly into tool execution authority.

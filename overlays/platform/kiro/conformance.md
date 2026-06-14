@@ -1,4 +1,4 @@
-# Kiro Overlay Conformance (DAS-1(TM) v0.001) (Normative)
+# Kiro Overlay Conformance (DAS-1(TM) v0.002) (Normative)
 
 Status: Draft
 Date: 2026-06-14
@@ -7,7 +7,7 @@ Date: 2026-06-14
 
 This document defines auditable requirements for claiming:
 
-- `DAS-1(TM) v0.001 Conformant + kiro`
+- `DAS-1(TM) v0.002 Conformant + kiro`
 
 This overlay claim is additive to core conformance and does not modify DAS-1 core requirements.
 

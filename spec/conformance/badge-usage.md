@@ -1,17 +1,17 @@
-# Badge and claim usage (DAS-1(TM) v0.001)
+# Badge and claim usage (DAS-1(TM) v0.002)
 
 This is a draft policy.
 
 Allowed claim (exact)
-- "DAS-1(TM) v0.001 Conformant"
+- "DAS-1(TM) v0.002 Conformant"
 - Optional additive overlay claim:
-  - "DAS-1(TM) v0.001 Conformant + <overlay>"
+  - "DAS-1(TM) v0.002 Conformant + <overlay>"
   - Examples:
-    - "DAS-1(TM) v0.001 Conformant + codex"
-    - "DAS-1(TM) v0.001 Conformant + claude-code"
-    - "DAS-1(TM) v0.001 Conformant + openclaw"
-    - "DAS-1(TM) v0.001 Conformant + cursor"
-    - "DAS-1(TM) v0.001 Conformant + kiro"
+    - "DAS-1(TM) v0.002 Conformant + codex"
+    - "DAS-1(TM) v0.002 Conformant + claude-code"
+    - "DAS-1(TM) v0.002 Conformant + openclaw"
+    - "DAS-1(TM) v0.002 Conformant + cursor"
+    - "DAS-1(TM) v0.002 Conformant + kiro"
 
 Overlay claim rules
 - Overlay claims are additive and MUST NOT imply that the overlay modifies or weakens DAS-1 core controls.

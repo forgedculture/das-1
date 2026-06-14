@@ -6,7 +6,7 @@
     "organization": "Forge Signals",
     "owner_id": "team.platform"
   },
-  "das_version": "v0.001",
+  "das_version": "v0.002",
   "scope": {
     "core_conformant": true,
     "overlay_claims": []

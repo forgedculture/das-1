@@ -1,7 +1,7 @@
 name: das-1-pci-overlay
-version: v0.001
+version: v0.002
 requires:
-  das_core: v0.001
+  das_core: v0.002
 tightens:
   - AEC-03
   - AEC-06

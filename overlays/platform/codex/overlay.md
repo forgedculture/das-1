@@ -1,7 +1,7 @@
-# DAS-1(TM) Codex overlay v0.001 (Informative)
+# DAS-1(TM) Codex overlay v0.002 (Informative)
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Objective
 - Prevent authority crossing in Codex-style coding agents where repository instructions, shell tooling, file edits, browser/computer-use actions, plugins/connectors, git operations, and CI/CD boundaries can become real execution authority.

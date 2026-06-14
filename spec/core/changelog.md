@@ -1,6 +1,6 @@
 # Change log (DAS-1(TM) core)
 
-## Unreleased
+## v0.002 (2026-06-14)
 - Added a roadmap for the 2026 agent-and-skills refresh.
 - Added generic glossary terms for agents, autonomy modes, connectors, delegated agents, skills, standing instruction artifacts, and tool brokers.
 - Added generic AECX catalog controls AECX-050 through AECX-052 (workspace containment, git egress and remote mutation control, MCP trust segmentation) and AECX-060 through AECX-069 for skill provenance, execution boundaries, tool brokers, connectors, delegated agents, context/memory containment, approval integrity, autonomous budgets, supply chain, and standing instruction governance.

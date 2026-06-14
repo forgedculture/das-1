@@ -4,7 +4,7 @@ Domain overlays describe how DAS-1(TM) tightens for high-impact operating contex
 
 Status: Informative (documentation-only)
 - All domain overlays in this directory are Informative. They are documentation-only.
-- They are NOT machine-verified and are NOT part of the DAS-1(TM) v0.001 conformance claim set.
+- They are NOT machine-verified and are NOT part of the DAS-1(TM) v0.002 conformance claim set.
 - The claimable overlay set is the platform overlays (for example: codex, claude-code, openclaw), each of which ships a verifier plugin and a conformance/claim packet. Domain overlays do not, yet.
 - Why documentation-only: regulated fields (healthcare, law, finance, voting/elections, government, military) require real legal, regulatory, and policy review. Publishing machine-checkable "conformance" for them without that review would over-claim. Until a domain has been through real review and has a verifier plus evidence, it stays guidance only.
 
@@ -24,9 +24,9 @@ Rule
 - Normative force comes from the DAS-1(TM) core and the applicable platform overlay, not from a domain document.
 
 How they layer
-- A domain overlay is read on top of a system that is already DAS-1(TM) v0.001 Conformant (core) and conformant to the applicable platform overlay (for example codex, claude-code, openclaw).
+- A domain overlay is read on top of a system that is already DAS-1(TM) v0.002 Conformant (core) and conformant to the applicable platform overlay (for example codex, claude-code, openclaw).
 - Core and the platform overlay carry the verifiable, claimable requirements. The domain overlay adds operating-context guidance (threat assumptions, tightenings, runtime baseline, drills, and suggested receipt fields) for that context.
-- Using a domain overlay does not create a domain conformance claim. There is no "DAS-1(TM) v0.001 Conformant + <domain>" claim. See `spec/conformance/badge-usage.md` and `spec/conformance/conformance-criteria.md`.
+- Using a domain overlay does not create a domain conformance claim. There is no "DAS-1(TM) v0.002 Conformant + <domain>" claim. See `spec/conformance/badge-usage.md` and `spec/conformance/conformance-criteria.md`.
 
 Precedent
 - These overlays are Informative in the same sense as `mappings/` (see `mappings/README.md`): they translate or contextualize DAS-1(TM) for another frame without becoming normative or claimable on their own.

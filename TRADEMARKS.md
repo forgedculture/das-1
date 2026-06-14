@@ -17,7 +17,7 @@ All Marks are owned by the project owner. The open licenses for the spec and any
 
 ## Conformance claim policy
 You may use the phrase:
-- "DAS-1(TM) v0.001 Conformant"
+- "DAS-1(TM) v0.002 Conformant"
 
 Only if you meet the conformance criteria in:
 - spec/conformance/conformance-criteria.md

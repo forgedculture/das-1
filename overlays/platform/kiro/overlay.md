@@ -1,7 +1,7 @@
-# DAS-1(TM) Kiro overlay v0.001 (Informative)
+# DAS-1(TM) Kiro overlay v0.002 (Informative)
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Objective
 - Prevent authority crossing in Kiro-style spec-driven agent workflows where steering files, specs, hooks, MCP servers, task execution, shell commands, and workspace automation can become real execution authority.

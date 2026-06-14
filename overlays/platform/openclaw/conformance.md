@@ -1,4 +1,4 @@
-# OpenClaw Overlay Conformance (DAS-1(TM) v0.001) (Normative)
+# OpenClaw Overlay Conformance (DAS-1(TM) v0.002) (Normative)
 
 Status: Draft  
 Date: 2026-02-09
@@ -7,7 +7,7 @@ Date: 2026-02-09
 
 This document defines auditable requirements for claiming:
 
-- `DAS-1(TM) v0.001 Conformant + openclaw`
+- `DAS-1(TM) v0.002 Conformant + openclaw`
 
 This overlay claim is additive to core conformance and does not modify DAS-1 core requirements.
 

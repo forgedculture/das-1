@@ -1,4 +1,4 @@
-# Claude Code Overlay Conformance (DAS-1(TM) v0.001) (Normative)
+# Claude Code Overlay Conformance (DAS-1(TM) v0.002) (Normative)
 
 Status: Draft  
 Date: 2026-02-10
@@ -7,7 +7,7 @@ Date: 2026-02-10
 
 This document defines auditable requirements for claiming:
 
-- `DAS-1(TM) v0.001 Conformant + claude-code`
+- `DAS-1(TM) v0.002 Conformant + claude-code`
 - This profile is suitable for supervised Claude Code use via Amazon Bedrock and remains non-exclusive relative to other tools meeting DAS-1 controls.
 
 This overlay claim is additive to core conformance and does not modify DAS-1 core requirements.

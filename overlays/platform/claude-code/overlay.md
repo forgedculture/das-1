@@ -1,7 +1,7 @@
-# DAS-1(TM) Claude Code overlay v0.001 (Informative)
+# DAS-1(TM) Claude Code overlay v0.002 (Informative)
 
 Prerequisite
-- DAS-1(TM) v0.001 Conformant.
+- DAS-1(TM) v0.002 Conformant.
 
 Objective
 - Prevent authority crossing in Claude Code-style coding agents where untrusted repository content, shell tooling, and credentialed git/network operations can become real execution authority.

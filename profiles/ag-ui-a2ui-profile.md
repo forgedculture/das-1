@@ -1,4 +1,4 @@
-# AG-UI / A2UI profile (DAS-1(TM)) v0.001 (Informative)
+# AG-UI / A2UI profile (DAS-1(TM)) v0.002 (Informative)
 
 Goal
 - Treat shared state and UI channels as data destinations under AEC-08 and evidence sources under AEC-07.
