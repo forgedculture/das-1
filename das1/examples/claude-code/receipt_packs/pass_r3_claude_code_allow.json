@@ -34,12 +34,21 @@
       "git_ref": "refs/heads/main",
       "policy_snapshot_ref": "artifacts/claude-code/policy/policy-snapshot-2026-02-01.json",
       "tool_catalog_ref": "artifacts/claude-code/policy/tool-catalog-2026-02-01.json",
+      "standing_instruction_refs": [
+        "repo:CLAUDE.md@sha256:example-reviewed-root",
+        "repo:.claude/settings.json@sha256:example-reviewed-settings"
+      ],
       "operator_id": "dev.paul",
       "intent_summary": "Refactor verifier overlay wiring for claude-code",
       "files_changed_ref": "artifacts/claude-code/prs/pr-204/files.txt",
       "commands_run_ref": "artifacts/claude-code/prs/pr-204/commands.log",
       "assumptions_ref": "artifacts/claude-code/prs/pr-204/assumptions.md",
       "validation_ref": "artifacts/claude-code/prs/pr-204/validation.md",
+      "used_skill_or_subagent": true,
+      "skill_or_subagent_refs": [
+        "skill:reviewed-verifier-maintenance@v1",
+        "subagent:bounded-test-runner@v1"
+      ],
       "r3_r4_approver_id": "user.security",
       "change_control_ref": "https://github.com/forgedculture/das-1/pull/204",
       "supervision_mode": "user-confirmed",

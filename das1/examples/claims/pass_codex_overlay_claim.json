@@ -1,0 +1,39 @@
+{
+  "claim_version": "v0.0.1",
+  "claim_id": "claim_codex_2026_05_01",
+  "generated_at": "2026-05-01T22:10:00Z",
+  "claimant": {
+    "organization": "Forge Signals",
+    "owner_id": "team.platform"
+  },
+  "das_version": "v0.001",
+  "scope": {
+    "core_conformant": true,
+    "overlay_claims": [
+      "codex"
+    ]
+  },
+  "disclosures": {
+    "last_required_drill_pass_at": {
+      "D1": "2026-05-01T16:00:00Z",
+      "D2": "2026-05-01T16:30:00Z"
+    },
+    "known_exceptions": [
+      {
+        "exception_id": "exc_0001",
+        "status": "approved",
+        "expires_at": "2026-12-31T12:00:00Z"
+      }
+    ],
+    "non_certification_statement": "This claim is a self-asserted conformance statement and not a certification."
+  },
+  "evidence": {
+    "conformance_report_ref": "../../../codex-overlay-report.json",
+    "exceptions_ref": "das1/examples/exceptions"
+  },
+  "attestation": {
+    "statement": "I attest this claim is accurate to the best of my knowledge and supported by the referenced evidence.",
+    "attester_id": "user.security",
+    "attested_at": "2026-05-01T22:15:00Z"
+  }
+}

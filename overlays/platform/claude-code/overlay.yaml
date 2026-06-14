@@ -18,6 +18,13 @@ adds:
   - AECX-050
   - AECX-051
   - AECX-052
+  - AECX-060
+  - AECX-061
+  - AECX-064
+  - AECX-065
+  - AECX-066
+  - AECX-068
+  - AECX-069
 drills:
   - D-CC-01
   - D-CC-02
@@ -28,4 +35,6 @@ drills:
   - D-CC-07
   - D-CC-08
   - D-CC-09
+  - D-CC-10
+  - D-CC-11
 conformance_doc: overlays/platform/claude-code/conformance.md

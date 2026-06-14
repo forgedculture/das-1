@@ -1,0 +1,33 @@
+name: das-1-cursor-overlay
+version: v0.001
+requires:
+  das_core: v0.001
+applies_to:
+  runtime: cursor
+  deployment: local-or-ci-agentic-coding
+tightens:
+  - AEC-03
+  - AEC-05
+  - AEC-06
+  - AEC-07
+  - AEC-08
+  - AEC-09
+  - AEC-11
+adds:
+  - AECX-060
+  - AECX-061
+  - AECX-062
+  - AECX-063
+  - AECX-064
+  - AECX-065
+  - AECX-066
+  - AECX-067
+  - AECX-068
+  - AECX-069
+drills:
+  - D-CUR-01
+  - D-CUR-02
+  - D-CUR-03
+  - D-CUR-04
+  - D-CUR-05
+conformance_doc: overlays/platform/cursor/conformance.md

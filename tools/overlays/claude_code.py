@@ -65,6 +65,17 @@ REQUIRED_DRILL_ASSERTIONS = {
         "approval_artifact_time_bound_verified",
         "approval_sample_crosscheck_passed",
     ],
+    "D-CC-10": [
+        "standing_instruction_inventory_present",
+        "standing_instruction_load_order_verified",
+        "lower_authority_override_blocked",
+        "instruction_conflict_logged",
+    ],
+    "D-CC-11": [
+        "skill_or_subagent_inventory_present",
+        "skill_or_subagent_boundary_enforced",
+        "skill_or_subagent_revocation_verified",
+    ],
 }
 
 
@@ -209,6 +220,7 @@ def run_overlay_checks(context, load_json_records, parse_iso8601_aware):
             "git_ref",
             "policy_snapshot_ref",
             "tool_catalog_ref",
+            "standing_instruction_refs",
             "operator_id",
             "intent_summary",
             "files_changed_ref",
@@ -233,6 +245,18 @@ def run_overlay_checks(context, load_json_records, parse_iso8601_aware):
                     file=file,
                     message="supervision_mode must be 'user-confirmed' for R3/R4 allow receipts.",
                     pointer="/overlay_context/claude_code/supervision_mode",
+                )
+            )
+
+        if claude_ctx.get("used_skill_or_subagent") is True and not claude_ctx.get("skill_or_subagent_refs"):
+            failures.append(
+                _failure(
+                    file=file,
+                    message=(
+                        "Claude Code receipts involving skills or subagents require "
+                        "skill_or_subagent_refs."
+                    ),
+                    pointer="/overlay_context/claude_code/skill_or_subagent_refs",
                 )
             )
 

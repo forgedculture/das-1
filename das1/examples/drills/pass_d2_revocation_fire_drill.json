@@ -1,8 +1,8 @@
 {
   "report_version": "v0.0.1",
   "drill_id": "D2",
-  "run_id": "run_d2_2026_01_15",
-  "executed_at": "2026-01-15T16:30:00Z",
+  "run_id": "run_d2_2026_05_01",
+  "executed_at": "2026-05-01T16:30:00Z",
   "environment": "staging-with-prod-like-policy",
   "owner_id": "team.platform",
   "witness_ids": [
@@ -12,7 +12,7 @@
     "wf.deploy.gated"
   ],
   "result": "pass",
-  "scorecard_ref": "artifacts/drills/d2/scorecard-2026-01-15.md",
+  "scorecard_ref": "artifacts/drills/d2/scorecard-2026-05-01.md",
   "evidence_refs": [
     "artifacts/drills/d2/revoke-event-log.json",
     "artifacts/drills/d2/post-revoke-tool-call-check.json"

@@ -1,0 +1,26 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-CX-09",
+  "run_id": "run_codex_dcx09_2026_05_01",
+  "executed_at": "2026-05-01T21:20:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": ["user.security"],
+  "workflow_ids": ["wf.codex.assistant"],
+  "result": "pass",
+  "scorecard_ref": "artifacts/codex/drills/dcx09/scorecard.md",
+  "evidence_refs": [
+    "artifacts/codex/drills/dcx09/approval-sample-audit.json",
+    "artifacts/codex/drills/dcx09/receipt-crosscheck.log"
+  ],
+  "overlay_context": {
+    "codex": {
+      "assertions": {
+        "approval_artifact_scope_match_verified": true,
+        "approval_artifact_time_bound_verified": true,
+        "approval_sample_crosscheck_passed": true
+      }
+    }
+  },
+  "notes": "Approval artifacts matched action scope and timing."
+}

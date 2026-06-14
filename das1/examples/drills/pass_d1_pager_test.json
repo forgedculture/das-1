@@ -1,8 +1,8 @@
 {
   "report_version": "v0.0.1",
   "drill_id": "D1",
-  "run_id": "run_d1_2026_01_15",
-  "executed_at": "2026-01-15T16:00:00Z",
+  "run_id": "run_d1_2026_05_01",
+  "executed_at": "2026-05-01T16:00:00Z",
   "environment": "staging-with-prod-like-policy",
   "owner_id": "team.platform",
   "witness_ids": [
@@ -12,7 +12,7 @@
     "wf.deploy.gated"
   ],
   "result": "pass",
-  "scorecard_ref": "artifacts/drills/d1/scorecard-2026-01-15.md",
+  "scorecard_ref": "artifacts/drills/d1/scorecard-2026-05-01.md",
   "evidence_refs": [
     "artifacts/drills/d1/receipt-pack.json",
     "artifacts/drills/d1/timeline.csv"

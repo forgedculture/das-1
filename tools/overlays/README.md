@@ -19,7 +19,9 @@ Usage
 - Core + overlay plugin checks:
   - `python tools/das1_verify.py verify-overlay --receipts ... --exceptions ... --drills ... --overlay openclaw`
   - `python tools/das1_verify.py verify-overlay --receipts ... --exceptions ... --drills ... --overlay claude-code`
+  - `python tools/das1_verify.py verify-overlay --receipts ... --exceptions ... --drills ... --overlay codex`
 
 Reference plugins
 - `openclaw.py` for overlay id `openclaw`
 - `claude_code.py` for overlay id `claude-code`
+- `codex.py` for overlay id `codex`

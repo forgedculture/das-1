@@ -12,6 +12,8 @@ Exception handling note
 Overlay conformance note
 - Overlay claims are additive. Implementations MAY claim core conformance without an overlay claim.
 - If an overlay claim is made, overlay-specific drills and evidence requirements also apply.
+- Vendor-specific, technology-specific, and domain-specific requirements MUST be applied through overlays or mappings, not by changing generic DAS-1 core control intent.
+- Domain overlays are high-impact operating-context examples and do not replace legal, regulatory, policy, or mission-specific compliance review.
 
 Utility and proportionality note
 - Implementations SHOULD provide clear evidence that controls are risk-proportional and do not render R1/R2 workflows operationally inert.
@@ -27,3 +29,4 @@ Recommended evidence package
 - Exceptions register with expiries
 - Tool-call IR annex + tabletop record
 - Conformance claim packet including required disclosures and report references
+- Overlay-specific receipt/drill packs and verifier report when an overlay claim is made

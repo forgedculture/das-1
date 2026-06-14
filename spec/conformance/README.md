@@ -65,6 +65,18 @@ This directory provides the smallest executable core needed to make DAS-1 claims
     --overlay claude-code \
     --report claude-code-overlay-report.json
 
+- Validate core + Codex overlay checks
+
+  python tools/das1_verify.py verify-overlay \
+    --receipts das1/examples/codex/receipt_packs \
+    --exceptions das1/examples/exceptions \
+    --drills das1/examples/codex/drills \
+    --tool-catalogs das1/examples/tool_catalogs \
+    --policy-snapshots das1/examples/policy_snapshots \
+    --ir-annexes das1/examples/ir_annexes \
+    --overlay codex \
+    --report codex-overlay-report.json
+
 - Validate conformance claim packets
 
   python tools/das1_verify.py verify-claims das1/examples/claims
@@ -97,6 +109,8 @@ This directory provides the smallest executable core needed to make DAS-1 claims
 - Core verifier is runtime-agnostic by default.
 - Overlay-specific checks are loaded from `tools/overlays/<overlay_id>.py`.
 - Overlay evidence can use namespaced `overlay_context` in receipt/drill artifacts without changing core control semantics.
+- Platform overlays currently include `openclaw`, `claude-code`, and `codex`.
+- Domain overlays under `overlays/domain/` are high-impact operating-context examples; they do not replace legal, regulatory, policy, or mission-specific compliance review.
 
 ## What this does not cover
 

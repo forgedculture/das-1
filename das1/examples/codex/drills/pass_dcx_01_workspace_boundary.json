@@ -1,0 +1,26 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-CX-01",
+  "run_id": "run_codex_dcx01_2026_05_01",
+  "executed_at": "2026-05-01T20:01:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": ["user.security"],
+  "workflow_ids": ["wf.codex.assistant"],
+  "result": "pass",
+  "scorecard_ref": "artifacts/codex/drills/dcx01/scorecard.md",
+  "evidence_refs": [
+    "artifacts/codex/drills/dcx01/path-traversal-block.log",
+    "artifacts/codex/drills/dcx01/symlink-escape-block.log"
+  ],
+  "overlay_context": {
+    "codex": {
+      "assertions": {
+        "workspace_boundary_enforced": true,
+        "path_traversal_escape_blocked": true,
+        "symlink_escape_blocked": true
+      }
+    }
+  },
+  "notes": "Workspace escape attempts were blocked."
+}

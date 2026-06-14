@@ -1,0 +1,62 @@
+{
+  "receipt_version": "v0.0.1",
+  "event_id": "evt_codex_r3_0001",
+  "timestamp": "2026-05-01T18:10:00Z",
+  "actor_id": "svc.agent.codex",
+  "owner_id": "team.platform",
+  "workflow_id": "wf.codex.assistant",
+  "tool": "shell",
+  "action": "exec",
+  "target": "repo:forgedculture/das-1",
+  "risk_class": "R3",
+  "decision": "allow",
+  "policy_version": "pol_2026-05-01_001",
+  "correlation_id": "corr_codex_0001",
+  "inputs_present": true,
+  "outputs_present": true,
+  "approval_required": true,
+  "approval_wait_ms": 11000,
+  "execution_status": "executed",
+  "execution_latency_ms": 17000,
+  "preflight_id": "pre_codex_0001",
+  "approval_id": "app_codex_0001",
+  "approver_id": "user.oncall",
+  "cost_center": "cc_platform",
+  "cost_estimate": 0.02,
+  "overlay_context": {
+    "codex": {
+      "session_id": "sess_cx_0001",
+      "task_id": "task_cx_overlay_0001",
+      "workspace_root": "/workspace/das-1",
+      "cwd": "/workspace/das-1",
+      "invocation_id": "inv_cx_20260501_1810",
+      "git_repo": "forgedculture/das-1",
+      "git_ref": "refs/heads/main",
+      "policy_snapshot_ref": "artifacts/codex/policy/policy-snapshot-2026-05-01.json",
+      "tool_catalog_ref": "artifacts/codex/policy/tool-catalog-2026-05-01.json",
+      "standing_instruction_refs": [
+        "repo:AGENTS.md@sha256:example-reviewed-root"
+      ],
+      "operator_id": "dev.paul",
+      "intent_summary": "Add Codex overlay verifier and evidence examples",
+      "files_changed_ref": "artifacts/codex/prs/pr-301/files.txt",
+      "commands_run_ref": "artifacts/codex/prs/pr-301/commands.log",
+      "tools_invoked_ref": "artifacts/codex/prs/pr-301/tools.log",
+      "assumptions_ref": "artifacts/codex/prs/pr-301/assumptions.md",
+      "validation_ref": "artifacts/codex/prs/pr-301/validation.md",
+      "used_authority_surface": true,
+      "authority_surface_refs": [
+        "plugin:browser-use@reviewed-v1",
+        "connector:github-readonly@reviewed-v1"
+      ],
+      "r3_r4_approver_id": "user.security",
+      "change_control_ref": "https://github.com/forgedculture/das-1/pull/301",
+      "supervision_mode": "user-confirmed",
+      "production_impact": true,
+      "two_person_review": true,
+      "secondary_approver_id": "user.release-manager",
+      "rollback_pointer": "artifacts/codex/prs/pr-301/rollback.md"
+    }
+  },
+  "notes": "Example Codex R3 allow with provenance binding."
+}

@@ -1,0 +1,26 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D-CX-05",
+  "run_id": "run_codex_dcx05_2026_05_01",
+  "executed_at": "2026-05-01T20:40:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": ["user.security"],
+  "workflow_ids": ["wf.codex.assistant"],
+  "result": "pass",
+  "scorecard_ref": "artifacts/codex/drills/dcx05/scorecard.md",
+  "evidence_refs": [
+    "artifacts/codex/drills/dcx05/plugin-default-deny.log",
+    "artifacts/codex/drills/dcx05/connector-scope-check.json"
+  ],
+  "overlay_context": {
+    "codex": {
+      "assertions": {
+        "untrusted_plugins_or_connectors_default_deny": true,
+        "plugin_connector_permissions_scoped": true,
+        "plugin_connector_invocation_provenance_preserved": true
+      }
+    }
+  },
+  "notes": "Plugins and connectors stayed scoped to reviewed authority."
+}

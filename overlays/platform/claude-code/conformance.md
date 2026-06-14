@@ -61,6 +61,15 @@ Required assertions:
   - `approval_artifact_scope_match_verified`
   - `approval_artifact_time_bound_verified`
   - `approval_sample_crosscheck_passed`
+- D-CC-10
+  - `standing_instruction_inventory_present`
+  - `standing_instruction_load_order_verified`
+  - `lower_authority_override_blocked`
+  - `instruction_conflict_logged`
+- D-CC-11
+  - `skill_or_subagent_inventory_present`
+  - `skill_or_subagent_boundary_enforced`
+  - `skill_or_subagent_revocation_verified`
 
 ## 4. Required receipt provenance bindings
 
@@ -75,12 +84,14 @@ For R3/R4 allow receipts in Claude Code-covered scope:
 - `overlay_context.claude_code.git_ref` MUST be present.
 - `overlay_context.claude_code.policy_snapshot_ref` MUST be present.
 - `overlay_context.claude_code.tool_catalog_ref` MUST be present.
+- `overlay_context.claude_code.standing_instruction_refs` MUST be present.
 - `overlay_context.claude_code.operator_id` MUST be present.
 - `overlay_context.claude_code.intent_summary` MUST be present.
 - `overlay_context.claude_code.files_changed_ref` MUST be present.
 - `overlay_context.claude_code.commands_run_ref` MUST be present.
 - `overlay_context.claude_code.assumptions_ref` MUST be present.
 - `overlay_context.claude_code.validation_ref` MUST be present.
+- `overlay_context.claude_code.skill_or_subagent_refs` MUST be present when a skill or subagent influences an R3/R4 action.
 - `overlay_context.claude_code.r3_r4_approver_id` MUST be present when risk class is `R3` or `R4`.
 - `overlay_context.claude_code.change_control_ref` MUST be present for `R3` and `R4` receipts.
 - `overlay_context.claude_code.supervision_mode` MUST be `user-confirmed` for `R3` and `R4` receipts.
@@ -112,3 +123,5 @@ A Claude Code overlay claim MUST be considered invalid if any of the following a
 - Any required D-CC drill is missing, stale, or failing.
 - Any required D-CC assertion is missing or false.
 - Required R3/R4 provenance fields are missing.
+- Standing instruction load-order evidence is missing for R3/R4 receipts.
+- Skill or subagent boundary evidence is missing for R3/R4 receipts involving skills or subagents.

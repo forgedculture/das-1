@@ -12,6 +12,7 @@ Threat assumptions
 - Shell and git actions can mutate local and remote systems quickly.
 - Credentials may exist in environment variables, local files, CLI helpers, or connectors.
 - MCP servers can expose tools with variable trust and broad capabilities.
+- Standing instruction surfaces such as `CLAUDE.md`, `.claude/settings.json`, skills, subagents, commands, hooks, and MCP configuration can become persistent authority rules.
 - Workspace boundaries can be bypassed via path traversal, symlinks, or mis-scoped commands.
 
 Tightens
@@ -27,10 +28,21 @@ Adds
 - AECX-050 Workspace containment
 - AECX-051 Git egress and remote mutation control
 - AECX-052 MCP trust segmentation
+- AECX-060 Skill provenance and review
+- AECX-061 Skill execution boundary
+- AECX-064 Delegated agent control
+- AECX-065 Context and memory containment
+- AECX-066 Approval artifact integrity
+- AECX-068 Agent supply-chain control
+- AECX-069 Standing instruction governance
 
 Claude Code runtime baseline
 - Deployment profile is non-exclusive: Claude Code via Bedrock is an accepted tool option, not a mandated single-vendor path.
 - Prompt handling baseline: no PHI or secrets in prompts.
+- Standing instruction surfaces must be inventoried and reviewed by scope, including repository `CLAUDE.md`, nested/local `CLAUDE.md` files, user-level `CLAUDE.md`, `.claude/settings.json`, skills, subagents, slash commands, hooks, and MCP configuration.
+- Precedence between organization, user, repository, nested path, skill, subagent, command, hook, and session instructions must be declared and evidenced.
+- Reviewed repository/project instructions must load by default before task execution; unreviewed or lower-authority personalizations must not override high-impact policy.
+- Skills, subagents, commands, and hooks that can influence R3/R4 actions require owner, version/source, review, execution boundary, and revocation evidence.
 - Writes outside the declared workspace root are prohibited unless explicitly approved as R4.
 - Writes and command execution require explicit user confirmation (supervised execution).
 - High-risk shell, git egress, and remote mutation actions default to deny without approval artifacts.
@@ -68,9 +80,17 @@ Overlay drills
 - D-CC-09 Approval artifact integrity red-team test
   - Pass: sampled approval artifacts match action scope, are time-bounded, and pass cross-check against receipt outcomes.
   - Output: approval sample audit report and receipt cross-check logs.
+- D-CC-10 Standing instruction precedence and override test
+  - Pass: reviewed default instructions load before execution; lower-authority personalizations, nested instructions, skills, subagents, commands, hooks, or MCP configuration cannot override high-impact policy without approval.
+  - Output: instruction inventory, load-order evidence, conflict-resolution logs, and blocked override receipts.
+- D-CC-11 Skill/subagent boundary test
+  - Pass: skills and subagents cannot exceed declared tool, data, workspace, network, approval, or revocation boundaries.
+  - Output: skill/subagent manifests, policy decisions, denied execution receipts, and revocation evidence.
 
 Operational risk closure requirements
 - For R3/R4 allow receipts, `overlay_context.claude_code` MUST include `session_id`, `task_id`, `workspace_root`, `cwd`, `invocation_id`, `git_repo`, `git_ref`, `policy_snapshot_ref`, and `tool_catalog_ref`.
+- For R3/R4 allow receipts, `overlay_context.claude_code.standing_instruction_refs` MUST identify active instruction artifacts, including applicable `CLAUDE.md`, settings, skill, subagent, command, hook, and MCP configuration references.
+- For R3/R4 allow receipts involving skills or subagents, `overlay_context.claude_code.skill_or_subagent_refs` MUST identify owner, source/version, review status, execution boundary, and revocation path.
 - PR-level receipts for Claude Code-assisted changes MUST include: `operator_id`, `intent_summary`, `files_changed_ref`, `commands_run_ref`, `assumptions_ref`, `validation_ref`, and when applicable `r3_r4_approver_id` and `rollback_pointer`.
 - R3/R4 approvals are required before execute for privileged access, meaningful blast radius, meaningful spend risk, or production-state change.
 - R3/R4 receipts MUST include `change_control_ref` and `supervision_mode=user-confirmed`.

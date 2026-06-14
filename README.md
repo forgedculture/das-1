@@ -22,6 +22,18 @@ DAS-1(TM) is a minimal, operator-grade standard for delegated authority in AI an
 Current overlay bundles:
 - `openclaw`: gateway exposure, prompt-injection boundary, sandbox/session isolation, revocation readiness.
 - `claude-code`: supervised coding-agent controls (propose/execute boundary, workspace containment, shell/git gating, MCP boundaries, CI execute boundary, approval integrity, revocation readiness).
+- `codex`: supervised coding-agent controls (`AGENTS.md` scope, workspace containment, shell/git gating, plugin/connector boundaries, browser/computer-use actions, CI execute boundary, approval integrity, revocation readiness).
+- `cursor`: supervised coding-agent controls (`.cursor/rules`, User Rules, `AGENTS.md`, workspace/index containment, terminal/tool authority, background edits, revocation readiness).
+- `kiro`: supervised coding-agent controls (steering files, specs, hooks, MCP boundaries, spec task execution, revocation readiness).
+
+Current domain overlay examples:
+- `business`: enterprise operations, HR, procurement, customer operations, support, and internal workflows.
+- `healthcare`: PHI boundaries, patient communications, chart operations, claims, and clinical-accountability boundaries.
+- `law`: matter boundaries, privilege, citation verification, client communications, and filings.
+- `finance`: payments, trades, ledger writes, financial advice, nonpublic data, and fraud/sanctions control checks.
+- `voting-elections`: voter registration, ballot logistics, public information, reporting support, audits, and election operations.
+- `government`: benefits, permits, procurement, records, public communications, enforcement support, and administrative decisions.
+- `military`: defense administration, logistics, readiness, cyber defense support, mission planning support, and command-support systems.
 
 ## What this is for
 
@@ -108,6 +120,20 @@ python tools/das1_verify.py verify-overlay \
   --ir-annexes das1/examples/ir_annexes \
   --overlay claude-code \
   --report claude-code-overlay-report.json
+```
+
+Verify core plus Codex overlay:
+
+```bash
+python tools/das1_verify.py verify-overlay \
+  --receipts das1/examples/codex/receipt_packs \
+  --exceptions das1/examples/exceptions \
+  --drills das1/examples/codex/drills \
+  --tool-catalogs das1/examples/tool_catalogs \
+  --policy-snapshots das1/examples/policy_snapshots \
+  --ir-annexes das1/examples/ir_annexes \
+  --overlay codex \
+  --report codex-overlay-report.json
 ```
 
 Verify publishable claim packets:
