@@ -6,7 +6,12 @@ Goal: make DAS-1 claims less subjective and more testable.
 This tool:
 - Validates receipt events against the canonical DAS-1 receipt schema.
 - Validates exception register entries against the canonical exceptions schema.
-- Applies a small set of DAS-1 v0.002 checks that are machine-verifiable.
+- Applies a small set of DAS-1 checks that are machine-verifiable.
+
+Version gating: checks default to DAS-1 v0.002. Pass --das-version v0.003 to
+additionally apply the v0.003 controls (AEC-13 delegation, AEC-14 classification
+and composition, the tightened AEC-10 cap enforcement, and Annex A autonomy).
+v0.002 evidence stays valid under v0.002, which is what the standard promises.
 
 This tool does NOT fully prove conformance with all 12 controls. Some controls
 require human-reviewed artifacts (catalog exports, policy docs, drill scorecards).
@@ -25,6 +30,43 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 import jsonschema
 from jsonschema import Draft202012Validator, FormatChecker
+
+
+RISK_ORDER = {"R1": 1, "R2": 2, "R3": 3, "R4": 4}
+AUTONOMY_ORDER = {"A0": 0, "A1": 1, "A2": 2, "A3": 3, "A4": 4, "A5": 5}
+
+# Autonomy levels at which the agent MUST NOT carry out execution itself
+# (Annex A.2: A0 sandbox, A1 observe, A2 draft, A3 recommend).
+NON_EXECUTING_AUTONOMY = ("A0", "A1", "A2", "A3")
+
+DEFAULT_DAS_VERSION = "v0.002"
+RECLASSIFICATION_TRIGGERS = ("tool", "scope", "data_class", "blast_radius")
+
+
+def _version_tuple(value: str) -> Tuple[int, ...]:
+    core = str(value).lstrip("vV").split("-")[0]
+    parts: List[int] = []
+    for chunk in core.split("."):
+        try:
+            parts.append(int(chunk))
+        except ValueError:
+            parts.append(0)
+    while len(parts) < 3:
+        parts.append(0)
+    return tuple(parts[:3])
+
+
+def _is_v0003_or_later(das_version: Optional[str]) -> bool:
+    if not das_version:
+        return False
+    return _version_tuple(das_version) >= _version_tuple("v0.003")
+
+
+def _risk_gt(a: Optional[str], b: Optional[str]) -> bool:
+    """True when risk class a is strictly higher than b."""
+    if a not in RISK_ORDER or b not in RISK_ORDER:
+        return False
+    return RISK_ORDER[a] > RISK_ORDER[b]
 
 
 @dataclass
@@ -162,6 +204,99 @@ def _das1_receipt_checks(receipt: Dict[str, Any], file: str) -> List[Failure]:
     return failures
 
 
+def _das1_receipt_checks_v0003(receipt: Dict[str, Any], file: str) -> List[Failure]:
+    """AEC-13, AEC-14, the tightened AEC-10, and Annex A. Additive to the v0.002 checks."""
+    failures: List[Failure] = []
+
+    def fail(message: str, pointer: str) -> None:
+        failures.append(Failure(kind="das1", file=file, message=message, pointer=pointer))
+
+    risk = receipt.get("risk_class")
+    decision = receipt.get("decision")
+    execution_status = receipt.get("execution_status")
+
+    # --- AEC-13: delegated execution must carry a reconstructable lineage ---
+    delegation_id = receipt.get("delegation_id")
+    parent_actor_id = receipt.get("parent_actor_id")
+    delegation_depth = receipt.get("delegation_depth")
+    delegated = bool(delegation_id) or bool(parent_actor_id) or (
+        isinstance(delegation_depth, int) and delegation_depth > 0
+    )
+
+    if delegated:
+        for field in ("delegation_id", "parent_actor_id", "root_principal_id", "granted_risk_ceiling"):
+            if not receipt.get(field):
+                fail(f"Delegated action requires {field} so lineage resolves to the human principal (AEC-13).", f"/{field}")
+        if not isinstance(delegation_depth, int):
+            fail("Delegated action requires delegation_depth (AEC-13).", "/delegation_depth")
+        elif delegation_depth < 1:
+            fail("Delegated action requires delegation_depth >= 1 (AEC-13).", "/delegation_depth")
+
+        ceiling = receipt.get("granted_risk_ceiling")
+        if _risk_gt(risk, ceiling):
+            fail(
+                f"Action classified {risk} exceeds granted_risk_ceiling {ceiling}; "
+                f"delegated authority must be a subset of the delegating agent's (AEC-13).",
+                "/risk_class",
+            )
+
+    # --- Annex A.3: autonomy level and risk ceiling intersect, never maximise ---
+    autonomy = receipt.get("autonomy_level")
+    if autonomy in NON_EXECUTING_AUTONOMY and execution_status == "executed" and risk in ("R3", "R4"):
+        fail(
+            f"autonomy_level {autonomy} must not record an executed {risk} action; "
+            f"at this level a human carries out execution (Annex A.2/A.3).",
+            "/execution_status",
+        )
+
+    # --- AEC-14: a sequence is governed at its composed class ---
+    composition_group_id = receipt.get("composition_group_id")
+    composed_class = receipt.get("composed_class")
+
+    if composition_group_id and not composed_class:
+        fail("Receipt in a composition group requires composed_class (AEC-14).", "/composed_class")
+    if composed_class and not composition_group_id:
+        fail("composed_class requires composition_group_id naming the sequence (AEC-14).", "/composition_group_id")
+    if composed_class and _risk_gt(risk, composed_class):
+        fail(
+            f"composed_class {composed_class} is lower than the action's own class {risk}; "
+            f"the composed class must be at least the highest individual class (AEC-14).",
+            "/composed_class",
+        )
+
+    # This is the composition hole: individually-gated actions whose sequence
+    # exceeds them must face the gate for the composed class, not their own.
+    if composed_class in ("R3", "R4") and decision == "allow":
+        for field in ("approval_id", "approver_id", "preflight_id"):
+            if not receipt.get(field):
+                fail(
+                    f"Sequence governed at composed_class {composed_class} requires {field}, "
+                    f"even though this action is classified {risk} (AEC-14/AEC-03/AEC-06).",
+                    f"/{field}",
+                )
+
+    # --- AEC-10: caps are enforced in the execution path, not reported after ---
+    if receipt.get("cap_enforcement_point") == "reporting_layer":
+        fail(
+            "cap_enforcement_point=reporting_layer does not satisfy AEC-10; "
+            "the cap must be enforced in the execution path.",
+            "/cap_enforcement_point",
+        )
+    if receipt.get("cap_enforced") is True:
+        if receipt.get("cap_enforcement_point") != "execution_path":
+            fail("cap_enforced=true requires cap_enforcement_point=execution_path (AEC-10).", "/cap_enforcement_point")
+        if not receipt.get("cap_id"):
+            fail("cap_enforced=true requires cap_id (AEC-10).", "/cap_id")
+        if execution_status not in ("blocked", "queued"):
+            fail(
+                "cap_enforced=true requires execution_status blocked or queued; "
+                "a cap that did not halt execution is not a breaker (AEC-10).",
+                "/execution_status",
+            )
+
+    return failures
+
+
 def _das1_exception_checks(exc: Dict[str, Any], file: str) -> List[Failure]:
     failures: List[Failure] = []
 
@@ -282,17 +417,47 @@ def _das1_drill_checks(drill: Dict[str, Any], file: str, now_utc: datetime) -> L
             )
         )
 
+    # A drill that claims a pass must show the outcome that defines the pass.
+    drill_id = drill.get("drill_id")
+    if drill.get("result") == "pass":
+        if drill_id == "D3":
+            if drill.get("cascade_complete") is not True:
+                failures.append(Failure(kind="das1", file=file, message="D3 pass requires cascade_complete=true (AEC-13).", pointer="/cascade_complete"))
+            if drill.get("lineage_reconstructed") is not True:
+                failures.append(Failure(kind="das1", file=file, message="D3 pass requires lineage_reconstructed=true (AEC-13).", pointer="/lineage_reconstructed"))
+            executed_after = drill.get("descendants_executed_after_revoke")
+            if not isinstance(executed_after, int):
+                failures.append(Failure(kind="das1", file=file, message="D3 pass requires descendants_executed_after_revoke (AEC-13).", pointer="/descendants_executed_after_revoke"))
+            elif executed_after != 0:
+                failures.append(Failure(kind="das1", file=file, message=f"D3 cannot pass with {executed_after} descendant execution(s) after revoke (AEC-13).", pointer="/descendants_executed_after_revoke"))
+            if drill.get("revocation_within_budget") is not True:
+                failures.append(Failure(kind="das1", file=file, message="D3 pass requires the cascade to complete within the AEC-05 revocation budget.", pointer="/revocation_within_budget"))
+        elif drill_id == "D4":
+            if drill.get("cap_breaker_halted_execution") is not True:
+                failures.append(Failure(kind="das1", file=file, message="D4 pass requires cap_breaker_halted_execution=true (AEC-10).", pointer="/cap_breaker_halted_execution"))
+            if drill.get("cap_owner_notified") is not True:
+                failures.append(Failure(kind="das1", file=file, message="D4 pass requires cap_owner_notified=true; a cap has a named owner (AEC-10).", pointer="/cap_owner_notified"))
+            if drill.get("cap_enforcement_point") != "execution_path":
+                failures.append(Failure(kind="das1", file=file, message="D4 pass requires cap_enforcement_point=execution_path; a reporting-layer control is not a breaker (AEC-10).", pointer="/cap_enforcement_point"))
+
     return failures
 
 
-def verify_drills(path: Path, schema_path: Path, max_age_days: int = 90) -> Tuple[List[Failure], Dict[str, Any]]:
+def verify_drills(
+    path: Path,
+    schema_path: Path,
+    max_age_days: int = 90,
+    das_version: str = DEFAULT_DAS_VERSION,
+) -> Tuple[List[Failure], Dict[str, Any]]:
     schema = _load_json(schema_path)
 
     failures: List[Failure] = []
     total = 0
     now_utc = datetime.now(timezone.utc)
-    required_drills = ("D1", "D2")
+    required_drills = ("D1", "D2", "D3", "D4") if _is_v0003_or_later(das_version) else ("D1", "D2")
     latest_pass: Dict[str, datetime] = {}
+    m8_values: List[float] = []
+    m9_values: List[float] = []
 
     for jf in _iter_json_files(path):
         total += 1
@@ -308,6 +473,13 @@ def verify_drills(path: Path, schema_path: Path, max_age_days: int = 90) -> Tupl
                 prior = latest_pass.get(drill_id)
                 if prior is None or dt > prior:
                     latest_pass[drill_id] = dt
+
+            m8 = obj.get("m8_cap_enforcement_rate")
+            if isinstance(m8, (int, float)):
+                m8_values.append(float(m8))
+            m9 = obj.get("m9_cascade_completion_ms_p95")
+            if isinstance(m9, (int, float)):
+                m9_values.append(float(m9))
         else:
             failures.append(
                 Failure(kind="schema", file=str(jf), message="Drill report must be a JSON object.")
@@ -343,18 +515,35 @@ def verify_drills(path: Path, schema_path: Path, max_age_days: int = 90) -> Tupl
         "kind": "das1-drills",
         "generated_at": _utcnow_iso(),
         "path": str(path),
+        "das_version": das_version,
         "total_files": total,
         "required_drills": list(required_drills),
         "max_age_days": max_age_days,
         "latest_pass": {k: v.isoformat() for k, v in latest_pass.items()},
+        "metrics": {
+            "m8_cap_enforcement_rate": {
+                "min": min(m8_values) if m8_values else None,
+                "sample_size": len(m8_values),
+            },
+            "m9_delegation_cascade_completion_ms": {
+                "p50": _percentile(m9_values, 0.50),
+                "p95": _percentile(m9_values, 0.95),
+                "sample_size": len(m9_values),
+            },
+        },
         "failures": [f.__dict__ for f in failures],
         "pass": len(failures) == 0,
     }
     return failures, report
 
 
-def verify_receipts(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[str, Any]]:
+def verify_receipts(
+    path: Path,
+    schema_path: Path,
+    das_version: str = DEFAULT_DAS_VERSION,
+) -> Tuple[List[Failure], Dict[str, Any]]:
     schema = _load_json(schema_path)
+    apply_v0003 = _is_v0003_or_later(das_version)
 
     failures: List[Failure] = []
     total = 0
@@ -375,6 +564,8 @@ def verify_receipts(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[
         failures.extend(_validate_against_schema(obj, schema, str(jf), kind="schema"))
         if isinstance(obj, dict):
             failures.extend(_das1_receipt_checks(obj, str(jf)))
+            if apply_v0003:
+                failures.extend(_das1_receipt_checks_v0003(obj, str(jf)))
 
             risk = obj.get("risk_class")
             decision = obj.get("decision")
@@ -496,6 +687,7 @@ def verify_receipts(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[
         "kind": "das1-receipts",
         "generated_at": _utcnow_iso(),
         "path": str(path),
+        "das_version": das_version,
         "total_files": total,
         "metrics": utility_metrics,
         "failures": [f.__dict__ for f in failures],
@@ -532,8 +724,13 @@ def verify_exceptions(path: Path, schema_path: Path) -> Tuple[List[Failure], Dic
     return failures, report
 
 
-def verify_tool_catalogs(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[str, Any]]:
+def verify_tool_catalogs(
+    path: Path,
+    schema_path: Path,
+    das_version: str = DEFAULT_DAS_VERSION,
+) -> Tuple[List[Failure], Dict[str, Any]]:
     schema = _load_json(schema_path)
+    apply_v0003 = _is_v0003_or_later(das_version)
     failures: List[Failure] = []
     total = 0
 
@@ -584,10 +781,25 @@ def verify_tool_catalogs(path: Path, schema_path: Path) -> Tuple[List[Failure], 
                     )
                 seen_tools.add(tool_name)
 
+            if apply_v0003:
+                # Annex A.3: both axes must appear on the catalog entry, so a
+                # promotion along one is visible as a change to that one alone.
+                for field in ("risk_ceiling", "autonomy_level"):
+                    if not tool.get(field):
+                        failures.append(
+                            Failure(
+                                kind="das1",
+                                file=str(jf),
+                                message=f"Tool entry '{tool_name}' requires {field} (AEC-01/Annex A.3).",
+                                pointer=f"/tools/{idx}/{field}",
+                            )
+                        )
+
     report = {
         "kind": "das1-tool-catalogs",
         "generated_at": _utcnow_iso(),
         "path": str(path),
+        "das_version": das_version,
         "total_files": total,
         "failures": [f.__dict__ for f in failures],
         "pass": len(failures) == 0,
@@ -837,18 +1049,32 @@ def verify_claims(path: Path, schema_path: Path, max_age_days: int = 90) -> Tupl
                 )
             )
 
+        claim_version = str(obj.get("das_version", ""))
+        claim_is_v0003 = _is_v0003_or_later(claim_version)
+        required_claim_drills = ("D1", "D2", "D3", "D4") if claim_is_v0003 else ("D1", "D2")
+
         scope = obj.get("scope", {}) if isinstance(obj.get("scope"), dict) else {}
         core_conformant = scope.get("core_conformant")
+        core_sections = ("receipts", "exceptions", "drills")
+        if core_conformant is True and claim_is_v0003:
+            core_sections = core_sections + ("delegation_records", "classification_registers")
         if core_conformant is True:
-            for section in ("receipts", "exceptions", "drills"):
+            for section in core_sections:
                 sec = conformance_report.get(section)
                 if not isinstance(sec, dict) or sec.get("pass") is not True:
                     failures.append(
                         Failure(
                             kind="das1",
                             file=str(jf),
-                            message=f"Core claim requires passing {section} section in referenced conformance report.",
-                            pointer=f"/scope/core_conformant",
+                            message=(
+                                f"Core claim requires passing {section} section in referenced conformance report."
+                                + (
+                                    f" ({claim_version} claims must evidence AEC-13 and AEC-14.)"
+                                    if section in ("delegation_records", "classification_registers")
+                                    else ""
+                                )
+                            ),
+                            pointer="/scope/core_conformant",
                         )
                     )
 
@@ -861,7 +1087,7 @@ def verify_claims(path: Path, schema_path: Path, max_age_days: int = 90) -> Tupl
         if not isinstance(drill_disclosure, dict):
             drill_disclosure = {}
 
-        for drill_id in ("D1", "D2"):
+        for drill_id in required_claim_drills:
             dt = _parse_iso8601_aware(str(drill_disclosure.get(drill_id, "")))
             if dt is None:
                 failures.append(
@@ -886,7 +1112,7 @@ def verify_claims(path: Path, schema_path: Path, max_age_days: int = 90) -> Tupl
         report_drills = conformance_report.get("drills", {})
         latest_pass = report_drills.get("latest_pass", {}) if isinstance(report_drills, dict) else {}
         if isinstance(latest_pass, dict):
-            for drill_id in ("D1", "D2"):
+            for drill_id in required_claim_drills:
                 claimed = _parse_iso8601_aware(str(drill_disclosure.get(drill_id, "")))
                 observed = _parse_iso8601_aware(str(latest_pass.get(drill_id, "")))
                 if claimed is not None and observed is not None and claimed != observed:
@@ -927,6 +1153,280 @@ def verify_claims(path: Path, schema_path: Path, max_age_days: int = 90) -> Tupl
         "path": str(path),
         "total_files": total,
         "max_age_days": max_age_days,
+        "failures": [f.__dict__ for f in failures],
+        "pass": len(failures) == 0,
+    }
+    return failures, report
+
+
+def verify_delegation_records(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[str, Any]]:
+    """AEC-13. Checks the subset rule per record, then cascade integrity across the set."""
+    schema = _load_json(schema_path)
+    failures: List[Failure] = []
+    total = 0
+    now_utc = datetime.now(timezone.utc)
+    records: Dict[str, Dict[str, Any]] = {}
+    record_files: Dict[str, str] = {}
+
+    for jf in _iter_json_files(path):
+        total += 1
+        obj = _load_json(jf)
+        failures.extend(_validate_against_schema(obj, schema, str(jf), kind="schema"))
+        if not isinstance(obj, dict):
+            failures.append(Failure(kind="schema", file=str(jf), message="Delegation record must be a JSON object."))
+            continue
+
+        file = str(jf)
+
+        def fail(message: str, pointer: str) -> None:
+            failures.append(Failure(kind="das1", file=file, message=message, pointer=pointer))
+
+        delegation_id = obj.get("delegation_id")
+        if isinstance(delegation_id, str):
+            if delegation_id in records:
+                fail(f"Duplicate delegation_id '{delegation_id}' (AEC-13).", "/delegation_id")
+            records[delegation_id] = obj
+            record_files[delegation_id] = file
+
+        issued_at = _parse_iso8601_aware(str(obj.get("issued_at", "")))
+        expires_at = _parse_iso8601_aware(str(obj.get("expires_at", "")))
+        if issued_at is None:
+            fail("issued_at must be a valid timezone-aware ISO-8601 datetime (AEC-13).", "/issued_at")
+        if expires_at is None:
+            fail("expires_at must be a valid timezone-aware ISO-8601 datetime; every delegation expires (AEC-13).", "/expires_at")
+        if issued_at is not None and expires_at is not None and expires_at <= issued_at:
+            fail("expires_at must be after issued_at (AEC-13).", "/expires_at")
+
+        status = obj.get("status")
+        if status == "active" and expires_at is not None and expires_at <= now_utc:
+            fail("status=active is inconsistent with a past expires_at; the delegation has lapsed (AEC-13).", "/status")
+        if status == "revoked" and not obj.get("revoked_at"):
+            fail("status=revoked requires revoked_at (AEC-13).", "/revoked_at")
+
+        depth = obj.get("delegation_depth")
+        if isinstance(depth, int) and depth > 0 and not obj.get("parent_delegation_id"):
+            fail("delegation_depth > 0 requires parent_delegation_id so lineage is reconstructable (AEC-13).", "/parent_delegation_id")
+
+        if obj.get("delegating_actor_id") == obj.get("delegated_actor_id"):
+            fail("delegating_actor_id and delegated_actor_id must differ (AEC-13).", "/delegated_actor_id")
+
+        # The subset rule. Checkable from the record alone when delegating_scope is present.
+        granted = obj.get("granted_scope") if isinstance(obj.get("granted_scope"), dict) else {}
+        parent_scope = obj.get("delegating_scope") if isinstance(obj.get("delegating_scope"), dict) else None
+        if parent_scope is not None:
+            for field in ("tools", "data_classes", "actions"):
+                child_vals = granted.get(field)
+                parent_vals = parent_scope.get(field)
+                if isinstance(child_vals, list) and isinstance(parent_vals, list):
+                    extra = sorted(set(child_vals) - set(parent_vals))
+                    if extra:
+                        fail(
+                            f"granted_scope.{field} grants {extra} not held by the delegating agent; "
+                            f"delegated authority must be a subset (AEC-13).",
+                            f"/granted_scope/{field}",
+                        )
+
+            granted_ceiling = obj.get("granted_risk_ceiling")
+            parent_ceiling = parent_scope.get("risk_ceiling")
+            if _risk_gt(granted_ceiling, parent_ceiling):
+                fail(
+                    f"granted_risk_ceiling {granted_ceiling} exceeds the delegating agent's {parent_ceiling} (AEC-13).",
+                    "/granted_risk_ceiling",
+                )
+
+            granted_autonomy = obj.get("granted_autonomy_level")
+            parent_autonomy = parent_scope.get("autonomy_level")
+            if (
+                granted_autonomy in AUTONOMY_ORDER
+                and parent_autonomy in AUTONOMY_ORDER
+                and AUTONOMY_ORDER[granted_autonomy] > AUTONOMY_ORDER[parent_autonomy]
+            ):
+                fail(
+                    f"granted_autonomy_level {granted_autonomy} exceeds the delegating agent's "
+                    f"{parent_autonomy}; the subset rule applies to both axes (AEC-13/Annex A.3).",
+                    "/granted_autonomy_level",
+                )
+
+    # Cascade integrity across the whole set.
+    revoked_ids = {rid for rid, rec in records.items() if rec.get("status") == "revoked"}
+    orphans = 0
+    for delegation_id, rec in records.items():
+        parent_id = rec.get("parent_delegation_id")
+        if not parent_id:
+            continue
+        if parent_id not in records:
+            orphans += 1
+            failures.append(
+                Failure(
+                    kind="das1",
+                    file=record_files[delegation_id],
+                    message=f"parent_delegation_id '{parent_id}' does not resolve to a delegation record; lineage is broken (AEC-13).",
+                    pointer="/parent_delegation_id",
+                )
+            )
+            continue
+
+        # Walk to the root so a revocation anywhere above is caught, not just the immediate parent.
+        ancestor = parent_id
+        seen = {delegation_id}
+        while ancestor:
+            if ancestor in seen:
+                failures.append(
+                    Failure(
+                        kind="das1",
+                        file=record_files[delegation_id],
+                        message=f"Delegation lineage contains a cycle at '{ancestor}' (AEC-13).",
+                        pointer="/parent_delegation_id",
+                    )
+                )
+                break
+            seen.add(ancestor)
+            if ancestor in revoked_ids and rec.get("status") == "active":
+                failures.append(
+                    Failure(
+                        kind="das1",
+                        file=record_files[delegation_id],
+                        message=(
+                            f"Delegation is still active while ancestor '{ancestor}' is revoked; "
+                            f"revocation must cascade to every descendant (AEC-13)."
+                        ),
+                        pointer="/status",
+                    )
+                )
+                break
+            ancestor = records.get(ancestor, {}).get("parent_delegation_id")
+
+    report = {
+        "kind": "das1-delegation-records",
+        "generated_at": _utcnow_iso(),
+        "path": str(path),
+        "total_files": total,
+        "total_records": len(records),
+        "revoked_records": len(revoked_ids),
+        "orphan_records": orphans,
+        "failures": [f.__dict__ for f in failures],
+        "pass": len(failures) == 0,
+    }
+    return failures, report
+
+
+def verify_classification_registers(path: Path, schema_path: Path) -> Tuple[List[Failure], Dict[str, Any]]:
+    """AEC-14. Checks the stated procedure and every composition test case."""
+    schema = _load_json(schema_path)
+    failures: List[Failure] = []
+    total = 0
+    composition_cases = 0
+
+    for jf in _iter_json_files(path):
+        total += 1
+        obj = _load_json(jf)
+        failures.extend(_validate_against_schema(obj, schema, str(jf), kind="schema"))
+        if not isinstance(obj, dict):
+            failures.append(Failure(kind="schema", file=str(jf), message="Classification register must be a JSON object."))
+            continue
+
+        file = str(jf)
+
+        def fail(message: str, pointer: str) -> None:
+            failures.append(Failure(kind="das1", file=file, message=message, pointer=pointer))
+
+        generated_at = _parse_iso8601_aware(str(obj.get("generated_at", "")))
+        if generated_at is None:
+            fail("generated_at must be a valid timezone-aware ISO-8601 datetime (AEC-14).", "/generated_at")
+
+        # AEC-14: the default must be stated, and the stated default must be the higher class.
+        if obj.get("ambiguity_default") != "higher_class":
+            fail(
+                "ambiguity_default must be higher_class; AEC-14 requires the default posture on "
+                "ambiguous classification to be the higher class.",
+                "/ambiguity_default",
+            )
+
+        triggers = obj.get("reclassification_triggers")
+        if isinstance(triggers, list):
+            missing = [t for t in RECLASSIFICATION_TRIGGERS if t not in triggers]
+            if missing:
+                fail(
+                    f"reclassification_triggers is missing {missing}; AEC-14 requires review when the "
+                    f"tool, its scope, its data class, or its blast radius changes.",
+                    "/reclassification_triggers",
+                )
+
+        entries = obj.get("entries") if isinstance(obj.get("entries"), list) else []
+        entry_by_id: Dict[str, Dict[str, Any]] = {}
+        for idx, entry in enumerate(entries):
+            if not isinstance(entry, dict):
+                continue
+            entry_id = entry.get("entry_id")
+            if isinstance(entry_id, str):
+                if entry_id in entry_by_id:
+                    fail(f"Duplicate entry_id '{entry_id}' (AEC-14).", f"/entries/{idx}/entry_id")
+                entry_by_id[entry_id] = entry
+            reviewed_at = _parse_iso8601_aware(str(entry.get("reviewed_at", "")))
+            if reviewed_at is None:
+                fail(f"Entry '{entry_id}' requires a valid reviewed_at (AEC-14).", f"/entries/{idx}/reviewed_at")
+            if entry.get("contested") is True and not entry.get("contest_resolution_ref"):
+                fail(
+                    f"Entry '{entry_id}' is marked contested and requires contest_resolution_ref (AEC-14).",
+                    f"/entries/{idx}/contest_resolution_ref",
+                )
+
+        rules = obj.get("composition_rules") if isinstance(obj.get("composition_rules"), list) else []
+        if not rules:
+            fail(
+                "Register requires at least one composition_rules entry; AEC-14 takes a composition "
+                "test case as part of its receipt.",
+                "/composition_rules",
+            )
+
+        for idx, rule in enumerate(rules):
+            if not isinstance(rule, dict):
+                continue
+            composition_cases += 1
+            group = rule.get("composition_group_id")
+            members = rule.get("member_entry_ids") if isinstance(rule.get("member_entry_ids"), list) else []
+            declared_max = rule.get("individual_max_class")
+            composed = rule.get("composed_class")
+            governed = rule.get("governed_at_class")
+
+            unresolved = [m for m in members if m not in entry_by_id]
+            if unresolved:
+                fail(
+                    f"Composition rule '{group}' references entries not in the register: {unresolved} (AEC-14).",
+                    f"/composition_rules/{idx}/member_entry_ids",
+                )
+
+            observed = [entry_by_id[m].get("risk_class") for m in members if m in entry_by_id]
+            observed = [r for r in observed if r in RISK_ORDER]
+            if observed:
+                actual_max = max(observed, key=lambda r: RISK_ORDER[r])
+                if declared_max != actual_max:
+                    fail(
+                        f"Composition rule '{group}' declares individual_max_class {declared_max} but its "
+                        f"member entries top out at {actual_max} (AEC-14).",
+                        f"/composition_rules/{idx}/individual_max_class",
+                    )
+
+            if _risk_gt(declared_max, composed):
+                fail(
+                    f"Composition rule '{group}' has composed_class {composed} below individual_max_class "
+                    f"{declared_max}; a sequence is never governed below its highest member (AEC-14).",
+                    f"/composition_rules/{idx}/composed_class",
+                )
+
+            if governed != composed:
+                fail(
+                    f"Composition rule '{group}' is governed at {governed} but composes to {composed}; "
+                    f"the sequence must be governed at the composed class (AEC-14).",
+                    f"/composition_rules/{idx}/governed_at_class",
+                )
+
+    report = {
+        "kind": "das1-classification-registers",
+        "generated_at": _utcnow_iso(),
+        "path": str(path),
+        "total_files": total,
+        "composition_cases": composition_cases,
         "failures": [f.__dict__ for f in failures],
         "pass": len(failures) == 0,
     }
@@ -1075,6 +1575,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     p_verify.add_argument("--schemas", type=str, default="schemas", help="schemas directory")
     p_verify.add_argument("--drill-max-age-days", type=int, default=90, help="max age for required D1/D2 passes")
     p_verify.add_argument("--ir-max-age-days", type=int, default=365, help="max age for IR tabletop evidence")
+    p_verify.add_argument("--das-version", type=str, default=DEFAULT_DAS_VERSION, help="DAS-1 version to check against (v0.002 default; v0.003 adds AEC-13/AEC-14/Annex A and the tightened AEC-10)")
+    p_verify.add_argument("--delegation-records", type=str, default=None, help="path to delegation records directory (required at v0.003)")
+    p_verify.add_argument("--classification-registers", type=str, default=None, help="path to classification registers directory (required at v0.003)")
     p_verify.add_argument("--overlay", action="append", default=[], help="overlay plugin id (repeatable)")
     p_verify.add_argument("--overlay-dir", type=str, default="tools/overlays", help="overlay plugin directory")
     p_verify.add_argument("--report", type=str, default="conformance-report.json", help="output report path")
@@ -1117,6 +1620,16 @@ def main(argv: Optional[List[str]] = None) -> int:
     p_ir.add_argument("--max-age-days", type=int, default=365)
     p_ir.add_argument("--report", type=str, default="ir-annexes-report.json")
 
+    p_dr = sub.add_parser("verify-delegation-records", help="verify AEC-13 delegation records")
+    p_dr.add_argument("path", type=str)
+    p_dr.add_argument("--schema", type=str, default="schemas/delegation-record.schema.json")
+    p_dr.add_argument("--report", type=str, default="delegation-records-report.json")
+
+    p_cr = sub.add_parser("verify-classification-registers", help="verify AEC-14 classification registers")
+    p_cr.add_argument("path", type=str)
+    p_cr.add_argument("--schema", type=str, default="schemas/classification-register.schema.json")
+    p_cr.add_argument("--report", type=str, default="classification-registers-report.json")
+
     p_o = sub.add_parser("verify-overlay", help="verify core plus overlay plugin checks")
     p_o.add_argument("--receipts", type=str, required=True, help="path to receipts directory")
     p_o.add_argument("--exceptions", type=str, required=True, help="path to exceptions directory")
@@ -1127,6 +1640,9 @@ def main(argv: Optional[List[str]] = None) -> int:
     p_o.add_argument("--schemas", type=str, default="schemas", help="schemas directory")
     p_o.add_argument("--drill-max-age-days", type=int, default=90, help="max age for required D1/D2 passes")
     p_o.add_argument("--ir-max-age-days", type=int, default=365, help="max age for IR tabletop evidence")
+    p_o.add_argument("--das-version", type=str, default=DEFAULT_DAS_VERSION, help="DAS-1 version to check against")
+    p_o.add_argument("--delegation-records", type=str, default=None, help="path to delegation records directory (required at v0.003)")
+    p_o.add_argument("--classification-registers", type=str, default=None, help="path to classification registers directory (required at v0.003)")
     p_o.add_argument("--overlay", action="append", required=True, help="overlay plugin id (repeatable)")
     p_o.add_argument("--overlay-dir", type=str, default="tools/overlays", help="overlay plugin directory")
     p_o.add_argument("--report", type=str, default="overlay-report.json", help="output report path")
@@ -1153,6 +1669,18 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     if args.cmd == "verify-claims":
         failures, report = verify_claims(Path(args.path), Path(args.schema), max_age_days=args.max_age_days)
+        Path(args.report).write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(json.dumps({"pass": report["pass"], "failures": len(failures)}))
+        return 1 if failures else 0
+
+    if args.cmd == "verify-delegation-records":
+        failures, report = verify_delegation_records(Path(args.path), Path(args.schema))
+        Path(args.report).write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(json.dumps({"pass": report["pass"], "failures": len(failures)}))
+        return 1 if failures else 0
+
+    if args.cmd == "verify-classification-registers":
+        failures, report = verify_classification_registers(Path(args.path), Path(args.schema))
         Path(args.report).write_text(json.dumps(report, indent=2), encoding="utf-8")
         print(json.dumps({"pass": report["pass"], "failures": len(failures)}))
         return 1 if failures else 0
@@ -1185,14 +1713,21 @@ def main(argv: Optional[List[str]] = None) -> int:
         schemas_dir = Path(args.schemas)
         overlay_dir = Path(args.overlay_dir)
         overlays = args.overlay or []
+        das_version = args.das_version
+        apply_v0003 = _is_v0003_or_later(das_version)
 
-        receipt_failures, receipt_report = verify_receipts(receipts_dir, schemas_dir / "receipt.schema.json")
+        receipt_failures, receipt_report = verify_receipts(
+            receipts_dir, schemas_dir / "receipt.schema.json", das_version=das_version
+        )
         exc_failures, exc_report = verify_exceptions(exceptions_dir, schemas_dir / "exception.schema.json")
         drill_failures, drill_report = verify_drills(
-            drills_dir, schemas_dir / "drill-report.schema.json", max_age_days=args.drill_max_age_days
+            drills_dir,
+            schemas_dir / "drill-report.schema.json",
+            max_age_days=args.drill_max_age_days,
+            das_version=das_version,
         )
         tool_catalog_failures, tool_catalog_report = verify_tool_catalogs(
-            tool_catalogs_dir, schemas_dir / "tool-catalog.schema.json"
+            tool_catalogs_dir, schemas_dir / "tool-catalog.schema.json", das_version=das_version
         )
         policy_snapshot_failures, policy_snapshot_report = verify_policy_snapshots(
             policy_snapshots_dir, schemas_dir / "policy-snapshot.schema.json"
@@ -1200,6 +1735,53 @@ def main(argv: Optional[List[str]] = None) -> int:
         ir_annex_failures, ir_annex_report = verify_ir_annexes(
             ir_annexes_dir, schemas_dir / "ir-annex.schema.json", max_age_days=args.ir_max_age_days
         )
+        # AEC-13 and AEC-14 evidence. Only demanded at v0.003, so v0.002
+        # invocations keep working unchanged.
+        delegation_failures: List[Failure] = []
+        delegation_report: Dict[str, Any] = {"kind": "das1-delegation-records", "skipped": True, "pass": True}
+        classification_failures: List[Failure] = []
+        classification_report: Dict[str, Any] = {"kind": "das1-classification-registers", "skipped": True, "pass": True}
+
+        if args.delegation_records:
+            delegation_failures, delegation_report = verify_delegation_records(
+                Path(args.delegation_records), schemas_dir / "delegation-record.schema.json"
+            )
+        elif apply_v0003:
+            delegation_failures = [
+                Failure(
+                    kind="das1",
+                    file=str(receipts_dir),
+                    message=f"{das_version} requires --delegation-records; AEC-13 takes delegation records as its receipt.",
+                    pointer="/delegation_records",
+                )
+            ]
+            delegation_report = {
+                "kind": "das1-delegation-records",
+                "generated_at": _utcnow_iso(),
+                "failures": [f.__dict__ for f in delegation_failures],
+                "pass": False,
+            }
+
+        if args.classification_registers:
+            classification_failures, classification_report = verify_classification_registers(
+                Path(args.classification_registers), schemas_dir / "classification-register.schema.json"
+            )
+        elif apply_v0003:
+            classification_failures = [
+                Failure(
+                    kind="das1",
+                    file=str(receipts_dir),
+                    message=f"{das_version} requires --classification-registers; AEC-14 takes a classification register as its receipt.",
+                    pointer="/classification_registers",
+                )
+            ]
+            classification_report = {
+                "kind": "das1-classification-registers",
+                "generated_at": _utcnow_iso(),
+                "failures": [f.__dict__ for f in classification_failures],
+                "pass": False,
+            }
+
         overlay_failures: List[Failure] = []
         overlay_reports: Dict[str, Any] = {}
         if overlays:
@@ -1216,6 +1798,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         combined = {
             "kind": "das1-conformance-seed",
             "generated_at": _utcnow_iso(),
+            "das_version": das_version,
             "receipts_path": str(receipts_dir),
             "exceptions_path": str(exceptions_dir),
             "drills_path": str(drills_dir),
@@ -1228,6 +1811,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             "tool_catalogs": tool_catalog_report,
             "policy_snapshots": policy_snapshot_report,
             "ir_annexes": ir_annex_report,
+            "delegation_records": delegation_report,
+            "classification_registers": classification_report,
             "overlays": overlay_reports,
             "pass": (
                 len(receipt_failures) == 0
@@ -1236,6 +1821,8 @@ def main(argv: Optional[List[str]] = None) -> int:
                 and len(tool_catalog_failures) == 0
                 and len(policy_snapshot_failures) == 0
                 and len(ir_annex_failures) == 0
+                and len(delegation_failures) == 0
+                and len(classification_failures) == 0
                 and len(overlay_failures) == 0
             ),
         }
@@ -1251,6 +1838,8 @@ def main(argv: Optional[List[str]] = None) -> int:
                     "tool_catalog_failures": len(tool_catalog_failures),
                     "policy_snapshot_failures": len(policy_snapshot_failures),
                     "ir_annex_failures": len(ir_annex_failures),
+                    "delegation_record_failures": len(delegation_failures),
+                    "classification_register_failures": len(classification_failures),
                     "overlay_failures": len(overlay_failures),
                 }
             )
