@@ -28,14 +28,28 @@ Non-goals:
 - [ ] Extend verifier plugins and machine checks for accepted overlays. (Started: Codex verifier added; Claude Code verifier expanded for D-CC-10/D-CC-11.)
 - [x] Update README, conformance docs, checklist, and badge guidance after implementation.
 
-## Remaining Work
+## Remaining Work (v0.002 refresh)
 
-- [ ] Review the refresh spec with stakeholders and confirm naming/versioning for the next DAS-1 release.
+- [x] Confirm naming/versioning for the next DAS-1 release. Resolved 2026-08-20: v0.003, see tasks/decisions.md.
+- [x] Decide the status of domain overlays for the current release. Resolved at v0.002: Informative, documentation-only.
 - [ ] Decide which additional platform overlays are in scope beyond OpenClaw, Claude Code, Codex, Cursor, and Kiro.
-- [ ] Add verifier plugins and example evidence for accepted domain overlays, or explicitly mark them as documentation-only overlays for the current release.
 - [ ] Add policy snapshot/tool catalog examples for Codex-specific evidence if stronger sample completeness is desired.
 - [ ] Add conformance claims for domain overlays only after legal/regulatory/policy review expectations are finalized.
 - [ ] Package changes into reviewable PRs or commits by layer.
+
+## v0.003 (see spec/roadmap/v0.003-enterprise-load-findings.md)
+
+- [x] Core normative deltas: AEC-13, AEC-14, Annex A, tightened AEC-10, M8/M9, D3/D4.
+- [x] Reconcile AECX-064 and AECX-067 so delegation and budget are not stated twice at two strengths.
+- [x] Schemas: delegation-record, classification-register, and additive fields on receipt/drill/tool-catalog/claim.
+- [x] Verifier: `--das-version` gate, AEC-13/AEC-14/AEC-10/Annex A checks, D3/D4 outcome checks, two new artifact verifiers.
+- [x] Draft evidence pack under das1/examples/v0003/ plus a v0.003 claim packet.
+- [x] Negative tests proving every new check fires, gated in CI.
+- [x] Conformance criteria, checklist, scorecard, badge guidance, and README updated for the two-version state.
+- [ ] Re-examine the five platform overlays against AEC-13 and AEC-14. None currently declares an autonomy ladder or a delegation boundary in overlay terms.
+- [ ] Decide whether domain overlays need AEC-14 classification guidance before they graduate from Informative.
+- [ ] Second independent enterprise adoption to confirm or falsify the findings (section 8 of the backlog). v0.003 stays Draft until then.
+- [ ] Release decision: promote v0.003 from Draft, or withdraw it as implementation defects.
 
 ## Verification Plan
 
