@@ -11,7 +11,7 @@ AI is moving from content generation to execution. Agentic workflows and AI-powe
 
 That gap becomes your next incident.
 
-DAS-1(TM) is a minimal, operator-grade standard for delegated authority in AI and agentic systems. It defines 12 Authority Engineering Controls (AEC-01 through AEC-12), required drills, and conformance claims backed by receipts.
+DAS-1(TM) is a minimal, operator-grade standard for delegated authority in AI and agentic systems. It defines 12 Authority Engineering Controls (AEC-01 through AEC-12), required drills, and conformance claims backed by receipts. A v0.003 draft adds two controls (AEC-13 delegation, AEC-14 classification and composition) and a normative autonomy annex; see below.
 
 - Core Spec: spec/core/das-1-core.md
 - Conformance: spec/conformance/
@@ -64,6 +64,32 @@ See: spec/conformance/conformance-criteria.md
 Overlay claims are additive:
 - Core claim: DAS-1(TM) v0.002 Conformant(TM)
 - Overlay claim: DAS-1(TM) v0.002 Conformant(TM) + `<overlay>`
+
+## v0.003 (draft, not claimable)
+
+v0.003 came out of carrying a full enterprise agentic operating model on v0.002 and finding
+three things the enterprise needed that the standard did not specify, plus one control that
+was measured but never enforced. See spec/roadmap/v0.003-enterprise-load-findings.md.
+
+- AEC-13 Delegation envelope and cascading revocation. The tool catalog governs what an agent
+  may call; nothing governed what an agent may *grant*. Delegated authority must be a subset
+  of the delegating agent's on every axis, revocation must cascade to every descendant within
+  the AEC-05 budget, and lineage must resolve back to the human principal.
+- AEC-14 Action classification and composition. Names who classifies, on what evidence, how a
+  contest resolves, and what happens when individually low-risk actions compose into a
+  high-risk effect. A sequence is governed at its composed class.
+- Annex A Autonomy levels. A0-A5 crosswalked to R1-R4. Effective authority is the
+  *intersection* of autonomy level and risk ceiling, never the maximum, and promotion along
+  the autonomy axis must not raise a registered risk ceiling.
+- AEC-10 tightened. A cap must be enforced in the execution path with a named owner and a
+  raise path. A spend forecast is not a control.
+
+v0.003 is additive: AEC-01 through AEC-12 are unchanged and unrenumbered, so existing v0.002
+claims stay valid against v0.002. The verifier supports `--das-version v0.003` so adopters can
+build evidence ahead of release, and a draft evidence pack lives in `das1/examples/v0003/`.
+
+These findings rest on a single enterprise adoption. v0.003 stays Draft until a second
+independent adoption confirms or falsifies them.
 
 ## Safety With Utility
 
@@ -166,5 +192,6 @@ Bring receipts.
 - Brand assets (logos, marks, badges): all rights reserved, trademark governed (see assets/brand/LICENSE-ASSETS.txt and TRADEMARKS.md)
 
 Status
-- Version: v0.002 (draft)
-- Date: 2026-06-14
+- Released version: v0.002 (draft)
+- In progress: v0.003 core deltas, verifier, and draft evidence pack; not claimable
+- Date: 2026-08-20

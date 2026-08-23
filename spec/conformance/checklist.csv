@@ -11,9 +11,15 @@ AEC-09,,,,,
 AEC-10,,,,,
 AEC-11,,,,,
 AEC-12,,,,,
+AEC-13,,,,,v0.003 draft. Delegation envelope subset rule and cascading revocation; receipt is delegation records plus D3
+AEC-14,,,,,v0.003 draft. Classification ownership contest path reclassification triggers and the composition rule; receipt is the classification register plus a composition test case
 MET-M5,,,,,R1/R2 autonomous execution coverage reported and compared to target range
 MET-M6,,,,,R1/R2 execution latency p50/p95 reported and compared to target range
 MET-M7,,,,,Blocked or queued action rate by risk class reported and compared to target range
+MET-M8,,,,,v0.003 draft. Cap enforcement rate: over-cap events halted in the execution path as a proportion of those observed
+MET-M9,,,,,v0.003 draft. Delegation cascade completion time p50/p95 within the AEC-05 revocation budget
+ANX-A01,,,,,v0.003 draft. Every agent has a registered autonomy level and risk ceiling in its tool catalog entry
+ANX-A02,,,,,v0.003 draft. Effective authority is the intersection of autonomy level and risk ceiling; promotion along the autonomy axis has not raised any registered risk ceiling
 UTL-01,,,,,Utility-impacting hardening captured via AEC-11 exception with expiry when needed
 OVL-01,,,,,Overlay claim names platform/domain overlays and references overlay-specific verifier report
 OVL-02,,,,,Overlay-specific drills pass within the evidence window

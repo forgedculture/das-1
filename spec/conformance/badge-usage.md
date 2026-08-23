@@ -1,6 +1,12 @@
-# Badge and claim usage (DAS-1(TM) v0.002)
+# Badge and claim usage (DAS-1(TM))
 
 This is a draft policy.
+
+Version note
+- v0.002 is the current claimable version.
+- v0.003 is a draft. No "DAS-1(TM) v0.003 Conformant" claim may be made while it is Draft,
+  even where the verifier passes with `--das-version v0.003`. A passing v0.003 report is
+  evidence that the shape works, not a claim.
 
 Allowed claim (exact)
 - "DAS-1(TM) v0.002 Conformant"
@@ -21,7 +27,7 @@ Overlay claim rules
 - Multiple overlays MAY be named only when evidence exists for each claimed overlay.
 
 Required disclosure
-- Last drill dates (D1, D2)
+- Last drill dates (D1, D2; plus D3 and D4 once v0.003 releases)
 - Known exceptions with expiry
 - Overlay-specific drill dates when an overlay claim is made
 - Overlay-specific report reference when an overlay verifier exists
@@ -38,8 +44,9 @@ Recommended claim packet links
 - Core conformance report
 - Overlay verifier report, if applicable
 - Exceptions register
-- D1/D2 drill reports
+- D1/D2 drill reports (plus D3/D4 at v0.003)
+- Delegation records and classification register (v0.003)
 - Overlay drill reports
 - Tool catalog and policy snapshot
 - Incident response annex
-- Scorecard with M1-M7 and utility guardrails
+- Scorecard with M1-M7 and utility guardrails (M1-M9 at v0.003)

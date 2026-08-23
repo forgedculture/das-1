@@ -94,6 +94,23 @@ jobs:
             --overlay kiro \
             --report kiro-overlay-report.json
 
+      - name: Verify v0.003 core evidence (draft)
+        run: |
+          python tools/das1_verify.py verify \
+            --das-version v0.003 \
+            --receipts das1/examples/v0003/receipt_packs \
+            --exceptions das1/examples/exceptions \
+            --drills das1/examples/v0003/drills \
+            --tool-catalogs das1/examples/v0003/tool_catalogs \
+            --policy-snapshots das1/examples/policy_snapshots \
+            --ir-annexes das1/examples/ir_annexes \
+            --delegation-records das1/examples/v0003/delegation_records \
+            --classification-registers das1/examples/v0003/classification_registers \
+            --report conformance-v0003-report.json
+
+      - name: Prove the v0.003 checks fire
+        run: python tools/test_v0003_checks.py
+
       - name: Verify conformance claim packets
         run: |
           python tools/das1_verify.py verify-claims das1/examples/claims \
@@ -105,6 +122,7 @@ jobs:
           name: conformance-reports
           path: |
             conformance-report.json
+            conformance-v0003-report.json
             openclaw-overlay-report.json
             claude-code-overlay-report.json
             codex-overlay-report.json

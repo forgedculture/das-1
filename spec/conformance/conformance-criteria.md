@@ -1,9 +1,32 @@
-# Conformance criteria (DAS-1(TM) v0.002)
+# Conformance criteria (DAS-1(TM))
+
+## v0.002 (current released version)
 
 An implementation MAY claim "DAS-1(TM) v0.002 Conformant" only if:
-- All AEC controls are implemented OR explicitly excepted with expiry (AEC-11).
+- All AEC-01 through AEC-12 controls are implemented OR explicitly excepted with expiry (AEC-11).
 - D1 and D2 have been executed within the last 90 days.
 - Metrics M1-M7 are measurable from stored receipts.
+
+## v0.003 (draft, not yet claimable)
+
+v0.003 is additive. AEC-01 through AEC-12 are unchanged and unrenumbered, so a v0.002
+claim stays valid against v0.002 and does not lapse when v0.003 releases.
+
+An implementation will be able to claim "DAS-1(TM) v0.003 Conformant" only if, in addition
+to everything required at v0.002:
+- AEC-13 and AEC-14 are implemented OR explicitly excepted with expiry (AEC-11).
+- D3 and D4 have been executed within the last 90 days, alongside D1 and D2.
+- Metrics M1-M9 are measurable from stored receipts and drill reports.
+- Delegation records exist for every delegation, and the AEC-13 subset rule is checkable
+  from the records rather than asserted.
+- A classification register exists naming the classification authority, the evidence basis,
+  the contest resolution path, the reclassification triggers, and at least one composition
+  test case.
+- Every tool catalog entry carries both a risk ceiling and an autonomy level (Annex A.3).
+- The AEC-10 cap is enforced in the execution path with a named owner and a raise path.
+
+No implementation may claim v0.003 conformance while the version is Draft. The verifier
+supports it (`--das-version v0.003`) so adopters can build and test evidence ahead of release.
 
 Exception handling note
 - Expired exceptions SHOULD be retained for historical evidence and audit reconstruction.
