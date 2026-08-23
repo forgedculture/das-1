@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://forgedculture.org/das-1/schemas/classification-register.schema.json",
+  "title": "DAS-1 Classification Register",
+  "description": "AEC-14 receipt. Names who classifies actions, on what evidence, how contests resolve, the ambiguity default, the reclassification triggers, and the composition test cases.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "register_version",
+    "register_id",
+    "generated_at",
+    "owner_id",
+    "classification_authority",
+    "evidence_basis",
+    "contest_resolution",
+    "ambiguity_default",
+    "reclassification_triggers",
+    "entries"
+  ],
+  "properties": {
+    "register_version": {
+      "type": "string",
+      "pattern": "^v\\d+\\.\\d+\\.\\d+$"
+    },
+    "register_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "owner_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "classification_authority": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Who classifies an action."
+    },
+    "evidence_basis": {
+      "type": "string",
+      "minLength": 1,
+      "description": "On what evidence classification is decided."
+    },
+    "contest_resolution": {
+      "type": "string",
+      "minLength": 1,
+      "description": "How a contested classification is resolved."
+    },
+    "ambiguity_default": {
+      "type": "string",
+      "enum": ["higher_class", "lower_class"],
+      "description": "AEC-14 requires this to be stated, and requires the stated default to be higher_class."
+    },
+    "reclassification_triggers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["tool", "scope", "data_class", "blast_radius"]
+      },
+      "description": "AEC-14 requires review when the tool, its scope, its data class, or its blast radius changes."
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "entry_id",
+          "tool",
+          "action",
+          "risk_class",
+          "classified_by",
+          "reviewed_at"
+        ],
+        "properties": {
+          "entry_id": {"type": "string", "minLength": 1},
+          "tool": {"type": "string", "minLength": 1},
+          "action": {"type": "string", "minLength": 1},
+          "risk_class": {"type": "string", "enum": ["R1", "R2", "R3", "R4"]},
+          "classified_by": {"type": "string", "minLength": 1},
+          "reviewed_at": {"type": "string", "format": "date-time"},
+          "blast_radius": {"type": "string"},
+          "data_classes": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "contested": {"type": "boolean"},
+          "contest_resolution_ref": {"type": "string"},
+          "notes": {"type": "string"}
+        }
+      }
+    },
+    "composition_rules": {
+      "type": "array",
+      "description": "Composition test cases. Each shows a sequence whose composed effect exceeds the highest class of any member action, and the class the sequence is actually governed at.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "composition_group_id",
+          "member_entry_ids",
+          "individual_max_class",
+          "composed_class",
+          "governed_at_class"
+        ],
+        "properties": {
+          "composition_group_id": {"type": "string", "minLength": 1},
+          "description": {"type": "string"},
+          "member_entry_ids": {
+            "type": "array",
+            "minItems": 2,
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          },
+          "individual_max_class": {"type": "string", "enum": ["R1", "R2", "R3", "R4"]},
+          "composed_class": {"type": "string", "enum": ["R1", "R2", "R3", "R4"]},
+          "governed_at_class": {"type": "string", "enum": ["R1", "R2", "R3", "R4"]},
+          "detection_method": {"type": "string"},
+          "evidence_refs": {
+            "type": "array",
+            "items": {"type": "string", "minLength": 1},
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "notes": {"type": "string"},
+    "overlay_context": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z0-9][a-z0-9_-]{1,63}$"
+      },
+      "additionalProperties": {
+        "type": "object"
+      }
+    }
+  }
+}

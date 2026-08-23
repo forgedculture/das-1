@@ -84,6 +84,42 @@
     "audit_completeness_preserved": {
       "type": "boolean"
     },
+    "cascade_complete": {
+      "type": "boolean"
+    },
+    "descendants_blocked": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "descendants_executed_after_revoke": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "lineage_reconstructed": {
+      "type": "boolean"
+    },
+    "cap_breaker_halted_execution": {
+      "type": "boolean"
+    },
+    "cap_owner_notified": {
+      "type": "boolean"
+    },
+    "cap_enforcement_point": {
+      "type": "string",
+      "enum": [
+        "execution_path",
+        "reporting_layer"
+      ]
+    },
+    "m8_cap_enforcement_rate": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "m9_cascade_completion_ms_p95": {
+      "type": "number",
+      "minimum": 0
+    },
     "m1_time_to_revoke_ms_p95": {
       "type": "number",
       "minimum": 0

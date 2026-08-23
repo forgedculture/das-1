@@ -61,6 +61,17 @@
     "cap_id": {"type": "string"},
     "revoked": {"type": "boolean"},
     "revoke_of_event_id": {"type": "string"},
+    "cap_enforced": {"type": "boolean"},
+    "cap_enforcement_point": {"type": "string", "enum": ["execution_path", "reporting_layer"]},
+    "delegation_id": {"type": "string", "minLength": 1},
+    "parent_actor_id": {"type": "string", "minLength": 1},
+    "delegation_depth": {"type": "integer", "minimum": 0},
+    "root_principal_id": {"type": "string", "minLength": 1},
+    "granted_risk_ceiling": {"type": "string", "enum": ["R1", "R2", "R3", "R4"]},
+    "autonomy_level": {"type": "string", "enum": ["A0", "A1", "A2", "A3", "A4", "A5"]},
+    "composition_group_id": {"type": "string", "minLength": 1},
+    "composed_class": {"type": "string", "enum": ["R1", "R2", "R3", "R4"]},
+    "classification_ref": {"type": "string", "minLength": 1},
     "overlay_context": {
       "type": "object",
       "propertyNames": {

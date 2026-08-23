@@ -95,6 +95,14 @@
             "D2": {
               "type": "string",
               "format": "date-time"
+            },
+            "D3": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "D4": {
+              "type": "string",
+              "format": "date-time"
             }
           }
         },
@@ -152,6 +160,12 @@
           "minLength": 1
         },
         "exceptions_ref": {
+          "type": "string"
+        },
+        "delegation_records_ref": {
+          "type": "string"
+        },
+        "classification_register_ref": {
           "type": "string"
         },
         "notes": {
