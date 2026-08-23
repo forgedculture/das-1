@@ -1,0 +1,26 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D3",
+  "run_id": "run_v3_d3_2026_08_18",
+  "executed_at": "2026-08-18T17:00:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": ["user.security", "user.oncall"],
+  "workflow_ids": ["wf.deploy.delegated"],
+  "result": "pass",
+  "scorecard_ref": "artifacts/drills/v0003/d3/scorecard-2026-08-18.md",
+  "evidence_refs": [
+    "artifacts/drills/v0003/d3/cascade-revoke-log.json",
+    "artifacts/drills/v0003/d3/descendant-execution-check.json",
+    "artifacts/drills/v0003/d3/lineage-reconstruction.json"
+  ],
+  "audit_completeness_preserved": true,
+  "revocation_within_budget": true,
+  "cascade_complete": true,
+  "descendants_blocked": 1,
+  "descendants_executed_after_revoke": 0,
+  "lineage_reconstructed": true,
+  "m1_time_to_revoke_ms_p95": 14000,
+  "m9_cascade_completion_ms_p95": 14200,
+  "notes": "Revoked dlg_root_0003 mid-execution. dlg_child_0004 blocked by cascade; no descendant executed afterward. Lineage resolved to user.platform.owner."
+}

@@ -1,0 +1,62 @@
+{
+  "catalog_version": "v0.0.1",
+  "catalog_id": "catalog_v0003_2026_08_18",
+  "generated_at": "2026-08-18T13:00:00Z",
+  "owner_id": "team.platform",
+  "workflow_id": "wf.deploy.delegated",
+  "review_ref": "artifacts/catalog/review-2026-08-18.md",
+  "tools": [
+    {
+      "tool": "cd_pipeline",
+      "actions": ["promote_release", "rollback_release"],
+      "permissions": ["deploy:write"],
+      "data_classes": ["internal"],
+      "owner_id": "team.platform",
+      "revocation_path": "authz_gateway/revoke?workflow=wf.deploy.delegated",
+      "logging_location": "logs://authority/cd_pipeline",
+      "risk_ceiling": "R3",
+      "autonomy_level": "A4",
+      "may_delegate": true,
+      "risk_notes": "R3/R4 actions require approval and preflight. A4: never executes unattended."
+    },
+    {
+      "tool": "storage_api",
+      "actions": ["write_object", "rotate_manifest"],
+      "permissions": ["storage:write"],
+      "data_classes": ["customer"],
+      "owner_id": "team.platform",
+      "revocation_path": "authz_gateway/revoke?workflow=wf.export.bulk",
+      "logging_location": "logs://authority/storage_api",
+      "risk_ceiling": "R3",
+      "autonomy_level": "A4",
+      "may_delegate": false,
+      "risk_notes": "Individually R2, but subject to composition rule cmp_bulk_export_0001 which governs the sequence at R4."
+    },
+    {
+      "tool": "reports_api",
+      "actions": ["generate_report"],
+      "permissions": ["reports:read"],
+      "data_classes": ["public"],
+      "owner_id": "team.analytics",
+      "revocation_path": "authz_gateway/revoke?workflow=wf.reporting.delegated",
+      "logging_location": "logs://authority/reports_api",
+      "risk_ceiling": "R2",
+      "autonomy_level": "A5",
+      "may_delegate": false,
+      "risk_notes": "A5 latitude is real only within the R2 ceiling. Promotion to A5 did not raise the ceiling."
+    },
+    {
+      "tool": "authz_gateway",
+      "actions": ["revoke_authority", "revoke_authority_cascade"],
+      "permissions": ["authz:revoke"],
+      "data_classes": ["internal"],
+      "owner_id": "team.security",
+      "revocation_path": "break-glass://authz_gateway/disable",
+      "logging_location": "logs://authority/authz_gateway",
+      "risk_ceiling": "R3",
+      "autonomy_level": "A4",
+      "may_delegate": false,
+      "risk_notes": "Cascade revocation must complete within the AEC-05 budget (AEC-13)."
+    }
+  ]
+}

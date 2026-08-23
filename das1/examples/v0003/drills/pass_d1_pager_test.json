@@ -1,0 +1,22 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D1",
+  "run_id": "run_v3_d1_2026_08_18",
+  "executed_at": "2026-08-18T16:00:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": ["user.security"],
+  "workflow_ids": ["wf.deploy.delegated", "wf.export.bulk"],
+  "result": "pass",
+  "scorecard_ref": "artifacts/drills/v0003/d1/scorecard-2026-08-18.md",
+  "evidence_refs": [
+    "artifacts/drills/v0003/d1/chain-reconstruction.json",
+    "artifacts/drills/v0003/d1/approve-deny-decisions.json"
+  ],
+  "chain_reconstruction_ok": true,
+  "revocation_within_budget": true,
+  "audit_completeness_preserved": true,
+  "m1_time_to_revoke_ms_p95": 14000,
+  "m2_approval_latency_ms_p95": 30000,
+  "notes": "Chain reconstructed from receipts across two delegation hops."
+}

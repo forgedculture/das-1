@@ -1,0 +1,30 @@
+{
+  "record_version": "v0.0.1",
+  "delegation_id": "dlg_root_0001",
+  "delegation_depth": 0,
+  "issued_at": "2026-08-18T14:00:00Z",
+  "expires_at": "2026-12-31T00:00:00Z",
+  "delegating_actor_id": "svc.agent.orchestrator",
+  "delegated_actor_id": "svc.agent.deployer",
+  "root_principal_id": "user.platform.owner",
+  "workflow_id": "wf.deploy.delegated",
+  "granted_scope": {
+    "tools": ["cd_pipeline", "storage_api", "reports_api"],
+    "actions": ["promote_release", "write_object", "rotate_manifest", "generate_report"],
+    "data_classes": ["internal", "customer", "public"]
+  },
+  "delegating_scope": {
+    "tools": ["cd_pipeline", "storage_api", "reports_api", "authz_gateway"],
+    "actions": ["promote_release", "rollback_release", "write_object", "rotate_manifest", "generate_report", "revoke_authority_cascade"],
+    "data_classes": ["internal", "customer", "public", "secret"],
+    "risk_ceiling": "R4",
+    "autonomy_level": "A5"
+  },
+  "granted_risk_ceiling": "R3",
+  "granted_autonomy_level": "A4",
+  "may_subdelegate": true,
+  "revocation_path": "authz_gateway/revoke?delegation=dlg_root_0001&cascade=true",
+  "status": "active",
+  "correlation_id": "corr_v3_r3_0002",
+  "notes": "Subset on every axis: tools and data classes narrowed, ceiling R4->R3, autonomy A5->A4."
+}

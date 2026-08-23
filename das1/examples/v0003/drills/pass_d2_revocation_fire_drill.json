@@ -1,0 +1,20 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D2",
+  "run_id": "run_v3_d2_2026_08_18",
+  "executed_at": "2026-08-18T16:30:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": ["user.security"],
+  "workflow_ids": ["wf.deploy.delegated"],
+  "result": "pass",
+  "scorecard_ref": "artifacts/drills/v0003/d2/scorecard-2026-08-18.md",
+  "evidence_refs": [
+    "artifacts/drills/v0003/d2/revoke-event-log.json",
+    "artifacts/drills/v0003/d2/post-revoke-tool-call-check.json"
+  ],
+  "audit_completeness_preserved": true,
+  "revocation_within_budget": true,
+  "m1_time_to_revoke_ms_p95": 15000,
+  "notes": "Single-agent revoke. The delegated case is covered separately by D3."
+}

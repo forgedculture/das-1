@@ -1,0 +1,43 @@
+{
+  "claim_version": "v0.0.1",
+  "claim_id": "claim_core_v0003_2026_08_18",
+  "generated_at": "2026-08-18T22:00:00Z",
+  "claimant": {
+    "organization": "Forge Signals",
+    "owner_id": "team.platform"
+  },
+  "das_version": "v0.003",
+  "scope": {
+    "core_conformant": true,
+    "overlay_claims": []
+  },
+  "disclosures": {
+    "last_required_drill_pass_at": {
+      "D1": "2026-08-18T16:00:00Z",
+      "D2": "2026-08-18T16:30:00Z",
+      "D3": "2026-08-18T17:00:00Z",
+      "D4": "2026-08-18T17:30:00Z"
+    },
+    "known_exceptions": [
+      {
+        "exception_id": "exc_0001",
+        "status": "approved",
+        "expires_at": "2026-12-31T12:00:00Z",
+        "notes": "Approval latency SLO pipeline pending."
+      }
+    ],
+    "non_certification_statement": "This claim is a self-asserted conformance statement and not a certification. DAS-1 v0.003 is a draft; this packet demonstrates the evidence shape and is not a released-version claim."
+  },
+  "evidence": {
+    "conformance_report_ref": "../../../conformance-v0003-report.json",
+    "exceptions_ref": "das1/examples/exceptions",
+    "delegation_records_ref": "das1/examples/v0003/delegation_records",
+    "classification_register_ref": "das1/examples/v0003/classification_registers",
+    "notes": "v0.003 core claim: adds AEC-13 delegation records, the AEC-14 classification register with one composition test case, and D3/D4 drill evidence."
+  },
+  "attestation": {
+    "statement": "I attest this claim is accurate to the best of my knowledge and supported by the referenced evidence.",
+    "attester_id": "user.security",
+    "attested_at": "2026-08-18T22:05:00Z"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "report_version": "v0.0.1",
+  "drill_id": "D4",
+  "run_id": "run_v3_d4_2026_08_18",
+  "executed_at": "2026-08-18T17:30:00Z",
+  "environment": "staging-with-prod-like-policy",
+  "owner_id": "team.platform",
+  "witness_ids": ["user.finops"],
+  "workflow_ids": ["wf.export.bulk"],
+  "result": "pass",
+  "scorecard_ref": "artifacts/drills/v0003/d4/scorecard-2026-08-18.md",
+  "evidence_refs": [
+    "artifacts/drills/v0003/d4/cap-breaker-log.json",
+    "artifacts/drills/v0003/d4/cap-owner-page.json",
+    "artifacts/drills/v0003/d4/raise-path-response.json"
+  ],
+  "audit_completeness_preserved": true,
+  "cap_breaker_halted_execution": true,
+  "cap_owner_notified": true,
+  "cap_enforcement_point": "execution_path",
+  "m8_cap_enforcement_rate": 1,
+  "notes": "Drove wf.export.bulk past cap_export_daily. Breaker halted in the execution path; cap owner team.platform paged in 41s against a 5m response target."
+}

@@ -1,0 +1,31 @@
+{
+  "record_version": "v0.0.1",
+  "delegation_id": "dlg_child_0002",
+  "parent_delegation_id": "dlg_root_0001",
+  "delegation_depth": 1,
+  "issued_at": "2026-08-18T14:30:00Z",
+  "expires_at": "2026-12-30T00:00:00Z",
+  "delegating_actor_id": "svc.agent.deployer",
+  "delegated_actor_id": "svc.agent.migrator",
+  "root_principal_id": "user.platform.owner",
+  "workflow_id": "wf.export.bulk",
+  "granted_scope": {
+    "tools": ["storage_api", "reports_api"],
+    "actions": ["write_object", "rotate_manifest", "generate_report"],
+    "data_classes": ["customer", "public"]
+  },
+  "delegating_scope": {
+    "tools": ["cd_pipeline", "storage_api", "reports_api"],
+    "actions": ["promote_release", "write_object", "rotate_manifest", "generate_report"],
+    "data_classes": ["internal", "customer", "public"],
+    "risk_ceiling": "R3",
+    "autonomy_level": "A4"
+  },
+  "granted_risk_ceiling": "R3",
+  "granted_autonomy_level": "A4",
+  "may_subdelegate": false,
+  "revocation_path": "authz_gateway/revoke?delegation=dlg_child_0002&cascade=true",
+  "status": "active",
+  "correlation_id": "corr_v3_cmp_0001",
+  "notes": "Second hop. cd_pipeline withheld; the ceiling is held level rather than raised."
+}

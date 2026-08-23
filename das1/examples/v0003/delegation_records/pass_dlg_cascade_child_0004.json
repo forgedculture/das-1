@@ -1,0 +1,33 @@
+{
+  "record_version": "v0.0.1",
+  "delegation_id": "dlg_child_0004",
+  "parent_delegation_id": "dlg_root_0003",
+  "delegation_depth": 1,
+  "issued_at": "2026-08-18T16:10:00Z",
+  "expires_at": "2026-12-30T00:00:00Z",
+  "delegating_actor_id": "svc.agent.batch",
+  "delegated_actor_id": "svc.agent.batch.worker",
+  "root_principal_id": "user.platform.owner",
+  "workflow_id": "wf.deploy.delegated",
+  "granted_scope": {
+    "tools": ["cd_pipeline"],
+    "actions": ["promote_release"],
+    "data_classes": ["internal"]
+  },
+  "delegating_scope": {
+    "tools": ["cd_pipeline"],
+    "actions": ["promote_release"],
+    "data_classes": ["internal"],
+    "risk_ceiling": "R3",
+    "autonomy_level": "A4"
+  },
+  "granted_risk_ceiling": "R2",
+  "granted_autonomy_level": "A3",
+  "may_subdelegate": false,
+  "revocation_path": "authz_gateway/revoke?delegation=dlg_child_0004",
+  "status": "revoked",
+  "revoked_at": "2026-08-18T17:00:14Z",
+  "revoked_by_delegation_id": "dlg_root_0003",
+  "correlation_id": "corr_v3_d3_0001",
+  "notes": "Descendant revoked by cascade, not directly. This is the AEC-05 gap AEC-13 closes."
+}

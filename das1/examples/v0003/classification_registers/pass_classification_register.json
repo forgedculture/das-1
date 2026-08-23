@@ -1,0 +1,72 @@
+{
+  "register_version": "v0.0.1",
+  "register_id": "clsreg_2026_08_18",
+  "generated_at": "2026-08-18T13:00:00Z",
+  "owner_id": "team.platform",
+  "classification_authority": "Authority Review Board (team.platform lead plus one security reviewer, quorum 2). Named in GOVERNANCE.md.",
+  "evidence_basis": "Tool catalog entry, declared blast radius from the AEC-06 preflight, data classes touched, and reversibility of the action.",
+  "contest_resolution": "A contested classification escalates to the Authority Review Board within one business day. The higher class stands while the contest is open. The board's decision is recorded against the entry with contest_resolution_ref.",
+  "ambiguity_default": "higher_class",
+  "reclassification_triggers": ["tool", "scope", "data_class", "blast_radius"],
+  "entries": [
+    {
+      "entry_id": "cls_e1",
+      "tool": "reports_api",
+      "action": "generate_report",
+      "risk_class": "R1",
+      "classified_by": "team.analytics",
+      "reviewed_at": "2026-08-18T13:00:00Z",
+      "blast_radius": "Read-only over published availability data. No external side effect.",
+      "data_classes": ["public"]
+    },
+    {
+      "entry_id": "cls_e2",
+      "tool": "storage_api",
+      "action": "write_object",
+      "risk_class": "R2",
+      "classified_by": "team.platform",
+      "reviewed_at": "2026-08-18T13:00:00Z",
+      "blast_radius": "Single object write into an export bucket. Individually reversible by deleting the part.",
+      "data_classes": ["customer"]
+    },
+    {
+      "entry_id": "cls_e3",
+      "tool": "storage_api",
+      "action": "rotate_manifest",
+      "risk_class": "R2",
+      "classified_by": "team.platform",
+      "reviewed_at": "2026-08-18T13:00:00Z",
+      "blast_radius": "Rewrites the export manifest pointer. Reversible by restoring the prior manifest.",
+      "data_classes": ["customer"]
+    },
+    {
+      "entry_id": "cls_e4",
+      "tool": "cd_pipeline",
+      "action": "promote_release",
+      "risk_class": "R3",
+      "classified_by": "team.platform",
+      "reviewed_at": "2026-08-18T13:00:00Z",
+      "blast_radius": "Production service promotion. Rollback path exists but customer-visible during the window.",
+      "data_classes": ["internal"],
+      "contested": true,
+      "contest_resolution_ref": "artifacts/classification/arb-2026-08-14-promote-release.md",
+      "notes": "Proposed as R2 by the delivery team, contested by security, resolved at R3 by the board."
+    }
+  ],
+  "composition_rules": [
+    {
+      "composition_group_id": "cmp_bulk_export_0001",
+      "description": "Writing export parts and then rotating the manifest are each R2 and each individually reversible. Run as one sequence they publish a complete customer table to a bucket with an external read path, which is an irreversible customer-data egress. The sequence is governed at R4.",
+      "member_entry_ids": ["cls_e2", "cls_e3"],
+      "individual_max_class": "R2",
+      "composed_class": "R4",
+      "governed_at_class": "R4",
+      "detection_method": "Workflow-level rule: any sequence within one authorized task that writes >1 export part and then rotates the manifest is tagged cmp_bulk_export and raised to R4 before the first member executes.",
+      "evidence_refs": [
+        "das1/examples/v0003/receipt_packs/pass_composition_step_1.json",
+        "das1/examples/v0003/receipt_packs/pass_composition_step_2.json"
+      ]
+    }
+  ],
+  "notes": "AEC-14 receipt. The composition rule is the case that every individual gate passes and the composed effect faces none."
+}
