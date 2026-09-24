@@ -171,6 +171,33 @@ python tools/das1_verify.py verify-claims das1/examples/claims
 
 See `/spec/conformance/README.md` for full command options and current machine checks.
 
+### Keeping the example evidence current
+
+The example pack is date-gated, because the standard is. Drill passes expire
+after 90 days (AEC-05) and the IR tabletop after 365 (AEC-12), so the fixtures
+age out of the conformance window on a clock rather than on a commit.
+
+Check the remaining runway at any time:
+
+```bash
+python3 tools/check_freshness.py          # exits 1 when anything has under 30 days left
+```
+
+Refresh and re-prove in one step:
+
+```bash
+./tools/refresh_and_verify.sh
+```
+
+Run the script rather than `refresh_example_dates.py` alone. The conformance
+claims cross-check their disclosed drill dates against the generated
+`*-report.json` files, so re-dating the fixtures without regenerating the
+reports leaves the repository failing `verify-claims`. The script does both in
+the required order and then prints the remaining runway.
+
+CI runs the freshness check weekly on a schedule, not only on push, so expiry
+surfaces while there is still time to act on it.
+
 ## Overlay Extensions
 
 The default verifier is runtime-agnostic and extensible:

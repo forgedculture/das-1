@@ -7,8 +7,36 @@ on:
   pull_request:
     branches:
       - main
+  # The evidence in this repository expires on a clock, not on a commit.
+  # Drill passes age out after 90 days (AEC-05) and the IR tabletop after 365
+  # (AEC-12), so a repository that is merely quiet goes red on its own. On
+  # 2026-09-08 that happened: fixtures executed 2026-06-10 crossed the 90-day
+  # line and every job below began failing, while the last push had been
+  # 2026-08-22. Nothing ran, so nothing said so, for fifteen days.
+  # A gate that only speaks when pushed is not a detector.
+  schedule:
+    - cron: "0 13 * * 1"
+  workflow_dispatch:
 
 jobs:
+  # Deliberately a separate job. It reports the horizon rather than gating the
+  # conformance run, so an unrelated change is never blocked by evidence that
+  # is merely approaching expiry - but the repository still goes visibly red,
+  # and the scheduled run emails the owner, while there is a month left to act.
+  freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Days remaining before example evidence expires
+        run: python tools/check_freshness.py --warn-days 30
+
   verify:
     runs-on: ubuntu-latest
     steps:

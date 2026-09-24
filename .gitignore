@@ -6,3 +6,6 @@ examples/openclaw-article/
 __pycache__/
 *.pyc
 .obsidian/
+
+# Git-residue and quarantine holding pens; tooling debris, not record.
+_to_delete/

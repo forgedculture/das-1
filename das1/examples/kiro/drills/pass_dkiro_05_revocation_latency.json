@@ -2,7 +2,7 @@
   "report_version": "v0.0.1",
   "drill_id": "D-KIRO-05",
   "run_id": "run_kiro_dkiro05_2026_06_10",
-  "executed_at": "2026-06-10T20:40:00Z",
+  "executed_at": "2026-09-19T20:40:00Z",
   "environment": "staging-with-prod-like-policy",
   "owner_id": "team.platform",
   "witness_ids": [
