@@ -1,0 +1,43 @@
+name: das-1-psyche-overlay
+version: v0.002
+requires:
+  das_core: v0.002
+applies_to:
+  runtime: psyche
+  model_provider: local-deterministic-or-local-ollama
+  deployment: local-only-desktop-agent-runtime
+tightens:
+  - AEC-01
+  - AEC-03
+  - AEC-05
+  - AEC-06
+  - AEC-07
+  - AEC-08
+  - AEC-11
+adds:
+  - AECX-050
+  - AECX-062
+  - AECX-064
+  - AECX-065
+  - AECX-066
+  - AECX-067
+annex_a:
+  registered_autonomy_level: A5
+  registered_risk_ceiling: R2
+  effective_authority: A5 within R1-R2 only; R3 and R4 are refused in the authorization path
+  risk_crosswalk:
+    tier_0: R1
+    tier_1: R2
+    tier_2_and_above: refused
+drills:
+  - D-PSY-01
+  - D-PSY-02
+  - D-PSY-03
+  - D-PSY-04
+  - D-PSY-05
+  - D-PSY-06
+  - D-PSY-07
+  - D-PSY-08
+  - D-PSY-09
+  - D-PSY-10
+conformance_doc: overlays/platform/psyche/conformance.md

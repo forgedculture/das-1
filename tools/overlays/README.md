@@ -20,8 +20,10 @@ Usage
   - `python tools/das1_verify.py verify-overlay --receipts ... --exceptions ... --drills ... --overlay openclaw`
   - `python tools/das1_verify.py verify-overlay --receipts ... --exceptions ... --drills ... --overlay claude-code`
   - `python tools/das1_verify.py verify-overlay --receipts ... --exceptions ... --drills ... --overlay codex`
+  - `python tools/das1_verify.py verify-overlay --receipts ... --exceptions ... --drills ... --overlay psyche`
 
 Reference plugins
 - `openclaw.py` for overlay id `openclaw`
 - `claude_code.py` for overlay id `claude-code`
 - `codex.py` for overlay id `codex`
+- `psyche.py` for overlay id `psyche`

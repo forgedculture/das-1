@@ -25,6 +25,7 @@ Current overlay bundles:
 - `codex`: supervised coding-agent controls (`AGENTS.md` scope, workspace containment, shell/git gating, plugin/connector boundaries, browser/computer-use actions, CI execute boundary, approval integrity, revocation readiness).
 - `cursor`: supervised coding-agent controls (`.cursor/rules`, User Rules, `AGENTS.md`, workspace/index containment, terminal/tool authority, background edits, revocation readiness).
 - `kiro`: supervised coding-agent controls (steering files, specs, hooks, MCP boundaries, spec task execution, revocation readiness).
+- `psyche`: local-only governed agent runtime controls (deterministic authorization gate, approval as a re-check eligibility gate rather than an execution grant, non-authoritative model advisors, artifact-root containment, computed rather than asserted conformance status). First overlay to register an Annex A autonomy level and risk ceiling.
 
 Current domain overlay examples:
 - `business`: enterprise operations, HR, procurement, customer operations, support, and internal workflows.
