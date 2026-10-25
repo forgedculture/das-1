@@ -24,3 +24,8 @@
 - 2026-08-20: Build the v0.003 evidence as a separate pack under das1/examples/v0003/ instead of mutating the v0.002 pack, so released-version evidence is untouched by draft work.
 - 2026-08-20: Require negative tests for every new machine check (tools/test_v0003_checks.py) and gate them in CI. Fixtures built to pass only show the checks do not false-positive; they say nothing about whether the checks fire. This mirrors the rule that a control needs a receipt and a drill.
 - 2026-08-20: Claim packets are gated by the das_version they declare, not by a verifier flag, so a v0.003 claim cannot be produced from a v0.002 evidence run.
+
+## Breach review (2026-10-25)
+
+- 2026-10-25: Every in-scope public incident from 2025-01 to 2026-10-25 is an implementation failure against controls that are clear as written. These cover untrusted content, approval bypass and auto modes, secrets within reach, component integrity, isolation, detection, receipts and long-lived credentials. No change to the core, conformance criteria or schemas follows. Implementation detail goes in overlays. This supersedes the first draft of spec/roadmap/2026-10-breach-review.md, which had proposed core and conformance changes.
+- 2026-10-25: Overlays never overwrite the spec. They tighten core controls or add catalog controls, drills and namespaced receipt fields. Changes to controls happen only in spec/core/ through this log.
