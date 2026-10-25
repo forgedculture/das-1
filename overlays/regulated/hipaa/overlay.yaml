@@ -1,0 +1,34 @@
+name: das-1-hipaa-overlay
+version: v0.002
+status: informative
+framework: HIPAA (45 CFR Part 164 Subparts C, D, E)
+checked: 2026-10-25
+requires:
+  das_core: v0.002
+stacks_with:
+  - overlays/domain/healthcare
+tightens:
+  - AEC-01
+  - AEC-02
+  - AEC-03
+  - AEC-04
+  - AEC-05
+  - AEC-07
+  - AEC-08
+  - AEC-09
+  - AEC-11
+  - AEC-12
+draft_tightens:
+  - AEC-13
+adds:
+  - AECX-041
+  - AECX-063
+  - AECX-065
+  - AECX-066
+  - AECX-068
+drills:
+  - D-HIPAA-01
+  - D-HIPAA-02
+  - D-HIPAA-03
+  - D-HIPAA-04
+mapping: mappings/regulated/hipaa.md

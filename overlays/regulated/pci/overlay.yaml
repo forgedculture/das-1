@@ -1,13 +1,33 @@
 name: das-1-pci-overlay
 version: v0.002
+status: informative
+framework: PCI DSS v4.0.1
+checked: 2026-10-25
 requires:
   das_core: v0.002
 tightens:
+  - AEC-01
+  - AEC-02
   - AEC-03
   - AEC-06
   - AEC-07
+  - AEC-08
+  - AEC-09
+  - AEC-12
+draft_tightens:
+  - AEC-13
+  - AEC-14
 adds:
   - AECX-014
   - AECX-030
+  - AECX-041
+  - AECX-052
+  - AECX-063
+  - AECX-065
+  - AECX-068
 drills:
   - D-PCI-01
+  - D-PCI-02
+  - D-PCI-03
+  - D-PCI-04
+mapping: mappings/regulated/pci-dss-v4.md

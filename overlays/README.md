@@ -7,7 +7,11 @@ Rule
 - Overlays must not weaken core controls.
 
 Available examples
-- `overlays/regulated/pci/`: PCI-oriented hardening overlay.
+- `overlays/regulated/`: compliance-framework overlays that say what each framework's assessor needs from DAS-1 controls and receipts. Informative, documentation-only. See `overlays/regulated/README.md`.
+  - `hipaa/`: HIPAA Security, Privacy and Breach Notification Rules.
+  - `soc2/`: SOC 2 against the AICPA Trust Services Criteria.
+  - `pci/`: PCI DSS v4.0.1.
+  - `fedramp-high/`: FedRAMP High (Rev5 Class D, NIST SP 800-53 Rev 5 High baseline).
 - `overlays/domain/`: High-impact domain overlays for business, healthcare, law, finance, voting/elections, government, and military/defense contexts.
 - `overlays/platform/openclaw/`: OpenClaw runtime hardening overlay focused on exposed gateway, prompt injection, session isolation, and sandbox containment.
 - `overlays/platform/claude-code/`: Claude Code runtime hardening overlay focused on workspace containment, shell/git authority gating, standing instruction governance, MCP boundaries, and revocation readiness.

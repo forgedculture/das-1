@@ -1,0 +1,33 @@
+name: das-1-soc2-overlay
+version: v0.002
+status: informative
+framework: SOC 2 (AICPA 2017 Trust Services Criteria, revised points of focus 2022)
+checked: 2026-10-25
+requires:
+  das_core: v0.002
+tightens:
+  - AEC-01
+  - AEC-02
+  - AEC-03
+  - AEC-05
+  - AEC-06
+  - AEC-07
+  - AEC-08
+  - AEC-11
+  - AEC-12
+draft_tightens:
+  - AEC-13
+adds:
+  - AECX-030
+  - AECX-060
+  - AECX-062
+  - AECX-063
+  - AECX-066
+  - AECX-068
+  - AECX-069
+drills:
+  - D-SOC2-01
+  - D-SOC2-02
+  - D-SOC2-03
+  - D-SOC2-04
+mapping: mappings/regulated/soc2-tsc.md

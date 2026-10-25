@@ -27,6 +27,12 @@ Current overlay bundles:
 - `kiro`: supervised coding-agent controls (steering files, specs, hooks, MCP boundaries, spec task execution, revocation readiness).
 - `psyche`: local-only governed agent runtime controls (deterministic authorization gate, approval as a re-check eligibility gate rather than an execution grant, non-authoritative model advisors, artifact-root containment, computed rather than asserted conformance status). First overlay to register an Annex A autonomy level and risk ceiling.
 
+Current regulated overlays (Informative; each pairs with a crosswalk in `mappings/regulated/`):
+- `hipaa`: ePHI in agent context, memory and logs; business associate agreements for model providers and agent platforms; minimum necessary retrieval; breach clocks.
+- `soc2`: agents in the system description; model providers as subservice organizations; receipts as the Type II sample population; change control for tools, models, skills and standing instructions.
+- `pci`: agent scoping against the cardholder data environment; no account data in receipts or transcripts; detokenize composition; daily automated log review.
+- `fedramp-high`: Rev5 Class D on the 800-53 High baseline; model providers inside the authorization boundary; non-repudiable, isolated approvals; the 15-minute incident path.
+
 Current domain overlay examples:
 - `business`: enterprise operations, HR, procurement, customer operations, support, and internal workflows.
 - `healthcare`: PHI boundaries, patient communications, chart operations, claims, and clinical-accountability boundaries.

@@ -1,0 +1,36 @@
+name: das-1-fedramp-high-overlay
+version: v0.002
+status: informative
+framework: FedRAMP Rev5 Class D (includes the NIST SP 800-53 Rev 5 High baseline; not a one-for-one equivalence)
+checked: 2026-10-25
+requires:
+  das_core: v0.002
+base_mapping: mappings/nist-800-53-r5.md
+tightens:
+  - AEC-01
+  - AEC-02
+  - AEC-03
+  - AEC-05
+  - AEC-06
+  - AEC-07
+  - AEC-08
+  - AEC-09
+  - AEC-11
+  - AEC-12
+draft_tightens:
+  - AEC-13
+  - AEC-14
+adds:
+  - AECX-014
+  - AECX-030
+  - AECX-050
+  - AECX-052
+  - AECX-062
+  - AECX-066
+  - AECX-068
+drills:
+  - D-FRH-01
+  - D-FRH-02
+  - D-FRH-03
+  - D-FRH-04
+mapping: mappings/regulated/fedramp-high.md

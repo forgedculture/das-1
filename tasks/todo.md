@@ -62,3 +62,19 @@ Non-goals:
 
 - Planning-only rollback: remove `spec/roadmap/agent-skills-refresh-spec.md` and the new `tasks/` artifacts if the direction is rejected.
 - Implementation rollback: keep each future layer in a separate reviewable change so core, catalog, overlays, schemas, examples, and verifier updates can be reverted independently.
+
+## Breach review, October 2026 (see spec/roadmap/2026-10-breach-review.md)
+
+- [x] Map 34 public incidents to the AEC that applies. Every in-scope incident is an implementation failure; no spec change (decision 2026-10-25).
+- [ ] Review the section 4 overlay guidance against each platform overlay and the MCP profile, as part of the AEC-13/14 re-examination above.
+- [ ] Decide which candidate new platform overlays are in scope (Copilot, Gemini CLI/Antigravity, agentic browsers, M365 Copilot, Amazon Q/Bedrock AgentCore).
+- [ ] Crosswalks in mappings/: OWASP Agentic Top 10 (2026), IMDA agentic framework, NIST CAISI, CSA AICM v1.1. Confirm the official OWASP category names first.
+- [ ] Example evidence expires about 2026-12-18 (54 days on 2026-10-25); run tools/refresh_and_verify.sh before then.
+
+## Regulated overlays: HIPAA, SOC 2, PCI, FedRAMP High (2026-10-25)
+
+- [x] Crosswalks in mappings/regulated/ (hipaa, soc2-tsc, pci-dss-v4, fedramp-high), each recording framework state and how far citations were checked.
+- [x] Overlays in overlays/regulated/ (hipaa, soc2, pci rewritten, fedramp-high) with tightenings by AEC, drills, and namespaced receipt fields.
+- [ ] Verify citations against official text the automated pass could not reach: PCI DSS v4.0.1 PDF and the PCI AI supplement, AICPA TSP Section 100 and TQA 9561, the FedRAMP High OSCAL profile.
+- [ ] Watch list: HIPAA Security Rule final rule (estimated July 2027); next PCI DSS version after the 2026 RFC; FedRAMP 20x Class D pilot; NIST SP 800-53 agent overlays; AICPA/AIUC-1 joint engagement.
+- [ ] Decide whether regulated overlays get example evidence and verifier plugins, or stay documentation-only.
